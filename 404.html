@@ -9,7 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found — CobWebZ</title>
   <meta name="description" content="That page doesn't exist on the CobWebZ site. Head back to the homepage or browse our work.">
-  <!-- Cloudflare Pages and Netlify serve this file for missing URLs. Search engines must not list it. -->
+  <!-- Shown for missing URLs. On Cloudflare Workers that needs not_found_handling: "404-page" in
+       the Worker's assets settings; without it, visitors get a blank 404. Search engines must not list it. -->
   <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#f0f1f3">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
@@ -35,7 +36,7 @@
       <p class="hero__lead">The page you asked for doesn't exist or has moved.</p>
       <div class="hero__actions">
         <a href="/" class="btn btn--primary btn--lg">Back to the homepage</a>
-        <a href="/work.html" class="hero__note">See our work <span aria-hidden="true">→</span></a>
+        <a href="/work" class="hero__note">See our work <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </main>

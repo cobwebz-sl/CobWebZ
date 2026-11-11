@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- The two pages search engines should list. The demo sites are left out on purpose: they are
-     noindex. Update <lastmod> (YYYY-MM-DD) when a page's content changes. -->
+     noindex. Update <lastmod> (YYYY-MM-DD) when a page's content changes.
+     /work, not /work.html: Cloudflare redirects .html addresses to the short form, and the
+     sitemap and canonical tags must name the address that answers without a redirect. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.cobwebz.lk/</loc>
@@ -9,7 +11,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.cobwebz.lk/work.html</loc>
+    <loc>https://www.cobwebz.lk/work</loc>
     <lastmod>2026-11-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

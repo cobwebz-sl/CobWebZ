@@ -1890,6 +1890,234 @@
     text-align: center;
   }
 
+  /* ---------- FAQ ---------- */
+  /* One rounded row per question, each a <details>. A closed answer is still in the page, so
+     search engines read it. The rows number themselves (the faq counter); the open one turns
+     solid with an iridescent edge, and its round + turns into an ×. Where the browser can
+     animate to height: auto (::details-content and interpolate-size), the answer slides open;
+     elsewhere it simply appears. */
+  .faq {
+    --faq-row: rgba(255, 255, 255, 0.5);
+    --faq-row-hover: rgba(255, 255, 255, 0.85);
+    --faq-edge: rgba(255, 255, 255, 0.9);
+    --faq-glow: rgba(91, 120, 166, 0.3);
+    /* The open row's edge: dusty blue and rose gold, with lilac, pink and peach between */
+    --faq-sheen: conic-gradient(from 200deg, #8fa5c6, #ae9de3, #e7a6c6, #ecc48f, #d9a796, #9dbbe6, #8fa5c6);
+  }
+  [data-theme="dark"] .faq {
+    --faq-row: rgba(255, 255, 255, 0.03);
+    --faq-row-hover: rgba(255, 255, 255, 0.055);
+    --faq-edge: rgba(255, 255, 255, 0.06);
+    --faq-glow: rgba(143, 165, 198, 0.22);
+  }
+
+  .faq__list {
+    display: grid;
+    gap: 10px;
+    max-width: 820px;
+    margin-inline: auto;
+    counter-reset: faq;
+  }
+  .faq__item {
+    position: relative;
+    counter-increment: faq;
+    border-radius: var(--radius-card);
+    background-color: var(--faq-row);
+    box-shadow: inset 0 0 0 1px var(--faq-edge), 0 1px 2px rgba(10, 10, 10, 0.03);
+    interpolate-size: allow-keywords; /* lets the answer animate to its natural height */
+    transition: background-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+  }
+  .faq__item[open] {
+    background-color: var(--color-surface);
+    box-shadow: inset 0 0 0 1px transparent, 0 28px 56px -30px var(--faq-glow);
+  }
+  @media (hover: hover) {
+    .faq__item:not([open]):hover { background-color: var(--faq-row-hover); }
+    .faq__q:hover .faq__icon { scale: 1.07; }
+  }
+
+  /* The iridescent edge of the open row and of its button: a gradient ring cut out by a mask */
+  .faq__item::before,
+  .faq__icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--faq-sheen);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s var(--ease-out);
+  }
+  .faq__item[open]::before,
+  .faq__item[open] .faq__icon::before { opacity: 1; }
+
+  /* The question: number on the left, round button on the right */
+  .faq__q {
+    position: relative;
+    display: block;
+    padding: 23px 78px 23px 68px;
+    border-radius: var(--radius-card);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    text-wrap: balance;
+    list-style: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .faq__q::-webkit-details-marker { display: none; }
+  /* The row number. The empty text after the slash keeps screen readers from reading it out. */
+  .faq__q::before {
+    content: counter(faq, decimal-leading-zero);
+    content: counter(faq, decimal-leading-zero) / '';
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    min-width: 28px;
+    height: 24px;
+    margin-top: -12px;
+    padding-inline: 5px;
+    border-radius: 8px;
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--color-line), 0 2px 5px -2px rgba(10, 10, 10, 0.12);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0;
+    text-align: center;
+    color: var(--color-body);
+  }
+  /* An ink circle with a +, which turns three-eighths of a turn into a light × when open */
+  .faq__icon {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+    margin-top: -18px;
+    border-radius: 50%;
+    background:
+      linear-gradient(currentColor 0 0) center / 12px 2px no-repeat,
+      linear-gradient(currentColor 0 0) center / 2px 12px no-repeat,
+      var(--color-ink);
+    color: var(--color-on-ink);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 6px 14px -6px rgba(10, 10, 10, 0.6);
+    transition: background-color 0.35s var(--ease-out), color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), rotate 0.5s var(--ease-out), scale 0.25s var(--ease-out);
+  }
+  .faq__item[open] .faq__icon {
+    rotate: 135deg;
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0), 0 6px 14px -6px var(--faq-glow);
+  }
+  /* Keyboard focus rings the whole row, not just its question */
+  @supports selector(:has(*)) {
+    .faq__q:focus-visible { outline: none; }
+    .faq__item:has(> .faq__q:focus-visible) { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  }
+
+  /* The answer: lined up under the question, sliding open from nothing to its natural height */
+  .faq__item::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: block-size 0.5s var(--ease-out), content-visibility 0.5s var(--ease-out) allow-discrete;
+  }
+  .faq__item[open]::details-content { block-size: auto; }
+  .faq__a {
+    padding: 0 78px 26px 68px;
+    font-size: 15px;
+    line-height: 1.7;
+    text-wrap: pretty;
+    opacity: 0;
+    translate: 0 -6px;
+    transition: opacity 0.4s var(--ease-out), translate 0.5s var(--ease-out);
+  }
+  .faq__item[open] .faq__a { opacity: 1; translate: none; transition-delay: 0.1s; }
+  @starting-style {
+    .faq__item[open] .faq__a { opacity: 0; translate: 0 -6px; }
+  }
+  .faq__a p { max-width: 62ch; }
+  .faq__a p + p { margin-top: 10px; }
+  .faq__a a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s var(--ease-out);
+  }
+  .faq__a a:hover { text-decoration-color: currentColor; }
+
+  @media (max-width: 639px) {
+    .faq__list { gap: 8px; }
+    .faq__q { padding: 18px 62px 18px 54px; font-size: 16px; }
+    .faq__q::before {
+      left: 16px;
+      min-width: 26px;
+      height: 22px;
+      margin-top: -11px;
+      padding-inline: 4px;
+      border-radius: 7px;
+      font-size: 10.5px;
+      line-height: 22px;
+    }
+    .faq__icon { right: 14px; width: 32px; height: 32px; margin-top: -16px; }
+    .faq__a { padding: 0 22px 22px 54px; font-size: 14.5px; }
+  }
+
+  /* The rows follow one another in once the list scrolls into view; the list itself stays put */
+  .js .faq__list.reveal { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .faq__list:not(.is-visible) .faq__item { opacity: 0; }
+    .js .faq__list.is-visible .faq__item { animation: faq-in 0.8s var(--ease-out) calc(var(--i, 0) * 60ms) backwards; }
+  }
+  @keyframes faq-in {
+    from { opacity: 0; translate: 0 16px; }
+  }
+
+  /* "Have another question?" under the list */
+  .faq__more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: clamp(32px, 4vw, 48px);
+    font-size: 15px;
+    text-align: center;
+  }
+  .faq__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .faq__contact-text {
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.2s var(--ease-out);
+  }
+  .faq__contact:hover .faq__contact-text { text-decoration-color: currentColor; }
+  .faq__contact-arrow {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--color-line), var(--shadow-pill);
+    transition: translate 0.25s var(--ease-out);
+  }
+  .faq__contact:hover .faq__contact-arrow { translate: 3px 0; }
+
   /* ---------- Why Choose Us: a dark panel with a web the pointer lights up ---------- */
   /* The panel keeps its own night palette (--w-*) in both themes. initWhyChooseUs() draws
      the web into both .why-us__web layers: faint everywhere, bright only in a circle round
@@ -2815,6 +3043,7 @@
     transition: text-decoration-color 0.2s var(--ease-out);
   }
   .contact-list a:hover { text-decoration-color: currentColor; }
+  .contact-list__place { font-weight: 500; color: var(--color-ink); }
 
   /* ---------- Footer ---------- */
   .footer {

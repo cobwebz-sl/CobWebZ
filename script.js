@@ -11,7 +11,7 @@ const CUBE_CONFIG = {
 
   contact: {
     email: 'cowebzsl@gmail.com',
-    phone: '',       // e.g. '+94 77 123 4567'
+    phone: '+94 71 907 0320', // shown as typed; must match the Google Business Profile and the structured data in index.html
     whatsapp: '94719070320' // 071 907 0320, international format, digits only. Enquiries go here.
   },
 

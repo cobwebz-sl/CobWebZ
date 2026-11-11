@@ -9,9 +9,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xTpUMg0MuPhQ5EP+in6S98erupmmXU1YGA784+uUY90='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CobWebZ — Web Development &amp; Infrastructure Studio in Sri Lanka</title>
+  <!-- SEO: the title and description are what Google shows in its results. Keep the title
+       under ~60 characters and the description under ~155, or Google cuts them off. -->
+  <title>Web Design &amp; Development in Colombo, Sri Lanka | CobWebZ</title>
   <meta name="description"
-    content="CobWebZ is a Sri Lankan web development studio. We build fast static sites and full-stack Python, Django and PHP applications, deploy them on Docker and Cloudflare, and keep them secure, monitored and online. Pricing from LKR 40,000.">
+    content="CobWebZ is a web design and development studio in Colombo, Sri Lanka. Fast, secure websites from LKR 40,000, Django and PHP web apps, hosting and support.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#f0f1f3">
   <!-- SEO: the site's public address. Search for "www.cobwebz.lk" across the project
@@ -21,17 +23,17 @@
   <meta property="og:site_name" content="CobWebZ">
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://www.cobwebz.lk/">
-  <meta property="og:title" content="CobWebZ — Web Development &amp; Infrastructure Studio">
+  <meta property="og:title" content="CobWebZ — Web Design &amp; Development in Sri Lanka">
   <meta property="og:description"
-    content="We build the web and keep it running. Full-stack development, deployment, security and server management from Sri Lanka.">
+    content="We build the web and keep it running. Websites, web apps, hosting, security and server management from Colombo, Sri Lanka.">
   <meta property="og:image" content="https://www.cobwebz.lk/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="CobWebZ — We build the web and keep it running.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CobWebZ — Web Development &amp; Infrastructure Studio">
+  <meta name="twitter:title" content="CobWebZ — Web Design &amp; Development in Sri Lanka">
   <meta name="twitter:description"
-    content="We build the web and keep it running. Full-stack development, deployment, security and server management from Sri Lanka.">
+    content="We build the web and keep it running. Websites, web apps, hosting, security and server management from Colombo, Sri Lanka.">
   <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -44,7 +46,14 @@
   <link rel="stylesheet" href="style.css">
 
   <!-- Structured data for search engines: who we are, what we offer and where to find us.
-       Keep the email and social URLs in step with CUBE_CONFIG in script.js. -->
+       Keep the email, phone and social URLs in step with CUBE_CONFIG in script.js, and the
+       name, city and phone in step with the Google Business Profile, letter for letter.
+       GOOGLE BUSINESS PROFILE: once it is verified, add its Maps link (Google Maps → your
+       profile → Share → Copy link) in two places below: as "hasMap", and as a third line in
+       "sameAs".
+       FAQ: "mainEntity" at the bottom repeats the questions and answers of the FAQ section,
+       word for word. Structured data has to match what visitors can read on the page, so
+       when you change a question or answer there, change it here too. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -56,17 +65,34 @@
         "url": "https://www.cobwebz.lk/",
         "logo": "https://www.cobwebz.lk/assets/logo.png",
         "image": "https://www.cobwebz.lk/assets/og-image.png",
-        "description": "Web development and infrastructure studio. Static sites, full-stack Python, Django and PHP applications, Docker and Cloudflare deployment, security scanning and server management.",
+        "slogan": "We build the web and keep it running.",
+        "description": "Web design and development studio in Colombo, Sri Lanka. Static websites, full-stack Python, Django and PHP applications, Docker and Cloudflare deployment, security scanning and server management.",
         "email": "cowebzsl@gmail.com",
-        "areaServed": { "@type": "Country", "name": "Sri Lanka" },
-        "address": { "@type": "PostalAddress", "addressCountry": "LK" },
+        "telephone": "+94 71 907 0320",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Colombo",
+          "addressRegion": "Western Province",
+          "addressCountry": "LK"
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Colombo" },
+          { "@type": "Country", "name": "Sri Lanka" }
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "telephone": "+94 71 907 0320",
+          "email": "cowebzsl@gmail.com",
+          "areaServed": "LK"
+        },
         "priceRange": "LKR 40,000+",
         "currenciesAccepted": "LKR",
         "sameAs": [
           "https://www.facebook.com/profile.php?id=61596432720722",
           "https://www.instagram.com/cobwebz_sl/"
         ],
-        "knowsAbout": ["Web development", "Django", "Python", "PHP", "Docker", "Cloudflare", "Technical SEO", "Web security", "Server management"],
+        "knowsAbout": ["Web design", "Web development", "Django", "Python", "PHP", "Docker", "Cloudflare", "Technical SEO", "Web security", "Server management"],
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Web development packages",
@@ -104,14 +130,72 @@
         "inLanguage": "en"
       },
       {
-        "@type": "WebPage",
+        "@type": ["WebPage", "FAQPage"],
         "@id": "https://www.cobwebz.lk/#webpage",
         "url": "https://www.cobwebz.lk/",
-        "name": "CobWebZ — Web Development & Infrastructure Studio in Sri Lanka",
+        "name": "Web Design & Development in Colombo, Sri Lanka | CobWebZ",
+        "description": "CobWebZ is a web design and development studio in Colombo, Sri Lanka. Fast, secure websites from LKR 40,000, Django and PHP web apps, hosting and support.",
         "isPartOf": { "@id": "https://www.cobwebz.lk/#website" },
         "about": { "@id": "https://www.cobwebz.lk/#organization" },
         "primaryImageOfPage": "https://www.cobwebz.lk/assets/og-image.png",
-        "inLanguage": "en"
+        "inLanguage": "en",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much does a website cost in Sri Lanka?",
+            "acceptedAnswer": { "@type": "Answer", "text": "At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application with a database, user accounts and an admin dashboard starts at LKR 100,000. Both are one-time prices. Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts with a discovery call and a fixed, written quote. See Pricing for what each package includes." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need a static website or a dynamic web application?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A static website suits most small businesses: a fast, secure site with a few pages and a contact form, and no server to look after. Choose a dynamic application when things need to change behind the scenes, such as user accounts, bookings or an admin dashboard where your team edits content. We build those in Python/Django or PHP with a MySQL database. Not sure? Choose “Not sure yet” in the enquiry form and we'll recommend one." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you use templates or page builders?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Every CobWebZ site is designed and coded for your business, with no generic themes, no page builders and no bloat. Static sites are written in HTML, CSS and JavaScript, and web applications in Python/Django or PHP, so pages stay light and load fast." }
+          },
+          {
+            "@type": "Question",
+            "name": "Will my website work on mobile phones?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every site we build is responsive, so the same pages fit phones, tablets and desktops. We aim for a Lighthouse score of 100 (Google's speed and quality check) and a load time under a second, so pages stay quick on mobile data." }
+          },
+          {
+            "@type": "Question",
+            "name": "Will my website show up on Google?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Every static site we build comes with basic SEO set up: page titles, meta descriptions and image alt text, on fast, mobile-friendly code. The Advanced Technical SEO & Analytics add-on (from LKR 10,000, one-time) goes further. No one can honestly promise a #1 ranking, but a fast, well-built site gives you the best start." }
+          },
+          {
+            "@type": "Question",
+            "name": "Are hosting and a domain name included?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Static Deployments package includes free-tier hosting on Cloudflare or GitHub Pages, connecting your custom domain and setting up SSL, so your site loads securely over HTTPS. The domain name itself, such as a .lk or .com address, is paid to its registrar. Domain, hosting and other third-party fees are billed by their providers." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you build an online store?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or PHP with a MySQL database and an admin dashboard for your products. Online payments are added with Payment Gateway Setup, from LKR 25,000. For an example, see the MUTE clothing store under Our Work." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you add online payments, WhatsApp or more than one language?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, as add-ons to any package: payment gateway setup from LKR 25,000, WhatsApp and CRM integrations from LKR 10,000, and multilingual support (for example English, Sinhala and Tamil) from LKR 20,000. Tick the ones you want under Optional Enhancements and the estimate updates as you go." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you keep websites secure?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Every site is served over HTTPS. Web applications come with secure logins and password handling, and built-in protection against common attacks such as SQL injection and cross-site request forgery (CSRF). For ongoing protection, the Enterprise Retainer adds automated vulnerability scanning, monitoring, backups and patching." }
+          },
+          {
+            "@type": "Question",
+            "name": "Who looks after the website once it's live?",
+            "acceptedAnswer": { "@type": "Answer", "text": "That's up to you. Dynamic applications include an admin dashboard so your team can manage content. If you'd rather hand it over, the Basic Maintenance Plan (LKR 5,000 a month) covers updates, backups and uptime, and the Content Management Retainer (LKR 5,000 a month) covers four content updates or posts. Larger systems can move to the Enterprise Retainer for full infrastructure, security scanning and priority support." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you work with businesses outside Colombo?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. CobWebZ is based in Colombo and works with businesses across Sri Lanka. Send an enquiry from the form below, or message us on WhatsApp, wherever you are." }
+          }
+        ]
       }
     ]
   }
@@ -221,8 +305,9 @@
           <span class="hero__tagline" data-split-words>We build the web <span class="accent">and keep it
               running.</span></span>
         </h1>
-        <p class="hero__lead" data-hero-step>CobWebZ is a web development and infrastructure studio. We write the code,
-          deploy it on containers and the edge, and keep your servers patched, monitored and secure.</p>
+        <p class="hero__lead" data-hero-step>CobWebZ is a web design, development and infrastructure studio in Colombo,
+          Sri Lanka. We write the code, deploy it on containers and the edge, and keep your servers patched, monitored
+          and secure.</p>
         <div class="hero__actions" data-hero-step>
           <a href="#contact" class="btn btn--primary btn--lg" data-magnetic>Start a Project</a>
         </div>
@@ -239,11 +324,11 @@
     <section class="section about" id="about" aria-labelledby="about-title">
       <canvas class="particles" data-particles="about" aria-hidden="true"></canvas>
       <div class="container-cube">
-        <h2 id="about-title" class="sr-only">About us</h2>
+        <h2 id="about-title" class="sr-only">About CobWebZ</h2>
 
         <div class="about__body" data-scrub>
           <p class="about__statement" data-scrub-words>At CobWebZ, we craft high-performance, secure, and SEO-optimized
-            digital experiences for modern businesses. We pair clean, custom design with flawless frontend architecture
+            websites for businesses across Sri Lanka. We pair clean, custom design with flawless frontend architecture
             to deliver websites that are fast, scalable, and engineered to capture your audience's attention.</p>
           <div class="about__mark" data-spider>
             <svg class="spider" viewBox="0 0 775 490" aria-hidden="true">
@@ -426,7 +511,7 @@
             </span>
           </a>
 
-          <a href="photography/index.html" target="_blank" rel="noopener" class="work-card" data-cursor="View">
+          <a href="photography/" target="_blank" rel="noopener" class="work-card" data-cursor="View">
             <span class="work-card__media" data-preview>
               <img class="work-card__scroll" src="assets/work/black-scroll.webp" alt="Full-page screenshot of the Black. photography collective showcase" width="760" height="4502"
                 loading="lazy" decoding="async" style="--frames: 10.53">
@@ -442,7 +527,7 @@
             </span>
           </a>
 
-          <a href="hoodie/index.html" target="_blank" rel="noopener" class="work-card" data-cursor="View">
+          <a href="hoodie/" target="_blank" rel="noopener" class="work-card" data-cursor="View">
             <span class="work-card__media" data-preview>
               <img class="work-card__scroll" src="assets/work/mute-scroll.webp" alt="Full-page screenshot of the MUTE online clothing store" width="760" height="4696"
                 loading="lazy" decoding="async" style="--frames: 10.98">
@@ -895,6 +980,145 @@
       </div>
     </section>
 
+    <!-- ============ FAQ ============ -->
+    <!-- The questions people type into Google before they hire a web developer. Each row is a
+         <details>: closed until clicked, but its answer is still in the page, so search engines
+         read every one (and the browser's find-in-page opens the row it's in). name="faq" keeps
+         one row open at a time. The row numbers and the round +/× icons come from style.css.
+         The FAQPage structured data in <head> repeats these questions and answers word for word:
+         change one, change the other. Keep the prices in step with the Pricing cards. -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>FAQ</p>
+          <h2 id="faq-title" class="h-section" data-split-words>Common <span class="accent">questions.</span></h2>
+          <p class="section-lead">What businesses in Sri Lanka usually ask us before a website project.</p>
+        </header>
+
+        <div class="faq__list reveal" data-stagger>
+          <details class="faq__item" name="faq" open>
+            <summary class="faq__q">How much does a website cost in Sri Lanka?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application
+                with a database, user accounts and an admin dashboard starts at LKR 100,000. Both are one-time prices.
+                Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts
+                with a discovery call and a fixed, written quote. See <a href="#pricing">Pricing</a> for what each
+                package includes.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Do I need a static website or a dynamic web application?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>A static website suits most small businesses: a fast, secure site with a few pages and a contact form,
+                and no server to look after. Choose a dynamic application when things need to change behind the scenes,
+                such as user accounts, bookings or an admin dashboard where your team edits content. We build those in
+                Python/Django or PHP with a MySQL database. Not sure? Choose “Not sure yet” in the enquiry form and
+                we'll recommend one.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Do you use templates or page builders?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>No. Every CobWebZ site is designed and coded for your business, with no generic themes, no page
+                builders and no bloat. Static sites are written in HTML, CSS and JavaScript, and web applications in
+                Python/Django or PHP, so pages stay light and load fast.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Will my website work on mobile phones?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>Yes. Every site we build is responsive, so the same pages fit phones, tablets and desktops. We aim for
+                a Lighthouse score of 100 (Google's speed and quality check) and a load time under a second, so pages
+                stay quick on mobile data.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Will my website show up on Google?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>Every static site we build comes with basic SEO set up: page titles, meta descriptions and image alt
+                text, on fast, mobile-friendly code. The Advanced Technical SEO &amp; Analytics add-on (from LKR 10,000,
+                one-time) goes further. No one can honestly promise a #1 ranking, but a fast, well-built site gives you
+                the best start.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Are hosting and a domain name included?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>The Static Deployments package includes free-tier hosting on Cloudflare or GitHub Pages, connecting
+                your custom domain and setting up SSL, so your site loads securely over HTTPS. The domain name itself,
+                such as a .lk or .com address, is paid to its registrar. Domain, hosting and other third-party fees are
+                billed by their providers.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Can you build an online store?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or
+                PHP with a MySQL database and an admin dashboard for your products. Online payments are added with
+                Payment Gateway Setup, from LKR 25,000. For an example, see the MUTE clothing store under
+                <a href="#work">Our Work</a>.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Can you add online payments, WhatsApp or more than one language?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>Yes, as add-ons to any package: payment gateway setup from LKR 25,000, WhatsApp and CRM integrations
+                from LKR 10,000, and multilingual support (for example English, Sinhala and Tamil) from LKR 20,000. Tick
+                the ones you want under <a href="#addons">Optional Enhancements</a> and the estimate updates as you
+                go.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">How do you keep websites secure?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>Every site is served over HTTPS. Web applications come with secure logins and password handling, and
+                built-in protection against common attacks such as SQL injection and cross-site request forgery (CSRF).
+                For ongoing protection, the Enterprise Retainer adds automated vulnerability scanning, monitoring,
+                backups and patching.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Who looks after the website once it's live?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>That's up to you. Dynamic applications include an admin dashboard so your team can manage content. If
+                you'd rather hand it over, the Basic Maintenance Plan (LKR 5,000 a month) covers updates, backups and
+                uptime, and the Content Management Retainer (LKR 5,000 a month) covers four content updates or posts.
+                Larger systems can move to the Enterprise Retainer for full infrastructure, security scanning and
+                priority support.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">Do you work with businesses outside Colombo?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>Yes. CobWebZ is based in Colombo and works with businesses across Sri Lanka. Send an enquiry from the
+                form below, or message us on WhatsApp, wherever you are.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="faq__more reveal">
+          <p>Have another question?</p>
+          <a href="#contact" class="faq__contact"><span class="faq__contact-text">Contact us</span>
+            <span class="faq__contact-arrow" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </span></a>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ CONTACT ============ -->
     <section class="section" id="contact" aria-labelledby="contact-title">
       <canvas class="particles" data-particles="contact" aria-hidden="true"></canvas>
@@ -978,6 +1202,8 @@
           <li data-config-item="contact.phone"><span>Phone</span><a href="#" data-config-link="contact.phone"></a></li>
           <li data-config-item="contact.whatsapp"><span>WhatsApp</span><a href="#" data-config-link="contact.whatsapp"
               target="_blank" rel="noopener"></a></li>
+          <!-- Same city as the Google Business Profile -->
+          <li><span>Based in</span><b class="contact-list__place">Colombo, Sri Lanka</b></li>
         </ul>
       </div>
     </section>
@@ -992,7 +1218,7 @@
         <a href="#overview" class="footer__logo" aria-label="CobWebZ — back to top">
           <img src="assets/logo.png" alt="" width="104" height="83">
         </a>
-        <p class="footer__tagline">Web development and infrastructure studio.</p>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka.</p>
         <a href="#contact" class="btn btn--primary">Start a Project</a>
       </div>
 
@@ -1004,6 +1230,7 @@
             <li><a href="#about">About</a></li>
             <li><a href="#work">Our Work</a></li>
             <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#faq">FAQ</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </div>
@@ -1012,6 +1239,7 @@
           <h2 class="footer__h">Contact</h2>
           <ul>
             <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
+            <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
           </ul>
         </div>
         <div class="footer__col" data-config-block>
