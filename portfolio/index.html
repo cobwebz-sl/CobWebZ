@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Demo site: kept out of search results so the studio ranks, not the fictional business -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mariana Napolitani — UI/UX &amp; Web Designer</title>
+  <meta name="description" content="Portfolio of Mariana Napolitani, a UI/UX and web designer crafting elegant, functional and user-centered digital experiences.">
+  <meta name="theme-color" content="#0b0808">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23541624'/%3E%3Cpath fill='%23d9b9a5' d='M16 5c.6 5.900 5.100 10.400 11 11-5.900.6-10.400 5.100-11 11-.6-5.900-5.100-10.400-11-11 5.900-.6 10.400-5.100 11-11z'/%3E%3C/svg%3E">
+
+  <!-- Motion states only apply when JavaScript is running -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Imbue:opsz,wght@10..100,100..900&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Mrs+Saint+Delafield&display=swap">
+  <link rel="preload" as="image" href="assets/hero-cut.webp" type="image/webp">
+
+  <!-- Tailwind utilities (built ahead of time from tailwind.config.js), then the custom layer -->
+  <link rel="stylesheet" href="tailwind.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-ink font-sans text-cream antialiased">
+
+  <!-- Icon sprite -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.7 6.4 5.6 11.3 12 12-6.4.7-11.3 5.6-12 12-.7-6.4-5.6-11.3-12-12C6.4 11.3 11.3 6.4 12 0z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 40 12"><path fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" d="M1 6h37M33 1.5 38 6l-5 4.5"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3.2 2.6 3.2 15.400 0 18M12 3c-3.200 2.600-3.200 15.400 0 18M4.600 7.500h14.800M4.600 16.500h14.800"/></g></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.500" width="18" height="13" rx="1.500"/><path d="m3.500 7 8.500 6.500L20.500 7"/></g></symbol>
+    <symbol id="i-insta" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.3"><rect x="4" y="4" width="16" height="16" rx="4.500"/><circle cx="12" cy="12" r="3.600"/><circle cx="16.600" cy="7.400" r=".6" fill="currentColor"/></g></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M12 21s-6.500-6-6.500-11a6.500 6.500 0 0 1 13 0c0 5-6.500 11-6.500 11z"/><circle cx="12" cy="10" r="2.300"/></g></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" d="M5 5l14 14M19 5 5 19"/></symbol>
+  </svg>
+
+  <!-- Preloader -->
+  <div id="loader" class="loader" aria-hidden="true">
+    <div class="loader-in">
+      <p class="loader-sign">Mariana Napolitani</p>
+      <div class="loader-row">
+        <span>Portfolio</span>
+        <span class="loader-count"><span id="loaderCount">0</span>%</span>
+      </div>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+    </div>
+  </div>
+
+  <!-- Global chrome -->
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor-ring" id="cursorRing"><span id="cursorLabel"></span></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Floating section nav (appears once you leave the hero) -->
+  <nav id="dock" class="dock" aria-label="Sections">
+    <a href="#top" class="dock-brand" data-cursor="link" aria-label="Back to top">MN</a>
+    <div class="dock-links">
+      <span class="dock-pill" id="dockPill" aria-hidden="true"></span>
+      <a href="#work" data-nav data-cursor="link">Work</a>
+      <a href="#process" data-nav data-cursor="link">Process</a>
+      <a href="#tools" data-nav data-cursor="link">Tools</a>
+      <a href="#words" data-nav data-cursor="link">Words</a>
+      <a href="#contact" data-nav data-cursor="link">Contact</a>
+    </div>
+  </nav>
+
+  <div class="page relative overflow-x-clip">
+
+    <!-- Florals in the page margins -->
+    <img class="flower flower--right" src="assets/rose-cut.webp" alt="" width="800" height="1111" aria-hidden="true" data-speed="-0.12" data-depth="18">
+    <img class="flower flower--left" src="assets/rose-cut.webp" alt="" width="800" height="1111" aria-hidden="true" data-speed="-0.2" data-depth="-14">
+
+    <!-- ===================== HERO ===================== -->
+    <header id="top" class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <canvas id="dust" class="hero-dust" aria-hidden="true"></canvas>
+
+      <div class="wrap relative">
+        <div class="relative z-[3] flex items-center justify-between pt-6 text-[9.5px] uppercase tracking-[.26em] text-cream/75 md:pt-8 md:text-[11px]">
+          <span data-intro style="--d:1.05s">UI/UX &amp; Web Designer</span>
+          <span data-intro style="--d:1.15s">Creative Portfolio</span>
+        </div>
+
+        <h1 id="heroTitle" class="hero-title" aria-label="Portfolio">
+          <span class="hero-title-in" aria-hidden="true">
+            <span class="ch" style="--i:0"><i>P</i></span><span class="ch" style="--i:1"><i>O</i></span><span class="ch" style="--i:2"><i>R</i></span><span class="ch" style="--i:3"><i>T</i></span><span class="ch" style="--i:4"><i>F</i></span><span class="ch" style="--i:5"><i>O</i></span><span class="ch" style="--i:6"><i>L</i></span><span class="ch" style="--i:7"><i>I</i></span><span class="ch" style="--i:8"><i>O</i></span>
+          </span>
+        </h1>
+
+        <div class="hero-figure">
+          <div class="hero-figure-scroll" id="heroFigure">
+            <div class="hero-figure-in" data-depth="-16">
+              <img src="assets/hero-cut.webp" alt="Portrait of the designer in a black sheer top" width="1200" height="1800" fetchpriority="high" decoding="async">
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-row">
+          <div class="hero-left">
+            <p class="hero-tagline">
+              <span class="line"><span style="--i:0">I design digital</span></span>
+              <span class="line"><span style="--i:1">experiences that</span></span>
+              <span class="line"><span style="--i:2">inspire &amp; connect</span></span>
+            </p>
+            <div class="mt-6 md:mt-7" data-intro style="--d:1.45s">
+              <a href="#contact" class="pill" data-magnetic="0.25" data-cursor="link">
+                <span>Available for projects</span>
+                <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg>
+              </a>
+            </div>
+            <p class="hero-sign">Mariana Napolitani</p>
+          </div>
+
+          <div class="hero-right">
+            <p class="hero-bio" data-intro style="--d:1.35s">I'm a UI/UX and Web Designer crafting elegant, functional and user-centered digital experiences.</p>
+            <div class="hero-based" data-intro style="--d:1.55s">
+              <span>Based in any city<br>Working worldwide</span>
+              <span class="hero-globe"><svg aria-hidden="true"><use href="#i-globe"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== FRAME ===================== -->
+    <main class="wrap relative z-10 pb-10">
+      <div class="frame">
+
+        <!-- Selected projects -->
+        <section id="work" aria-labelledby="work-title">
+          <div class="flex items-center justify-between border-b border-line px-5 py-4 md:px-7 md:py-5" data-reveal>
+            <h2 id="work-title" class="eyebrow whitespace-nowrap">Selected projects <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg></h2>
+            <button type="button" class="arrow-link whitespace-nowrap" id="viewAll" data-cursor="link" aria-label="View all projects">
+              <span>View all<span class="hidden sm:inline"> projects</span></span>
+              <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+            </button>
+          </div>
+
+          <div class="grid md:grid-cols-3">
+            <article class="project" data-reveal style="--d:.05s"
+              data-title="Velvet Studio" data-cat="Branding &amp; Web Design" data-year="2025" data-role="Brand identity, UI/UX, Webflow build"
+              data-desc="A full rebrand and website for a boutique creative studio. A confident burgundy identity, editorial typography and a flexible component system that lets the team publish new case studies in minutes.">
+              <header class="project-head">
+                <span class="project-num">01</span>
+                <div>
+                  <h3>Velvet Studio</h3>
+                  <p>Branding &amp; Web Design</p>
+                </div>
+              </header>
+              <button type="button" class="mock-btn tilt" data-open data-cursor="view" aria-label="Open the Velvet Studio case study">
+                <div class="mock mock--velvet" aria-hidden="true">
+                  <div class="mock-page">
+                    <div class="m-browser">
+                      <div class="m-dots"><i></i><i></i><i></i></div>
+                      <div class="m-url">velvet-studio.com</div>
+                    </div>
+                    <div class="m-nav">
+                      <em>velvet</em>
+                      <span class="m-nav-link">Work</span>
+                      <span class="m-nav-link">Studio</span>
+                      <span class="m-nav-link">Journal</span>
+                      <b>Contact</b>
+                    </div>
+                    <div class="m-hero">
+                      <div class="m-copy">
+                        <span class="m-tag">Creative Agency &bull; Paris</span>
+                        <h4>Elevating Brands with Purpose</h4>
+                        <p class="m-desc">Digital identities and bespoke web experiences for visionary luxury labels.</p>
+                        <span class="m-cta">Explore Work <i>&rarr;</i></span>
+                      </div>
+                      <div class="m-photo" style="background-image:url(assets/velvet-hero.jpg)"></div>
+                    </div>
+                    <div class="m-band">
+                      <div class="m-window">
+                        <div class="m-window-bar"><i></i><i></i><i></i><span>Brand Identity Collateral</span></div>
+                        <div class="m-window-body">
+                          <div class="m-window-photo" style="background-image:url(assets/velvet-mockup.jpg)"></div>
+                          <div class="m-window-text">
+                            <h5>Identity System 2025</h5>
+                            <p>Debossed luxury stationery, gold foil business cards, and modular brand guidelines.</p>
+                            <span class="m-view-link">View Case Study &rarr;</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="m-cards">
+                      <div class="m-card" style="background-image:url(assets/velvet-hero.jpg)"><span>Editorial</span></div>
+                      <div class="m-card" style="background-image:url(assets/velvet-mockup.jpg)"><span>Print &amp; Foil</span></div>
+                      <div class="m-card" style="background-image:url(assets/rose.jpg)"><span>Art Direction</span></div>
+                    </div>
+                  </div>
+                  <span class="mock-glare"></span>
+                </div>
+                <span class="mock-cue" aria-hidden="true"><span>Case Study</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+              </button>
+              <ul class="tags"><li>Branding</li><li>Web Design</li><li>UI/UX</li></ul>
+            </article>
+
+            <article class="project" data-reveal style="--d:.15s"
+              data-title="Aurora Shop" data-cat="E-Commerce Design" data-year="2025" data-role="UX research, UI design, Design system"
+              data-desc="A calm, editorial storefront for a slow-fashion label. The product pages were rebuilt around large imagery and a three-step checkout, which lifted conversion and cut cart abandonment.">
+              <header class="project-head">
+                <span class="project-num">02</span>
+                <div>
+                  <h3>Aurora Shop</h3>
+                  <p>E-Commerce Design</p>
+                </div>
+              </header>
+              <button type="button" class="mock-btn tilt" data-open data-cursor="view" aria-label="Open the Aurora Shop case study">
+                <div class="mock mock--aurora" aria-hidden="true">
+                  <div class="mock-page">
+                    <div class="m-browser">
+                      <div class="m-dots"><i></i><i></i><i></i></div>
+                      <div class="m-url">aurorashop.co</div>
+                    </div>
+                    <div class="m-nav">
+                      <em>aurora</em>
+                      <span class="m-nav-link">New In</span>
+                      <span class="m-nav-link">Apparel</span>
+                      <span class="m-nav-link">Objects</span>
+                      <b>Cart (0)</b>
+                    </div>
+                    <div class="m-hero">
+                      <div class="m-copy">
+                        <span class="m-tag">Spring / Summer Edition</span>
+                        <h4>Timeless Pieces Modern Living</h4>
+                        <p class="m-desc">Quiet luxury designed from raw organic textures, architectural lines, and sustainable craft.</p>
+                        <span class="m-cta">Shop Collection <i>&rarr;</i></span>
+                      </div>
+                      <div class="m-photo" style="background-image:url(assets/aurora-hero.jpg)"></div>
+                    </div>
+                    <div class="m-products">
+                      <div class="m-prod">
+                        <div class="m-prod-img" style="background-image:url(assets/aurora-prod-1.jpg)"></div>
+                        <div class="m-prod-info"><h6>Linen Trench</h6><span>$380</span></div>
+                      </div>
+                      <div class="m-prod">
+                        <div class="m-prod-img" style="background-image:url(assets/aurora-prod-2.jpg)"></div>
+                        <div class="m-prod-info"><h6>Leather Tote</h6><span>$420</span></div>
+                      </div>
+                      <div class="m-prod">
+                        <div class="m-prod-img" style="background-image:url(assets/aurora-prod-3.jpg)"></div>
+                        <div class="m-prod-info"><h6>Ceramic Vessel</h6><span>$140</span></div>
+                      </div>
+                    </div>
+                    <div class="m-cards">
+                      <div class="m-card" style="background-image:url(assets/aurora-hero.jpg)"><span>Lookbook '25</span></div>
+                      <div class="m-card" style="background-image:url(assets/aurora-prod-1.jpg)"><span>Linen Craft</span></div>
+                      <div class="m-card" style="background-image:url(assets/aurora-prod-2.jpg)"><span>Leatherwork</span></div>
+                    </div>
+                  </div>
+                  <span class="mock-glare"></span>
+                </div>
+                <span class="mock-cue" aria-hidden="true"><span>Case Study</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+              </button>
+              <ul class="tags"><li>UI/UX</li><li>E-Commerce</li><li>Web Design</li></ul>
+            </article>
+
+            <article class="project" data-reveal style="--d:.25s"
+              data-title="Mindspace" data-cat="Landing Page Design" data-year="2024" data-role="Art direction, Landing page, Framer build"
+              data-desc="A launch page for a focus and meditation app. One clear promise, a quiet palette and a single arch motif that carries from the hero through to the sign-up form.">
+              <header class="project-head">
+                <span class="project-num">03</span>
+                <div>
+                  <h3>Mindspace</h3>
+                  <p>Landing Page Design</p>
+                </div>
+              </header>
+              <button type="button" class="mock-btn tilt" data-open data-cursor="view" aria-label="Open the Mindspace case study">
+                <div class="mock mock--mind" aria-hidden="true">
+                  <div class="mock-page">
+                    <div class="m-browser">
+                      <div class="m-dots"><i></i><i></i><i></i></div>
+                      <div class="m-url">mindspace.app</div>
+                    </div>
+                    <div class="m-nav">
+                      <em>mindspace</em>
+                      <span class="m-nav-link">Features</span>
+                      <span class="m-nav-link">Science</span>
+                      <span class="m-nav-link">Spaces</span>
+                      <b>Get App</b>
+                    </div>
+                    <div class="m-hero">
+                      <div class="m-copy">
+                        <span class="m-tag">Daily Mindfulness &bull; iOS &amp; Web</span>
+                        <h4>Focus Create Elevate</h4>
+                        <p class="m-desc">A digital sanctuary for conscious living. Micro-meditations and ambient soundscapes tailored to you.</p>
+                        <span class="m-cta">Start Free Trial <i>&rarr;</i></span>
+                      </div>
+                      <div class="m-photo m-photo--mind" style="background-image:url(assets/mindspace-hero.jpg)"></div>
+                    </div>
+                    <div class="m-band m-band--mind">
+                      <div class="m-app-showcase">
+                        <div class="m-app-screen" style="background-image:url(assets/mindspace-mockup.jpg)"></div>
+                        <div class="m-app-info">
+                          <p class="m-serif">Experience Serenity</p>
+                          <p class="m-sub">Over 500 guided sessions for clarity, breathwork, and restorative sleep.</p>
+                          <div class="m-pills"><span>Clarity</span><span>Deep Sleep</span><span>Focus</span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="m-cards">
+                      <div class="m-card" style="background-image:url(assets/mindspace-hero.jpg)"><span>Sanctuary</span></div>
+                      <div class="m-card" style="background-image:url(assets/mindspace-mockup.jpg)"><span>App Design</span></div>
+                      <div class="m-card" style="background-image:url(assets/mindspace-stones.jpg)"><span>Zen Flow</span></div>
+                    </div>
+                  </div>
+                  <span class="mock-glare"></span>
+                </div>
+                <span class="mock-cue" aria-hidden="true"><span>Case Study</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+              </button>
+              <ul class="tags"><li>Landing Page</li><li>UI/UX</li><li>Web Design</li></ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- Process + Tools -->
+        <div class="grid border-t border-line lg:grid-cols-[1.24fr_1fr]">
+
+          <section id="process" class="process" aria-labelledby="process-title">
+            <h2 id="process-title" class="eyebrow" data-reveal>My process <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg></h2>
+
+            <ol class="steps" id="steps">
+              <li class="step is-active" tabindex="0" data-reveal style="--d:.05s">
+                <span class="step-num">01</span>
+                <div><h3>Discover</h3><p>Understanding your goals, audience and vision.</p></div>
+              </li>
+              <li class="step" tabindex="0" data-reveal style="--d:.12s">
+                <span class="step-num">02</span>
+                <div><h3>Define</h3><p>Research, analysis and strategy development.</p></div>
+              </li>
+              <li class="step" tabindex="0" data-reveal style="--d:.19s">
+                <span class="step-num">03</span>
+                <div><h3>Design</h3><p>Crafting wireframes, layouts and visual UI.</p></div>
+              </li>
+              <li class="step" tabindex="0" data-reveal style="--d:.26s">
+                <span class="step-num">04</span>
+                <div><h3>Develop</h3><p>Bringing the design to life with clean, responsive code.</p></div>
+              </li>
+              <li class="step" tabindex="0" data-reveal style="--d:.33s">
+                <span class="step-num">05</span>
+                <div><h3>Deliver</h3><p>Testing, optimization and launch with care.</p></div>
+              </li>
+            </ol>
+
+            <div class="orbit" data-reveal="orbit" aria-hidden="true">
+              <svg class="orbit-ring" viewBox="0 0 400 400">
+                <circle class="orbit-track" cx="200" cy="200" r="198.500"/>
+                <circle class="orbit-arc" id="orbitArc" cx="200" cy="200" r="198.500" pathLength="100"/>
+              </svg>
+              <div class="orbit-rose"><img src="assets/rose-cut.webp" alt="" width="800" height="1111" loading="lazy" data-depth="12"></div>
+              <p class="orbit-quote">A thoughtful<br>process for<br>meaningful<br>results.</p>
+              <p class="orbit-count"><span id="stepNum">01</span><i></i>05</p>
+            </div>
+          </section>
+
+          <section id="tools" class="border-t border-line p-5 md:p-7 lg:border-l lg:border-t-0" aria-labelledby="tools-title">
+            <h2 id="tools-title" class="eyebrow" data-reveal>Tools I use <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg></h2>
+
+            <ul class="tools" id="toolGrid">
+              <li class="tool" data-reveal style="--d:.04s">
+                <span class="tool-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.500"><path d="M12 2.500H8.750a3.250 3.250 0 0 0 0 6.500H12zM12 9H8.750a3.250 3.250 0 0 0 0 6.500H12zM12 15.500H8.750A3.250 3.250 0 1 0 12 18.750zM12 2.500h3.250a3.250 3.250 0 0 1 0 6.500H12z"/><circle cx="15.250" cy="12.250" r="3.250"/></g></svg></span>
+                <span class="tool-name">Figma</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.08s">
+                <span class="tool-ico tool-ico--w">W</span>
+                <span class="tool-name">Webflow</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.12s">
+                <span class="tool-ico tool-ico--box">Xd</span>
+                <span class="tool-name">Adobe XD</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.16s">
+                <span class="tool-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.500 3h13v6h-6.500zM5.500 9H12l6.500 6H12v6l-6.500-6z"/></svg></span>
+                <span class="tool-name">Framer</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.2s">
+                <span class="tool-ico tool-ico--box">Ps</span>
+                <span class="tool-name">Photoshop</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.24s">
+                <span class="tool-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.500" stroke-linejoin="round"><rect x="3.750" y="3.750" width="16.500" height="16.500" rx="2.500"/><path d="M9 16.500v-9l6 9v-9"/></g></svg></span>
+                <span class="tool-name">Notion</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.28s">
+                <span class="tool-ico tool-ico--box">Ai</span>
+                <span class="tool-name">Illustrator</span>
+              </li>
+              <li class="tool" data-reveal style="--d:.32s">
+                <span class="tool-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.600" stroke-linecap="round"><path d="M9.500 3.500v7M3.500 14.500h7M14.500 20.500v-7M20.500 9.500h-7"/></g><g fill="currentColor"><circle cx="14.500" cy="4.200" r="1.400"/><circle cx="4.200" cy="9.500" r="1.400"/><circle cx="9.500" cy="19.800" r="1.400"/><circle cx="19.800" cy="14.500" r="1.400"/></g></svg></span>
+                <span class="tool-name">Slack</span>
+              </li>
+            </ul>
+
+            <p class="mt-6 text-[10px] uppercase tracking-[.34em] text-mute" data-reveal style="--d:.36s">&amp; more great tools</p>
+          </section>
+        </div>
+
+        <!-- Kind words -->
+        <section id="words" class="border-t border-line" aria-labelledby="words-title">
+          <div class="px-5 pt-5 md:px-7 md:pt-6" data-reveal>
+            <h2 id="words-title" class="eyebrow">Kind words <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg></h2>
+          </div>
+
+          <div class="grid md:grid-cols-3">
+            <figure class="quote" data-reveal style="--d:.05s">
+              <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+              <blockquote>Mariana is incredibly talented, creative and detail-oriented. She transformed our ideas into a beautiful, high-converting website.</blockquote>
+              <figcaption>
+                <img src="assets/avatar-1.jpg" alt="" width="200" height="200" loading="lazy">
+                <span><cite>Sofia L.</cite><small>Founder, Velvet Studio</small></span>
+              </figcaption>
+            </figure>
+
+            <figure class="quote" data-reveal style="--d:.15s">
+              <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+              <blockquote>Working with Mariana was a smooth and inspiring experience. She truly cares about delivering the best results.</blockquote>
+              <figcaption>
+                <img src="assets/avatar-2.jpg" alt="" width="200" height="200" loading="lazy">
+                <span><cite>Daniel R.</cite><small>CEO, Aurora Shop</small></span>
+              </figcaption>
+            </figure>
+
+            <figure class="quote" data-reveal style="--d:.25s">
+              <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+              <blockquote>Her layouts are not only stunning but also highly functional. I highly recommend her!</blockquote>
+              <figcaption>
+                <img src="assets/avatar-3.jpg" alt="" width="200" height="200" loading="lazy">
+                <span><cite>James T.</cite><small>Marketing Director</small></span>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="contact" aria-labelledby="contact-title">
+          <div class="contact-grid">
+            <div class="contact-cell">
+              <h2 id="contact-title" class="cta-title" data-reveal="lines">
+                <span class="line"><span style="--i:0">Let's create</span></span>
+                <span class="line"><span style="--i:1">something</span></span>
+              </h2>
+              <p class="cta-script" data-reveal="write"><span>Amazing</span></p>
+            </div>
+
+            <div class="contact-cell contact-cell--line" data-reveal style="--d:.1s">
+              <h3 class="text-[12px] uppercase leading-[1.7] tracking-[.2em] md:text-[13px]">I'm currently open<br>for new projects</h3>
+              <p class="mt-4 max-w-[24ch] text-[12px] leading-[1.75] text-mute">Let's build something impactful and beautiful together.</p>
+              <div class="mt-6">
+                <a href="mailto:hello@mariana-design.com?subject=New%20project%20enquiry" class="pill" data-magnetic="0.25" data-cursor="link">
+                  <span>Send me a message</span>
+                  <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <ul class="contact-cell contact-cell--line contact-list" data-reveal style="--d:.2s">
+              <li>
+                <button type="button" id="copyMail" data-copy="hello@mariana-design.com" data-cursor="link" aria-label="Copy email address hello@mariana-design.com">
+                  <svg aria-hidden="true"><use href="#i-mail"/></svg><span>hello@mariana-design.com</span>
+                </button>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener" data-cursor="link">
+                  <svg aria-hidden="true"><use href="#i-insta"/></svg><span>@mariana.design</span>
+                </a>
+              </li>
+              <li>
+                <span class="contact-static"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Any city, anywhere</span></span>
+              </li>
+            </ul>
+
+            <div class="contact-cell contact-photo-col" aria-hidden="true"></div>
+          </div>
+
+          <div class="thanks">
+            <span>Thank you for visiting</span>
+            <svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg>
+          </div>
+
+          <figure class="contact-photo" data-reveal="clip">
+            <img src="assets/portrait.jpg" alt="Black and white portrait of the designer" width="800" height="1000" loading="lazy">
+          </figure>
+          <img class="flower flower--footer" src="assets/rose-cut.webp" alt="" width="800" height="1111" loading="lazy" aria-hidden="true" data-speed="0.1">
+        </section>
+      </div>
+
+      <div class="mt-5 flex items-center justify-between text-[9.5px] uppercase tracking-[.26em] text-mute/80">
+        <span>&copy; <span id="year">2026</span> Mariana Napolitani</span>
+        <a href="#top" class="transition-colors duration-300 hover:text-cream" data-cursor="link">Back to top &uarr;</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Case study overlay -->
+  <div id="case" class="case" role="dialog" aria-modal="true" aria-labelledby="caseTitle" hidden>
+    <div class="case-backdrop" data-close></div>
+    <div class="case-panel">
+      <button type="button" class="case-close" data-close data-cursor="link" aria-label="Close case study">
+        <svg aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+      <div class="case-stage" id="caseStage"></div>
+      <div class="case-info">
+        <p class="case-count"><span id="caseNum">01</span><i></i><span id="caseTotal">03</span></p>
+        <h3 id="caseTitle" class="case-title"></h3>
+        <p id="caseCat" class="case-cat"></p>
+        <p id="caseDesc" class="case-desc"></p>
+        <dl class="case-meta">
+          <div><dt>Role</dt><dd id="caseRole"></dd></div>
+          <div><dt>Year</dt><dd id="caseYear"></dd></div>
+        </dl>
+        <ul class="tags" id="caseTags"></ul>
+        <div class="case-nav">
+          <button type="button" id="casePrev" class="arrow-link arrow-link--back" data-cursor="link"><svg aria-hidden="true"><use href="#i-arrow"/></svg><span>Previous</span></button>
+          <button type="button" id="caseNext" class="arrow-link" data-cursor="link"><span>Next project</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/lenis.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

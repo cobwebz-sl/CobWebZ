@@ -1,0 +1,6 @@
+# Search engines may crawl everything. The demo sites carry their own "noindex" tag,
+# which crawlers only see if they are allowed to fetch the page, so nothing is blocked here.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.cobwebz.lk/sitemap.xml

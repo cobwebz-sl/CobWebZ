@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <!-- Demo site: kept out of search results so the studio ranks, not the fictional business -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLACK. — Avant-Garde Minimalist Agency & Editorial Showcase</title>
+  <meta name="description" content="A brutalist, dark-mode luxury presentation showcase and agency portfolio featuring high-contrast editorial photography, acoustic engineering, and monochrome aesthetics.">
+  <meta name="theme-color" content="#08080a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308080a'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='36' fill='%23fff'%3EB.%3C/text%3E%3C/svg%3E">
+
+  <!-- Flag JS + hold scroll until the preloader finishes -->
+  <script>document.documentElement.classList.add('js', 'is-loading');</script>
+
+  <!-- Fonts: linked here rather than @imported from styles.css, so they download alongside it -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Italiana&display=swap">
+
+  <!-- Custom Styles, then the Tailwind utilities (built ahead of time from tailwind.config.js;
+       they come last, where the Tailwind CDN script used to inject them) -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="tailwind.css">
+
+  <!-- Icons: the twelve Lucide icons the page uses -->
+  <script src="vendor/icons.js"></script>
+</head>
+<body class="mode-scroll bg-[#08080a] text-neutral-200 font-space selection:bg-white selection:text-black min-h-screen relative">
+
+  <!-- Grain Film Texture Overlay -->
+  <div class="grain-overlay"></div>
+
+  <!-- Intro Preloader -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <div class="preloader-word">
+        <span style="--i:0">B</span><span style="--i:1">l</span><span style="--i:2">a</span><span style="--i:3">c</span><span style="--i:4">k</span><span style="--i:5">.</span>
+      </div>
+      <div class="preloader-meta">
+        <span>Collective — 2026</span>
+        <span id="preloaderCount">000</span>
+      </div>
+      <div class="preloader-bar"><span id="preloaderBar"></span></div>
+    </div>
+  </div>
+
+  <!-- Scroll Progress Indicator -->
+  <div id="scrollProgress" class="scroll-progress scroll-only"></div>
+
+  <!-- Custom Magnetic Cursor -->
+  <div id="customCursor" class="custom-cursor hidden md:block"></div>
+  <div id="cursorFollower" class="custom-cursor-follower hidden md:block">
+    <span id="cursorBadge" class="cursor-badge"></span>
+  </div>
+
+  <!-- ========================================================================
+       TOP NAVIGATION BAR
+       ======================================================================== -->
+  <header id="siteHeader" class="site-header fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-5 flex items-center justify-between pointer-events-auto">
+    <!-- Brand Wordmark -->
+    <a href="#" onclick="event.preventDefault(); goHome();" class="group flex items-center gap-3 cursor-pointer" aria-label="Black. — back to start" data-cursor-text="HOME">
+      <span class="text-2xl md:text-3xl font-syne font-black tracking-tighter text-white group-hover:tracking-normal transition-all duration-300">
+        Black.
+      </span>
+      <span class="hidden sm:inline-block lg:hidden xl:inline-block whitespace-nowrap text-[10px] font-mono tracking-widest text-neutral-400 border border-white/10 px-2 py-0.5 rounded uppercase">
+        Collective 2026
+      </span>
+    </a>
+
+    <!-- Center Mode Switcher & Controls -->
+    <div class="hidden lg:flex items-center gap-2 p-1.5 glass-panel rounded-full border border-white/10" role="toolbar" aria-label="View controls">
+      <!-- Scroll vs Deck Toggle -->
+      <button id="modeScrollBtn" class="whitespace-nowrap px-3 xl:px-4 py-1.5 text-xs font-mono tracking-wider rounded-full bg-white text-black transition-all duration-300" aria-pressed="true" title="Switch view (V)" data-cursor-text="MODE">
+        SCROLL STORY
+      </button>
+      <button id="modeDeckBtn" class="whitespace-nowrap px-3 xl:px-4 py-1.5 text-xs font-mono tracking-wider rounded-full text-white/70 hover:text-white transition-all duration-300" aria-pressed="false" title="Switch view (V)" data-cursor-text="MODE">
+        DECK SLIDES
+      </button>
+
+      <div class="w-px h-4 bg-white/15 mx-1" aria-hidden="true"></div>
+
+      <!-- Overview Grid Button -->
+      <button id="openOverviewBtn" class="header-toggle px-2.5 xl:px-3 py-1.5 text-xs font-mono tracking-wider text-white/70 hover:text-white flex items-center gap-1.5 transition-colors" aria-haspopup="dialog" title="Open index (G)" data-cursor-text="GRID">
+        <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+        <span class="sr-only xl:not-sr-only whitespace-nowrap">INDEX <kbd class="font-mono text-white/50">G</kbd></span>
+      </button>
+
+      <!-- Auto Play Button -->
+      <button id="autoPlayBtn" class="header-toggle px-2.5 xl:px-3 py-1.5 text-xs font-mono tracking-wider text-white/70 hover:text-white flex items-center gap-1.5 rounded-full transition-colors" aria-pressed="false" title="Auto-advance every 7 seconds" data-cursor-text="AUTO">
+        <i data-lucide="play" class="w-3.5 h-3.5"></i>
+        <span id="autoPlayStatus" class="sr-only xl:not-sr-only whitespace-nowrap">AUTO</span>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button id="soundToggleBtn" class="header-toggle px-2.5 xl:px-3 py-1.5 text-xs font-mono tracking-wider text-white/70 hover:text-white flex items-center gap-1.5 rounded-full transition-colors" aria-pressed="false" title="Interface sounds (M)" data-cursor-text="AUDIO">
+        <i data-lucide="volume-x" id="soundIcon" class="w-3.5 h-3.5"></i>
+        <span id="soundStatusText" class="sr-only xl:not-sr-only whitespace-nowrap">SOUND OFF</span>
+      </button>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-3 md:gap-4">
+      <!-- Mobile Overview Trigger -->
+      <button onclick="openOverviewModal()" class="lg:hidden w-10 h-10 flex items-center justify-center text-white/80 hover:text-white border border-white/20 rounded-full" aria-label="Open section index" aria-haspopup="dialog">
+        <i data-lucide="grid" class="w-4 h-4"></i>
+      </button>
+
+      <button id="openInquiryBtn" aria-haspopup="dialog" class="relative group px-5 py-2.5 overflow-hidden rounded-full border border-white/30 text-xs font-mono tracking-widest uppercase transition-all duration-300 hover:border-white" data-cursor-text="CONTACT">
+        <span class="relative z-10 text-white group-hover:text-black transition-colors duration-300">
+          Inquire
+        </span>
+        <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       SLIDE DECK CONTAINER (10 PRESENTATION SLIDES)
+       ======================================================================== -->
+  <div id="slideDeckContainer" class="slide-deck-container hidden w-full h-screen overflow-hidden relative" role="region" aria-roledescription="carousel" aria-label="Presentation deck">
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 1: OUR SERVICES
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-0" class="deck-slide active-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left Column: Title & Description -->
+        <div class="lg:col-span-4 space-y-6 fit-col">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+            Overview // Slide 01
+          </div>
+          <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none" style="--fit:6.9; --fit-max:4.5rem">
+            Our<br>Services.
+          </h2>
+          <p class="text-sm md:text-base text-neutral-400 font-jakarta leading-relaxed max-w-md">
+            Crafting monochrome brand identities, avant-garde sonic products and cinematic visual narratives — from first sketch to final frame, under one roof.
+          </p>
+          <div class="pt-4 flex items-center gap-4">
+            <button onclick="openDetailModal(0)" class="whitespace-nowrap px-5 py-2.5 bg-white text-black text-xs font-mono tracking-wider uppercase font-semibold rounded hover:bg-neutral-200 transition-colors" aria-haspopup="dialog" data-cursor-text="READ">
+              Explore Practice
+            </button>
+            <span class="text-xs font-mono text-neutral-400 tracking-wider">EST. 2018 / MILAN</span>
+          </div>
+        </div>
+
+        <!-- Center Column: Sand Dunes Image with Watermark -->
+        <div class="lg:col-span-5 relative flex items-center justify-center">
+          <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden spotlight-card tilt-card group" data-cursor-text="DUNES">
+            <div class="tilt-inner w-full h-full relative">
+              <img src="assets/sand_dunes.jpg" alt="Wind-carved sand dunes in black and white" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 transition-transform duration-700 ease-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+              
+              <!-- Signature Typography Overlay "Black." -->
+              <div class="absolute bottom-6 left-6 brand-watermark-wrap">
+                <div class="text-4xl md:text-5xl font-syne font-black text-white tracking-tighter leading-none">
+                  Black.
+                </div>
+                <div class="text-4xl md:text-5xl font-syne font-black stroke-text tracking-tighter leading-none -mt-3 opacity-60">
+                  Black.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Decorative Architectural Line -->
+          <div class="hidden lg:block absolute -right-6 top-1/2 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+        </div>
+
+        <!-- Right Column: Service Cards (Music & Photography) -->
+        <div class="lg:col-span-3 space-y-6">
+          <!-- Music Card -->
+          <div class="spotlight-card p-6 rounded-lg bg-[#0f0f13] border border-white/10 hover:border-white/30 transition-all duration-300" data-cursor-text="AUDIO">
+            <div class="flex flex-col items-start xl:flex-row xl:items-center gap-3 mb-3">
+              <div class="p-2 rounded bg-white/5 border border-white/10 text-white">
+                <i data-lucide="headphones" class="w-4 h-4"></i>
+              </div>
+              <h2 class="text-base font-syne font-bold text-white tracking-wide">Music</h2>
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+              Acoustic identities, spatial audio and studio-grade transducer design.
+            </p>
+          </div>
+
+          <!-- Photography Card -->
+          <div class="spotlight-card p-6 rounded-lg bg-[#0f0f13] border border-white/10 hover:border-white/30 transition-all duration-300" data-cursor-text="CAMERA">
+            <div class="flex flex-col items-start xl:flex-row xl:items-center gap-3 mb-3">
+              <div class="p-2 rounded bg-white/5 border border-white/10 text-white">
+                <i data-lucide="camera" class="w-4 h-4"></i>
+              </div>
+              <h2 class="text-base font-syne font-bold text-white tracking-wide">Photography</h2>
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+              Editorial, high-contrast chiaroscuro photography for print and campaign.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 2: OUR COMPANY MISSION
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-1" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: Title & Manifesto -->
+        <div class="lg:col-span-4 space-y-6 fit-col">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+            Manifesto // Slide 02
+          </div>
+          <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none" style="--fit:7.9; --fit-max:3.75rem">
+            Our<br>Company<br>Mission.
+          </h2>
+          <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-sm">
+            To strip away the non-essential until only raw form, structural light and commanding dark architecture remain.
+          </p>
+          <div class="pt-2">
+            <button onclick="openDetailModal(1)" class="text-xs font-mono tracking-wider text-white border-b border-white pb-1 hover:text-neutral-400 hover:border-neutral-400 transition-colors">
+              READ COMPLETE CHARTER →
+            </button>
+          </div>
+        </div>
+
+        <!-- Center: Woman in Sunglasses Portrait -->
+        <div class="lg:col-span-4 relative flex justify-center">
+          <div class="relative w-full max-w-xs aspect-[3/4] rounded-lg overflow-hidden spotlight-card tilt-card group" data-cursor-text="PORTRAIT">
+            <div class="tilt-inner w-full h-full relative">
+              <img src="assets/mission_woman.jpg" alt="Editorial portrait of a woman in sunglasses and a black suit" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent"></div>
+              
+              <!-- Bottom Watermark -->
+              <div class="absolute bottom-6 left-6 brand-watermark-wrap">
+                <div class="text-4xl font-syne font-black text-white tracking-tighter leading-none">
+                  Black.
+                </div>
+                <div class="text-4xl font-syne font-black stroke-text tracking-tighter leading-none -mt-3 opacity-60">
+                  Black.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Structured Missions 01, 02, 03 -->
+        <div class="lg:col-span-4 space-y-6">
+          <!-- Mission 01 -->
+          <div class="p-5 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/30 transition-all duration-300">
+            <div class="flex items-center gap-2 mb-2 text-xs font-mono font-bold tracking-widest text-white uppercase">
+              <span class="w-2 h-2 bg-white"></span>
+              Mission 01
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+              Purity of form and architectural negative space in everything we make.
+            </p>
+          </div>
+
+          <!-- Mission 02 -->
+          <div class="p-5 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/30 transition-all duration-300">
+            <div class="flex items-center gap-2 mb-2 text-xs font-mono font-bold tracking-widest text-white uppercase">
+              <span class="w-2 h-2 bg-white"></span>
+              Mission 02
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+              Sensory restraint and bespoke fabrication, down to the last stitch and screw.
+            </p>
+          </div>
+
+          <!-- Mission 03 -->
+          <div class="p-5 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/30 transition-all duration-300">
+            <div class="flex items-center gap-2 mb-2 text-xs font-mono font-bold tracking-widest text-white uppercase">
+              <span class="w-2 h-2 bg-white"></span>
+              Mission 03
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+              Global cultural impact through uncompromising art direction.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 3: OUR COMPANY PROJECT (PART 1 - BOTANICAL & GEOMETRY)
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-2" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: Image Collage (Foliage, Headdress, Bicycle) -->
+        <div class="lg:col-span-7 relative">
+          <div class="grid grid-cols-12 gap-4 items-center">
+            
+            <!-- Dark Botanical Card -->
+            <div class="col-span-6 aspect-[4/5] rounded-lg overflow-hidden spotlight-card group" data-cursor-text="FLORA">
+              <img src="assets/botanical.jpg" alt="Dark monstera and palm foliage" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <!-- Wilma Headdress & Bicycle Stack -->
+            <div class="col-span-6 space-y-4">
+              <!-- Avant-garde Portrait -->
+              <div class="aspect-square rounded-lg overflow-hidden spotlight-card group" data-cursor-text="COUTURE">
+                <img src="assets/wilma.jpg" alt="Model in a sculptural feather and flower headdress" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+              </div>
+              <!-- Matte Black Bike -->
+              <div class="aspect-[16/10] rounded-lg overflow-hidden spotlight-card group" data-cursor-text="VELO">
+                <img src="assets/bicycle.jpg" alt="Matte black carbon road bicycle against concrete" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-700">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Vertical Rotated Brand Mark -->
+          <div class="hidden md:block absolute -left-10 top-1/2 -translate-y-1/2 -rotate-90 origin-center brand-watermark-wrap pointer-events-none">
+            <div class="text-4xl font-syne font-black text-white/40 tracking-tighter">
+              Black.
+            </div>
+            <div class="text-4xl font-syne font-black stroke-text tracking-tighter -mt-2">
+              Black.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Project Description -->
+        <div class="lg:col-span-5 space-y-6 fit-col">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            Curated Case Study // 03
+          </div>
+          <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none" style="--fit:7.9; --fit-max:3rem">
+            Our Company<br>Project
+          </h2>
+
+          <div class="pt-2 border-t border-white/10 space-y-3">
+            <div class="text-xs font-mono font-bold tracking-widest text-white uppercase">
+              Project 01 // Synthesis
+            </div>
+            <p class="text-xs md:text-sm text-neutral-400 font-jakarta leading-relaxed">
+              An exploration of delicate botanical textures set against industrial carbon-fibre speed and avant-garde millinery.
+            </p>
+            <p class="text-xs md:text-sm text-neutral-400 font-jakarta leading-relaxed">
+              Twelve couture pieces, a 6.2 kg track frame and a tactile studio set, first shown at the Milan Triennale.
+            </p>
+          </div>
+
+          <div class="pt-4 flex items-center gap-3">
+            <button onclick="openDetailModal(2)" aria-haspopup="dialog" class="whitespace-nowrap px-5 py-2.5 bg-white text-black text-xs font-mono tracking-wider uppercase font-semibold rounded hover:bg-neutral-200 transition-colors">
+              Case Study Specs
+            </button>
+            <div class="flex items-center gap-1.5 text-neutral-400 text-xs font-mono">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+              <span>CARBON / BOTANICA</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 4: OUR COMPANY PROJECT (PART 2 - SOUNDFORM ZERO ACOUSTICS)
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-3" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: Project Narrative & Soundwave Visualizer -->
+        <div class="lg:col-span-5 space-y-6 fit-col">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            Acoustic Architecture // 04
+          </div>
+          <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none" style="--fit:8.9; --fit-max:3rem">
+            Soundform<br>Zero.
+          </h2>
+
+          <div class="space-y-4 pt-2">
+            <!-- Project 01 Pill -->
+            <div class="p-4 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/20 transition-all">
+              <div class="text-xs font-mono font-bold text-white tracking-widest uppercase mb-1">
+                Project 01 // Transducer Zero
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+                45mm neodymium drivers suspended in acoustic titanium chambers.
+              </p>
+            </div>
+
+            <!-- Project 02 Pill -->
+            <div class="p-4 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/20 transition-all">
+              <div class="text-xs font-mono font-bold text-white tracking-widest uppercase mb-1">
+                Project 02 // Frequency Core
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">
+                A sub-bass resonance chamber tuned from 4Hz to 48kHz, with glow-rim capacitive touch.
+              </p>
+            </div>
+          </div>
+          <button onclick="openDetailModal(3)" class="text-xs font-mono tracking-wider text-white border-b border-white pb-1 hover:text-neutral-400 hover:border-neutral-400 transition-colors" aria-haspopup="dialog">
+            PRODUCT SPECS →
+          </button>
+
+          <!-- Dynamic Acoustic Frequency Visualizer -->
+          <div class="pt-4 border-t border-white/10">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">Live 48kHz Frequency Response</span>
+              <span class="text-[10px] font-mono text-white/80">THD: 0.008%</span>
+            </div>
+            <div id="acousticVisualizer" aria-hidden="true" class="flex items-end justify-between h-14 w-full p-2 bg-black/50 border border-white/10 rounded overflow-hidden">
+              <!-- Visualizer bars generated dynamically by script.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Floating Glowing Headphones Showcase -->
+        <div class="lg:col-span-7 relative flex items-center justify-center">
+          <div class="relative w-full aspect-square max-w-lg spotlight-card tilt-card rounded-2xl group flex items-center justify-center p-8" data-cursor-text="SOUND 360°">
+            
+            <!-- Wireframe Geometric Box Accent (Signature element from mockup) -->
+            <div class="wireframe-box-lg -top-4 -right-4 group-hover:rotate-6 transition-transform duration-500"></div>
+
+            <div class="tilt-inner w-full h-full relative flex items-center justify-center">
+              <img src="assets/headphones.jpg" alt="Soundform Zero wireless headphones with illuminated rims" loading="lazy" decoding="async" class="w-full h-full object-contain filter drop-shadow-[0_20px_50px_rgba(255,255,255,0.12)] group-hover:scale-105 transition-transform duration-700 ease-out">
+              
+              <!-- Signature Brand Watermark in Upper Corner -->
+              <div class="absolute top-4 left-6 brand-watermark-wrap">
+                <div class="text-3xl font-syne font-black text-white tracking-tighter leading-none">
+                  Black.
+                </div>
+                <div class="text-3xl font-syne font-black stroke-text tracking-tighter leading-none -mt-2 opacity-60">
+                  Black.
+                </div>
+              </div>
+
+              <!-- Interactive Floating Sound Beacon -->
+              <div class="absolute bottom-6 right-6 flex items-center gap-2 p-2 bg-black/80 backdrop-blur rounded-full border border-white/20">
+                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                <span class="text-[10px] font-mono tracking-widest text-white pr-2">SPATIAL ANC</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 5: EXECUTIVE PROFILE - MIGUEL S HANSKIN
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-4" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: Hoodie Side Profile with Geometric Wireframe Box -->
+        <div class="lg:col-span-6 relative flex items-center justify-center">
+          <!-- Geometric Wireframe Box Accent from mockup -->
+          <div class="wireframe-box bottom-10 right-10"></div>
+          
+          <div class="relative w-full max-w-md aspect-[3/4] lg:max-h-[64vh] rounded-lg overflow-hidden spotlight-card tilt-card group" data-cursor-text="MIGUEL">
+            <div class="tilt-inner w-full h-full relative">
+              <img src="assets/miguel.jpg" alt="Profile portrait of Miguel S Hanskin" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+              
+              <!-- Bottom Watermark -->
+              <div class="absolute bottom-6 left-6 brand-watermark-wrap">
+                <div class="text-4xl font-syne font-black text-white tracking-tighter leading-none">
+                  Black.
+                </div>
+                <div class="text-4xl font-syne font-black stroke-text tracking-tighter leading-none -mt-3 opacity-60">
+                  Black.
+                </div>
+              </div>
+
+              <!-- Slide Pagination Dots on Card (from mockup) -->
+              <div class="absolute left-6 top-1/2 -translate-y-1/2 flex flex-col gap-2" aria-hidden="true">
+                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Executive Details -->
+        <div class="lg:col-span-6 space-y-6 fit-col">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            Executive Direction // 05
+          </div>
+
+          <div>
+            <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none mb-2" style="--fit:6.7; --fit-max:3.75rem">
+              Miguel S<br>Hanskin.
+            </h2>
+            <div class="text-xs md:text-sm font-mono tracking-widest text-neutral-400 uppercase">
+              Chief Executive Officer
+            </div>
+          </div>
+
+          <div class="space-y-4 pt-2 border-t border-white/10">
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-lg">
+              Leading the global creative vision of Black. Hanskin pairs architectural discipline with avant-garde product strategy for the world's most discerning brands.
+            </p>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-lg">
+              “True luxury is not the presence of decoration, but the absolute confidence of its absence.”
+            </p>
+          </div>
+
+          <div class="pt-4 flex items-center gap-4">
+            <button onclick="openDetailModal(4)" aria-haspopup="dialog" class="whitespace-nowrap px-5 py-2.5 bg-white text-black text-xs font-mono tracking-wider uppercase font-semibold rounded hover:bg-neutral-200 transition-colors">
+              Executive Bio
+            </button>
+            <span class="text-xs font-mono text-neutral-400">FOUNDING PARTNER // 2018</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 6: EXECUTIVE PROFILE - CLAUDINE BLEVINS
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-5" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: Statement & Watermark -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            Executive Direction // 06
+          </div>
+          
+          <div class="space-y-4">
+            <p class="text-xs md:text-sm text-neutral-400 font-jakarta leading-relaxed max-w-md">
+              Championing high-contrast editorial photography and cinematic branding across Paris, Tokyo and New York. Founder of the Black. Photography Fellowship.
+            </p>
+            <button onclick="openDetailModal(5)" class="text-xs font-mono tracking-wider text-white border-b border-white pb-1 hover:text-neutral-400 hover:border-neutral-400 transition-colors" aria-haspopup="dialog">
+              EXECUTIVE BIO →
+            </button>
+          </div>
+
+          <!-- Bottom Signature Watermark -->
+          <div class="pt-6 brand-watermark-wrap">
+            <div class="text-5xl font-syne font-black text-white tracking-tighter leading-none">
+              Black.
+            </div>
+            <div class="text-5xl font-syne font-black stroke-text tracking-tighter leading-none -mt-4 opacity-60">
+              Black.
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Leica Camera Showcase -->
+        <div class="lg:col-span-3 flex justify-center">
+          <div class="w-full max-w-xs aspect-square rounded-lg overflow-hidden spotlight-card group" data-cursor-text="LEICA">
+            <img src="assets/camera.jpg" alt="Vintage 35mm Leica rangefinder camera" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+          </div>
+        </div>
+
+        <!-- Right: Claudine Blevins Portrait & Title -->
+        <div class="lg:col-span-4 space-y-4 fit-col">
+          <div>
+            <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none mb-1" style="--fit:7; --fit-max:3rem">
+              Claudine<br>Blevins.
+            </h2>
+            <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase">
+              Managing Director
+            </div>
+          </div>
+
+          <div class="aspect-[3/4] w-full lg:max-h-[50vh] rounded-lg overflow-hidden spotlight-card group" data-cursor-text="CLAUDINE">
+            <img src="assets/claudine.jpg" alt="Portrait of Claudine Blevins" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 7: EXECUTIVE PROFILE - STEPHEN S THOMPSON
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-6" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: Stephen Portrait & Layered Tech Visual -->
+        <div class="lg:col-span-6 relative flex items-center justify-center">
+          <div class="relative w-full max-w-md aspect-[3/4] lg:max-h-[64vh] rounded-lg overflow-hidden spotlight-card tilt-card group" data-cursor-text="STEPHEN">
+            <div class="tilt-inner w-full h-full relative">
+              <img src="assets/stephen.jpg" alt="Portrait of Stephen S Thompson" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+              
+              <!-- Bottom Watermark -->
+              <div class="absolute bottom-6 left-6 brand-watermark-wrap">
+                <div class="text-4xl font-syne font-black text-white tracking-tighter leading-none">
+                  Black.
+                </div>
+                <div class="text-4xl font-syne font-black stroke-text tracking-tighter leading-none -mt-3 opacity-60">
+                  Black.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Stephen's Presentation Details -->
+        <div class="lg:col-span-6 space-y-6 fit-col">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase">
+            Executive Direction // 07
+          </div>
+
+          <div>
+            <h2 class="fit-title font-syne font-extrabold text-white tracking-tight leading-none mb-2" style="--fit:8.9; --fit-max:3.75rem">
+              Stephen S<br>Thompson.
+            </h2>
+            <div class="text-xs md:text-sm font-mono tracking-widest text-neutral-400 uppercase">
+              Chief Technology Officer
+            </div>
+          </div>
+
+          <div class="space-y-4 pt-2 border-t border-white/10">
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-lg">
+              Pioneering spatial audio algorithms, hardware integration and interactive digital interfaces for the next generation of sensory tech.
+            </p>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-lg">
+              “When audio becomes tactile, interface dissolves into pure intuition.”
+            </p>
+          </div>
+
+          <div class="pt-4 flex items-center gap-4">
+            <button onclick="openDetailModal(6)" aria-haspopup="dialog" class="whitespace-nowrap px-5 py-2.5 bg-white text-black text-xs font-mono tracking-wider uppercase font-semibold rounded hover:bg-neutral-200 transition-colors">
+              Technology Roadmap
+            </button>
+            <span class="text-xs font-mono text-neutral-400">SPATIAL AUDIO // R&amp;D</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 8: CREATIVE DIRECTION - JOHN B THOMPSON & JAMES T CAMPOS
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-7" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4">
+          <div>
+            <span class="text-xs font-mono text-neutral-400 tracking-widest uppercase">Atelier Studio // 08</span>
+            <h2 class="text-3xl md:text-5xl font-syne font-extrabold text-white tracking-tight mt-1">
+              Creative Direction.
+            </h2>
+          </div>
+          <button onclick="openDetailModal(7)" class="self-start md:self-auto mt-3 md:mt-0 text-xs font-mono tracking-wider text-white border-b border-white pb-1 hover:text-neutral-400 hover:border-neutral-400 transition-colors" aria-haspopup="dialog">
+            STUDIO PROFILE →
+          </button>
+        </div>
+
+        <!-- 2 Parallel Designer Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          
+          <!-- Designer 1: John B Thompson -->
+          <div class="spotlight-card rounded-xl p-6 bg-[#0f0f14] border border-white/10 hover:border-white/30 transition-all duration-300 group" data-cursor-text="JOHN">
+            <div class="aspect-[4/5] lg:aspect-auto lg:h-[34vh] w-full rounded-lg overflow-hidden mb-5">
+              <img src="assets/john.jpg" alt="Portrait of John B Thompson" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <h3 class="text-xl md:text-2xl font-syne font-bold text-white tracking-tight">
+              John B Thompson.
+            </h3>
+            <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-1">
+              Graphic Designer
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-3">
+              Specializing in custom brutalist type foundries, monochrome editorial editions, and large-format architectural identities.
+            </p>
+          </div>
+
+          <!-- Designer 2: James T Campos -->
+          <div class="spotlight-card rounded-xl p-6 bg-[#0f0f14] border border-white/10 hover:border-white/30 transition-all duration-300 group" data-cursor-text="JAMES">
+            <div class="aspect-[4/5] lg:aspect-auto lg:h-[34vh] w-full rounded-lg overflow-hidden mb-5">
+              <img src="assets/james.jpg" alt="Portrait of James T Campos" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <h3 class="text-xl md:text-2xl font-syne font-bold text-white tracking-tight">
+              James T Campos.
+            </h3>
+            <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-1">
+              Graphic Designer
+            </div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-3">
+              Directing interactive spatial installations, generative motion design, and high-impact digital brand expressions.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 9: CREATIVE ROSTER - MEL, DANA & COLLEN
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-8" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left: 3 Talent Cards (Mel, Dana, Collen) -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-widest uppercase mb-2">
+            Creative Roster // 09
+          </div>
+
+          <!-- Mel R Gavin -->
+          <button type="button" class="w-full text-left flex items-center gap-4 p-4 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/30 transition-all group" onclick="openDetailModal(8)" aria-haspopup="dialog" data-cursor-text="MEL">
+            <img src="assets/mel.jpg" alt="" loading="lazy" decoding="async" class="w-16 h-16 rounded object-cover grayscale group-hover:scale-105 transition-transform">
+            <span class="flex-1">
+              <span class="block text-lg font-syne font-bold text-white tracking-tight">Mel R Gavin</span>
+              <span class="block text-xs font-mono tracking-wider text-neutral-400 uppercase">Photographer</span>
+            </span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/40 group-hover:text-white transition-colors"></i>
+          </button>
+
+          <!-- Dana J Garcia -->
+          <button type="button" class="w-full text-left flex items-center gap-4 p-4 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/30 transition-all group" onclick="openDetailModal(8)" aria-haspopup="dialog" data-cursor-text="DANA">
+            <img src="assets/dana.jpg" alt="" loading="lazy" decoding="async" class="w-16 h-16 rounded object-cover grayscale group-hover:scale-105 transition-transform">
+            <span class="flex-1">
+              <span class="block text-lg font-syne font-bold text-white tracking-tight">Dana J Garcia</span>
+              <span class="block text-xs font-mono tracking-wider text-neutral-400 uppercase">Interior Designer</span>
+            </span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/40 group-hover:text-white transition-colors"></i>
+          </button>
+
+          <!-- Collen J Grimes -->
+          <button type="button" class="w-full text-left flex items-center gap-4 p-4 rounded-lg bg-[#0e0e12] border border-white/10 hover:border-white/30 transition-all group" onclick="openDetailModal(8)" aria-haspopup="dialog" data-cursor-text="COLLEN">
+            <img src="assets/collen.jpg" alt="" loading="lazy" decoding="async" class="w-16 h-16 rounded object-cover grayscale group-hover:scale-105 transition-transform">
+            <span class="flex-1">
+              <span class="block text-lg font-syne font-bold text-white tracking-tight">Collen J Grimes</span>
+              <span class="block text-xs font-mono tracking-wider text-neutral-400 uppercase">Model</span>
+            </span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/40 group-hover:text-white transition-colors"></i>
+          </button>
+        </div>
+
+        <!-- Right: Smartwatch Closeup with 11:36 LED Typography -->
+        <div class="lg:col-span-5 relative flex flex-col items-center justify-center">
+          <div class="relative w-full max-w-sm aspect-[3/4] lg:max-h-[58vh] rounded-2xl overflow-hidden spotlight-card tilt-card group" data-cursor-text="CHRONO">
+            <div class="tilt-inner w-full h-full relative">
+              <img src="assets/smartwatch.jpg" alt="Close-up of the curved edge of the Chronograph Zero smartwatch" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+              
+              <!-- Live / Iconic Time Display -->
+              <div class="absolute top-8 right-8 text-right">
+                <div id="smartwatchDisplayTime" class="text-4xl md:text-5xl font-mono font-bold text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]">
+                  11:36
+                </div>
+                <div class="text-[10px] font-mono tracking-widest text-white/50 uppercase mt-1">
+                  SAPPHIRE CURVED EDGE
+                </div>
+              </div>
+
+              <!-- Bottom Watermark -->
+              <div class="absolute bottom-6 left-6 brand-watermark-wrap">
+                <div class="text-4xl font-syne font-black text-white tracking-tighter leading-none">
+                  Black.
+                </div>
+                <div class="text-4xl font-syne font-black stroke-text tracking-tighter leading-none -mt-3 opacity-60">
+                  Black.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button id="smartwatchTimeToggle" class="mt-4 px-4 py-2 text-[10px] font-mono tracking-widest uppercase border border-white/20 hover:border-white rounded-full text-white/80 transition-colors" aria-pressed="false">
+            SHOW LIVE TIME
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------------------
+         SLIDE 10: CREATIVE ENSEMBLE - MYRA, MACK & WILMA
+         -------------------------------------------------------------------- -->
+    <section id="deck-slide-9" class="deck-slide flex items-center justify-center p-6 md:p-16 lg:p-20">
+      <div class="w-full max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header with Brand Logo and Slide Index -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="brand-watermark-wrap" aria-hidden="true">
+              <span class="text-2xl font-syne font-black text-white tracking-tighter">Black.</span>
+              <span class="text-2xl font-syne font-black stroke-text tracking-tighter ml-1">Black.</span>
+            </div>
+            <h2 class="text-xs font-mono text-neutral-400 tracking-widest uppercase hidden sm:inline">
+              // Creative Ensemble Roster
+            </h2>
+          </div>
+          <div class="text-xs font-mono text-neutral-400">
+            SLIDE 10 // FINALE
+          </div>
+        </div>
+
+        <!-- 3 Columns for Myra, Mack, Wilma -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Myra J Todd -->
+          <div class="spotlight-card rounded-xl p-5 bg-[#0f0f14] border border-white/10 hover:border-white/30 transition-all duration-300 group" data-cursor-text="MYRA">
+            <div class="aspect-[3/4] lg:aspect-auto lg:h-[32vh] w-full rounded-lg overflow-hidden mb-4">
+              <img src="assets/myra.jpg" alt="Portrait of Myra J Todd" loading="lazy" decoding="async" class="w-full h-full object-cover object-top grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <h3 class="text-lg font-syne font-bold text-white tracking-tight">Myra J Todd</h3>
+            <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-0.5">Editorial Model</div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-2">
+              Runway and live-installation performance with an editorial edge.
+            </p>
+          </div>
+
+          <!-- Mack E Spiegel -->
+          <div class="spotlight-card rounded-xl p-5 bg-[#0f0f14] border border-white/10 hover:border-white/30 transition-all duration-300 group" data-cursor-text="MACK">
+            <div class="aspect-[3/4] lg:aspect-auto lg:h-[32vh] w-full rounded-lg overflow-hidden mb-4">
+              <img src="assets/mack.jpg" alt="Portrait of Mack E Spiegel" loading="lazy" decoding="async" class="w-full h-full object-cover object-top grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <h3 class="text-lg font-syne font-bold text-white tracking-tight">Mack E Spiegel</h3>
+            <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-0.5">Graphic Designer</div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-2">
+              Conceptual graphics and scenography for the ensemble's live work.
+            </p>
+          </div>
+
+          <!-- Wilma G Ventura -->
+          <div class="spotlight-card rounded-xl p-5 bg-[#0f0f14] border border-white/10 hover:border-white/30 transition-all duration-300 group" data-cursor-text="WILMA">
+            <div class="aspect-[3/4] lg:aspect-auto lg:h-[32vh] w-full rounded-lg overflow-hidden mb-4">
+              <img src="assets/wilma.jpg" alt="Portrait of Wilma G Ventura in a feather headdress" loading="lazy" decoding="async" class="w-full h-full object-cover object-top grayscale brightness-95 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <h3 class="text-lg font-syne font-bold text-white tracking-tight">Wilma G Ventura</h3>
+            <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-0.5">Haute Couture Model</div>
+            <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-2">
+              Architectural millinery brought to life on the runway.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Footer Action Callout -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10">
+          <div class="text-xs font-mono text-neutral-400">
+            © 2026 BLACK. STUDIO INC. ALL RIGHTS RESERVED.
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="goToSlide(0)" class="text-xs font-mono tracking-wider text-white border-b border-white pb-0.5 hover:text-neutral-400 transition-colors">
+              RESTART PRESENTATION ↺
+            </button>
+            <button onclick="openInquiryModal()" class="px-5 py-2 bg-white text-black text-xs font-mono tracking-wider uppercase font-semibold rounded hover:bg-neutral-200 transition-colors">
+              BOOK CONSULTATION
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+
+  <!-- ========================================================================
+       CONTINUOUS SCROLL STORY (DEFAULT VIEW — CINEMATIC VERTICAL FLOW)
+       ======================================================================== -->
+  <main id="continuousScrollContainer" class="w-full">
+
+    <!-- Hero: full-bleed intro with parallax backdrop -->
+    <section id="scrollHero" class="relative h-[100svh] min-h-[620px] w-full overflow-hidden flex flex-col justify-end">
+      <div class="hero-bg absolute inset-0">
+        <img id="heroBgImage" src="assets/sand_dunes.jpg" alt="" fetchpriority="high" class="w-full h-full object-cover grayscale brightness-50">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#08080a]/70 via-transparent to-[#08080a]"></div>
+      </div>
+      <div class="hero-lines" aria-hidden="true"></div>
+
+      <div id="heroContent" class="relative z-10 w-full px-6 md:px-12 pb-10 md:pb-14">
+        <div class="max-w-7xl mx-auto">
+          <div class="hero-fade section-label !text-neutral-300 mb-4" style="--d:0">Milan · New York · Tokyo — Est. 2018</div>
+          <h1 class="hero-title font-syne font-black text-white" data-hero-split>Black.</h1>
+          <div class="mt-6 md:mt-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end border-t border-white/15 pt-6">
+            <p class="hero-fade md:col-span-5 text-sm md:text-base text-neutral-300 font-jakarta leading-relaxed max-w-md" style="--d:1">
+              An avant-garde collective for acoustic engineering, editorial photography and uncompromising creative direction.
+            </p>
+            <div class="hero-fade md:col-span-4 flex flex-wrap items-center gap-3" style="--d:2">
+              <button onclick="navigateTo(0)" class="px-5 py-3 bg-white text-black text-xs font-mono tracking-widest uppercase font-semibold rounded-full hover:bg-neutral-200 transition-colors" data-magnetic data-cursor-text="SCROLL">
+                Explore the work
+              </button>
+              <button onclick="openInquiryModal()" class="px-5 py-3 border border-white/30 text-white text-xs font-mono tracking-widest uppercase rounded-full hover:border-white transition-colors" aria-haspopup="dialog" data-magnetic data-cursor-text="CONTACT">
+                Start a project
+              </button>
+            </div>
+            <div class="hero-fade hidden md:flex md:col-span-3 justify-end" style="--d:3" aria-hidden="true">
+              <div class="scroll-cue text-neutral-400 font-mono uppercase">
+                <span>Scroll</span>
+                <span class="scroll-cue-line"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Velocity Marquee -->
+    <div class="marquee-band" aria-hidden="true">
+      <div class="marquee-track" data-marquee="1">
+        <div class="marquee-chunk text-white">Music <span class="star">✦</span> Photography <span class="star">✦</span> Acoustic Design <span class="star">✦</span> Creative Direction <span class="star">✦</span> Typography <span class="star">✦</span></div>
+        <div class="marquee-chunk text-white">Music <span class="star">✦</span> Photography <span class="star">✦</span> Acoustic Design <span class="star">✦</span> Creative Direction <span class="star">✦</span> Typography <span class="star">✦</span></div>
+        <div class="marquee-chunk text-white">Music <span class="star">✦</span> Photography <span class="star">✦</span> Acoustic Design <span class="star">✦</span> Creative Direction <span class="star">✦</span> Typography <span class="star">✦</span></div>
+      </div>
+      <div class="marquee-track" data-marquee="-1">
+        <div class="marquee-chunk stroke-text-heavy">Scenography <span class="star">✦</span> Industrial Design <span class="star">✦</span> Editorial <span class="star">✦</span> Spatial Audio <span class="star">✦</span> Identity <span class="star">✦</span></div>
+        <div class="marquee-chunk stroke-text-heavy">Scenography <span class="star">✦</span> Industrial Design <span class="star">✦</span> Editorial <span class="star">✦</span> Spatial Audio <span class="star">✦</span> Identity <span class="star">✦</span></div>
+        <div class="marquee-chunk stroke-text-heavy">Scenography <span class="star">✦</span> Industrial Design <span class="star">✦</span> Editorial <span class="star">✦</span> Spatial Audio <span class="star">✦</span> Identity <span class="star">✦</span></div>
+      </div>
+    </div>
+
+    <!-- Manifesto: words light up as you scroll -->
+    <section class="max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-48">
+      <span class="section-label mb-8" data-reveal="up" data-scramble>Manifesto</span>
+      <p class="font-syne font-bold text-white text-3xl md:text-5xl lg:text-6xl leading-[1.08] tracking-tight" data-scrub-text>
+        True luxury is not the presence of decoration, but the absolute confidence of its absence. We strip away the non-essential until only form, light and shadow remain.
+      </p>
+      <div class="mt-10 flex items-center gap-4" data-reveal="up">
+        <img src="assets/miguel.jpg" alt="" loading="lazy" decoding="async" class="w-12 h-12 rounded-full object-cover grayscale border border-white/20">
+        <div>
+          <div class="text-sm font-syne font-bold text-white">Miguel S Hanskin</div>
+          <div class="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">Founder & CEO</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 pb-32 md:pb-48 space-y-40 md:space-y-56">
+
+      <!-- Scroll Section 1: Services -->
+      <section id="scroll-sec-0" data-section="0" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">01</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-4 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>01 // Overview</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:6.9; --fit-max:3.75rem" data-split>Our Services.</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed" data-reveal="up">
+              Crafting monochrome brand identities, avant-garde sonic products and cinematic visual narratives — from first sketch to final frame.
+            </p>
+            <div data-reveal="up"><button onclick="openDetailModal(0)" class="link-line" aria-haspopup="dialog" data-cursor-text="READ">Explore practice →</button></div>
+          </div>
+          <div class="lg:col-span-5 aspect-[4/3] rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="DUNES">
+            <img src="assets/sand_dunes.jpg" alt="Wind-carved sand dunes in black and white" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+          </div>
+          <div class="lg:col-span-3 space-y-4" data-stagger>
+            <div class="story-card" data-reveal="up" data-cursor-text="AUDIO">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="p-2 rounded bg-white/5 border border-white/10 text-white"><i data-lucide="headphones" class="w-4 h-4"></i></div>
+                <h3 class="text-base font-bold text-white font-syne">Music</h3>
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">Acoustic transducer spatial audio synthesis.</p>
+            </div>
+            <div class="story-card" data-reveal="up" data-cursor-text="CAMERA">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="p-2 rounded bg-white/5 border border-white/10 text-white"><i data-lucide="camera" class="w-4 h-4"></i></div>
+                <h3 class="text-base font-bold text-white font-syne">Photography</h3>
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">Editorial high-contrast chiaroscuro photography.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 2: Mission -->
+      <section id="scroll-sec-1" data-section="1" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">02</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-4 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>02 // Manifesto</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:7.9; --fit-max:3.75rem" data-split>Our Company Mission.</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed" data-reveal="up">
+              Stripping away the trivial to reveal structural purity and commanding presence.
+            </p>
+            <div data-reveal="up"><button onclick="openDetailModal(1)" class="link-line" aria-haspopup="dialog" data-cursor-text="READ">Read the charter →</button></div>
+          </div>
+          <div class="lg:col-span-4 aspect-[3/4] rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="PORTRAIT">
+            <img src="assets/mission_woman.jpg" alt="Editorial portrait of a woman in sunglasses and a black suit" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+          </div>
+          <div class="lg:col-span-4 space-y-4" data-stagger>
+            <div class="story-card" data-reveal="up">
+              <div class="flex items-center justify-between mb-2">
+                <div class="text-xs font-mono text-white font-bold tracking-widest">MISSION 01</div>
+                <span class="text-[10px] font-mono text-neutral-400">/ 03</span>
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">Purity of form and architectural negative space.</p>
+            </div>
+            <div class="story-card" data-reveal="up">
+              <div class="flex items-center justify-between mb-2">
+                <div class="text-xs font-mono text-white font-bold tracking-widest">MISSION 02</div>
+                <span class="text-[10px] font-mono text-neutral-400">/ 03</span>
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">Sensory restraint and bespoke fabrication excellence.</p>
+            </div>
+            <div class="story-card" data-reveal="up">
+              <div class="flex items-center justify-between mb-2">
+                <div class="text-xs font-mono text-white font-bold tracking-widest">MISSION 03</div>
+                <span class="text-[10px] font-mono text-neutral-400">/ 03</span>
+              </div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed">Global cultural impact through uncompromising art direction.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 3: Project 01 Flora & Velo -->
+      <section id="scroll-sec-2" data-section="2" class="story-section">
+        <span class="section-index section-index-left" data-speed="0.18" aria-hidden="true">03</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7 grid grid-cols-2 gap-4 items-center" data-stagger>
+            <div class="aspect-[4/5] rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="FLORA">
+              <img src="assets/botanical.jpg" alt="Dark monstera and palm foliage" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.05">
+            </div>
+            <div class="space-y-4" data-speed="-0.08">
+              <div class="aspect-square rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="COUTURE">
+                <img src="assets/wilma.jpg" alt="Model in a sculptural feather and flower headdress" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+              </div>
+              <div class="aspect-[16/10] rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="VELO">
+                <img src="assets/bicycle.jpg" alt="Matte black carbon road bicycle against concrete" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-5 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>03 // Curated Project</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:7.5; --fit-max:3rem" data-split>Project 01 // Synthesis</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed" data-reveal="up">
+              Delicate botanical textures set against industrial carbon-fibre speed: organic leaves juxtaposed with sculpted feather millinery and track-cycling geometry.
+            </p>
+            <div class="flex flex-wrap gap-2" data-reveal="up">
+              <span class="tag-pill">Carbon</span><span class="tag-pill">Botanica</span><span class="tag-pill">Couture</span>
+            </div>
+            <div data-reveal="up"><button onclick="openDetailModal(2)" class="link-line" aria-haspopup="dialog" data-cursor-text="SPECS">Case study specs →</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 4: Soundform Zero -->
+      <section id="scroll-sec-3" data-section="3" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">04</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-5 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>04 // Acoustics</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:8.9; --fit-max:3rem" data-split>Project 02 // Soundform Zero</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed" data-reveal="up">
+              Floating matte wireless acoustic transducers with bespoke rim illumination. 45mm neodymium drivers suspended in acoustic titanium chambers.
+            </p>
+            <div class="pt-4 border-t border-white/10" data-reveal="up">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">Live 48kHz Frequency Response</span>
+                <span class="text-[10px] font-mono text-white/80">THD: 0.008%</span>
+              </div>
+              <div id="acousticVisualizerScroll" class="flex items-end justify-between h-14 w-full p-2 bg-black/50 border border-white/10 rounded overflow-hidden" aria-hidden="true"></div>
+            </div>
+            <div data-reveal="up"><button onclick="openDetailModal(3)" class="link-line" aria-haspopup="dialog" data-cursor-text="SPECS">Product specs →</button></div>
+          </div>
+          <div class="lg:col-span-7 relative">
+            <div class="wireframe-box-lg -top-6 -right-2 lg:right-6" data-speed="0.12"></div>
+            <div class="aspect-square max-w-lg mx-auto rounded-2xl overflow-hidden spotlight-card story-media p-8 flex items-center justify-center" data-reveal="img" data-cursor-text="SOUND 360°">
+              <img src="assets/headphones.jpg" alt="Soundform Zero wireless headphones with illuminated rims" loading="lazy" decoding="async" class="w-full h-full object-contain animate-float filter drop-shadow-[0_20px_50px_rgba(255,255,255,0.15)]">
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Animated Stats Band -->
+    <section class="border-y border-white/10">
+      <div class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/10" data-stagger>
+        <div class="stat-cell" data-reveal="up">
+          <div class="stat-value"><span data-count="180">0</span>+</div>
+          <div class="stat-label">Projects realized</div>
+        </div>
+        <div class="stat-cell" data-reveal="up">
+          <div class="stat-value"><span data-count="24">0</span></div>
+          <div class="stat-label">Global accolades</div>
+        </div>
+        <div class="stat-cell" data-reveal="up">
+          <div class="stat-value"><span data-count="99.4" data-decimals="1">0</span>%</div>
+          <div class="stat-label">Client retention</div>
+        </div>
+        <div class="stat-cell" data-reveal="up">
+          <div class="stat-value"><span data-count="14">0</span></div>
+          <div class="stat-label">Design patents</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pinned Horizontal Archive Gallery (vertical scroll drives sideways motion) -->
+    <section id="archiveGallery" class="relative" data-hscroll>
+      <div class="sticky top-0 h-[100svh] overflow-hidden flex flex-col justify-center">
+        <div class="w-full max-w-7xl mx-auto px-6 md:px-16 lg:px-24 mb-8 md:mb-10 flex items-end justify-between gap-6">
+          <div class="space-y-3">
+            <span class="section-label" data-reveal="up" data-scramble>Archive // Selected Frames</span>
+            <h2 class="text-4xl md:text-6xl font-syne font-black text-white leading-[0.95] tracking-tight" data-split>The Archive.</h2>
+          </div>
+          <div class="text-right font-mono text-xs text-neutral-400 shrink-0">
+            <span id="hscrollCounter" class="text-white text-2xl md:text-3xl font-syne font-bold">01</span>
+            <span>/ 10</span>
+          </div>
+        </div>
+
+        <div class="hscroll-track" data-hscroll-track>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/collen.jpg" alt="Collen, studio portrait" loading="lazy"></div>
+            <figcaption><span>01</span> Collen — Studio 4</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/camera.jpg" alt="Vintage camera" loading="lazy"></div>
+            <figcaption><span>02</span> Analog Ritual</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/john.jpg" alt="Designer glasses" loading="lazy"></div>
+            <figcaption><span>03</span> Frame Study</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/wilma.jpg" alt="Couture headdress" loading="lazy"></div>
+            <figcaption><span>04</span> Couture Crown</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/miguel.jpg" alt="Hoodie profile" loading="lazy"></div>
+            <figcaption><span>05</span> Street Silhouette</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/botanical.jpg" alt="Dark botanical leaves" loading="lazy"></div>
+            <figcaption><span>06</span> Night Flora</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/stephen.jpg" alt="Turtleneck portrait" loading="lazy"></div>
+            <figcaption><span>07</span> Quiet Tailoring</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/bicycle.jpg" alt="Matte black bicycle" loading="lazy"></div>
+            <figcaption><span>08</span> Velo Noir</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/mission_woman.jpg" alt="Woman in sunglasses" loading="lazy"></div>
+            <figcaption><span>09</span> Noir Optics</figcaption>
+          </figure>
+          <figure class="hscroll-card" data-cursor-text="ARCHIVE">
+            <div class="hscroll-media"><img src="assets/smartwatch.jpg" alt="Smartwatch closeup" loading="lazy"></div>
+            <figcaption><span>10</span> Chronograph Zero</figcaption>
+          </figure>
+        </div>
+
+        <div class="w-full max-w-7xl mx-auto px-6 md:px-16 lg:px-24 mt-8 md:mt-10">
+          <div class="h-px w-full bg-white/10 overflow-hidden"><div id="hscrollBar" class="hscroll-bar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scroll-linked giant type -->
+    <section class="py-20 md:py-32 overflow-hidden space-y-2" aria-hidden="true">
+      <div class="scrub-row text-white" data-scrub-x="-0.5">Leadership ✦ Direction ✦ Leadership ✦ Direction ✦</div>
+      <div class="scrub-row stroke-text-heavy" data-scrub-x="0.5">Vision ✦ Craft ✦ Vision ✦ Craft ✦ Vision ✦ Craft ✦</div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 pb-32 md:pb-48 space-y-40 md:space-y-56">
+
+      <!-- Scroll Section 5: Miguel S Hanskin -->
+      <section id="scroll-sec-4" data-section="4" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">05</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-6 relative">
+            <div class="wireframe-box bottom-6 -right-2 lg:right-4" data-speed="0.15"></div>
+            <div class="aspect-[3/4] max-w-md mx-auto rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="MIGUEL">
+              <img src="assets/miguel.jpg" alt="Profile portrait of Miguel S Hanskin" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+            </div>
+          </div>
+          <div class="lg:col-span-6 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>05 // Chief Executive</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:6.7; --fit-max:3.75rem" data-split>Miguel S Hanskin.</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-lg" data-reveal="up">
+              Leading the global creative vision of Black. Hanskin pairs architectural discipline with avant-garde product strategies for the world's most discerning brands.
+            </p>
+            <blockquote class="pl-5 border-l border-white/30 text-lg md:text-xl font-italiana text-white/90 leading-snug max-w-lg" data-reveal="up">
+              “True luxury is not the presence of decoration, but the absolute confidence of its absence.”
+            </blockquote>
+            <div data-reveal="up"><button onclick="openDetailModal(4)" class="link-line" aria-haspopup="dialog" data-cursor-text="BIO">Executive bio →</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 6: Claudine Blevins -->
+      <section id="scroll-sec-5" data-section="5" class="story-section">
+        <span class="section-index section-index-left" data-speed="0.18" aria-hidden="true">06</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-4 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>06 // Managing Director</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:7; --fit-max:3rem" data-split>Claudine Blevins.</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed" data-reveal="up">
+              Managing Director & Executive Creative Producer directing high-contrast campaigns across Paris, Tokyo, and New York.
+            </p>
+            <div data-reveal="up"><button onclick="openDetailModal(5)" class="link-line" aria-haspopup="dialog" data-cursor-text="BIO">Executive bio →</button></div>
+          </div>
+          <div class="lg:col-span-4 aspect-square rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-speed="0.06" data-cursor-text="LEICA">
+            <img src="assets/camera.jpg" alt="Vintage 35mm Leica rangefinder camera" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+          </div>
+          <div class="lg:col-span-4 aspect-[3/4] rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-speed="-0.06" data-cursor-text="CLAUDINE">
+            <img src="assets/claudine.jpg" alt="Portrait of Claudine Blevins" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 7: Stephen S Thompson -->
+      <section id="scroll-sec-6" data-section="6" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">07</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-6 aspect-[3/4] w-full max-w-md mx-auto rounded-lg overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="STEPHEN">
+            <img src="assets/stephen.jpg" alt="Portrait of Stephen S Thompson" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+          </div>
+          <div class="lg:col-span-6 space-y-5 fit-col" data-stagger>
+            <span class="section-label" data-reveal="up" data-scramble>07 // Chief Technology</span>
+            <h2 class="fit-title font-syne font-black text-white leading-[0.95] tracking-tight" style="--fit:8.9; --fit-max:3.75rem" data-split>Stephen S Thompson.</h2>
+            <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-lg" data-reveal="up">
+              Pioneering spatial audio algorithms, hardware integration, and interactive digital interfaces for the next generation of sensory tech.
+            </p>
+            <blockquote class="pl-5 border-l border-white/30 text-lg md:text-xl font-italiana text-white/90 leading-snug max-w-lg" data-reveal="up">
+              “When audio becomes tactile, interface dissolves into pure intuition.”
+            </blockquote>
+            <div data-reveal="up"><button onclick="openDetailModal(6)" class="link-line" aria-haspopup="dialog" data-cursor-text="ROADMAP">Technology roadmap →</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 8: Creative Direction -->
+      <section id="scroll-sec-7" data-section="7" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">08</span>
+        <div class="relative space-y-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
+            <div class="space-y-3">
+              <span class="section-label" data-reveal="up" data-scramble>08 // Atelier Studio</span>
+              <h2 class="text-4xl md:text-5xl font-syne font-black text-white leading-[0.95] tracking-tight" data-split>Creative Direction.</h2>
+            </div>
+            <div data-reveal="up"><button onclick="openDetailModal(7)" class="link-line" aria-haspopup="dialog" data-cursor-text="STUDIO">Studio profile →</button></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-stagger>
+            <div class="story-card !p-5 group" data-reveal="up" data-cursor-text="JOHN">
+              <div class="aspect-[4/5] rounded-lg overflow-hidden mb-5 story-media">
+                <img src="assets/john.jpg" alt="Portrait of John B Thompson" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale">
+              </div>
+              <h3 class="text-xl md:text-2xl font-syne font-bold text-white">John B Thompson</h3>
+              <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-1">Graphic Designer</div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-3">Custom brutalist type foundries, monochrome editorial editions, and large-format architectural identities.</p>
+            </div>
+            <div class="story-card !p-5 group md:mt-24" data-reveal="up" data-cursor-text="JAMES">
+              <div class="aspect-[4/5] rounded-lg overflow-hidden mb-5 story-media">
+                <img src="assets/james.jpg" alt="Portrait of James T Campos" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale">
+              </div>
+              <h3 class="text-xl md:text-2xl font-syne font-bold text-white">James T Campos</h3>
+              <div class="text-xs font-mono tracking-widest text-neutral-400 uppercase mt-1">Graphic Designer</div>
+              <p class="text-xs text-neutral-400 font-jakarta leading-relaxed mt-3">Interactive spatial installations, generative motion design, and high-impact digital brand expressions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 9: Creative Roster -->
+      <section id="scroll-sec-8" data-section="8" class="story-section">
+        <span class="section-index section-index-left" data-speed="0.18" aria-hidden="true">09</span>
+        <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7 space-y-5">
+            <span class="section-label" data-reveal="up" data-scramble>09 // Creative Talent</span>
+            <h2 class="text-4xl md:text-5xl font-syne font-black text-white leading-[0.95] tracking-tight" data-split>Mel, Dana & Collen.</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2" data-stagger>
+              <button type="button" class="story-card !p-4 text-left w-full" data-reveal="up" onclick="openDetailModal(8)" aria-haspopup="dialog" data-cursor-text="MEL">
+                <span class="block aspect-square rounded overflow-hidden mb-3 story-media"><img src="assets/mel.jpg" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale"></span>
+                <span class="block text-sm font-bold font-syne text-white">Mel R Gavin</span>
+                <span class="block text-[10px] font-mono text-neutral-400 uppercase tracking-wider">Photographer</span>
+              </button>
+              <button type="button" class="story-card !p-4 text-left w-full" data-reveal="up" onclick="openDetailModal(8)" aria-haspopup="dialog" data-cursor-text="DANA">
+                <span class="block aspect-square rounded overflow-hidden mb-3 story-media"><img src="assets/dana.jpg" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale"></span>
+                <span class="block text-sm font-bold font-syne text-white">Dana J Garcia</span>
+                <span class="block text-[10px] font-mono text-neutral-400 uppercase tracking-wider">Interior Designer</span>
+              </button>
+              <button type="button" class="story-card !p-4 text-left w-full" data-reveal="up" onclick="openDetailModal(8)" aria-haspopup="dialog" data-cursor-text="COLLEN">
+                <span class="block aspect-square rounded overflow-hidden mb-3 story-media"><img src="assets/collen.jpg" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale"></span>
+                <span class="block text-sm font-bold font-syne text-white">Collen J Grimes</span>
+                <span class="block text-[10px] font-mono text-neutral-400 uppercase tracking-wider">Model</span>
+              </button>
+            </div>
+          </div>
+          <div class="lg:col-span-5 relative aspect-[3/4] w-full max-w-sm mx-auto rounded-xl overflow-hidden spotlight-card story-media" data-reveal="img" data-cursor-text="CHRONO">
+            <img src="assets/smartwatch.jpg" alt="Close-up of the curved edge of the Chronograph Zero smartwatch" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale" data-speed="-0.04">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+            <div class="absolute top-6 right-6 text-right">
+              <div id="scrollWatchTime" class="text-4xl font-mono font-bold text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]">11:36</div>
+              <div class="text-[10px] font-mono tracking-widest text-white/50 uppercase mt-1">Sapphire curved edge</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Section 10: Creative Ensemble Finale -->
+      <section id="scroll-sec-9" data-section="9" class="story-section">
+        <span class="section-index" data-speed="0.18" aria-hidden="true">10</span>
+        <div class="relative space-y-10">
+          <div class="space-y-3">
+            <span class="section-label" data-reveal="up" data-scramble>10 // Creative Ensemble</span>
+            <h2 class="text-4xl md:text-5xl font-syne font-black text-white leading-[0.95] tracking-tight" data-split>Myra, Mack & Wilma.</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-stagger>
+            <div class="story-card !p-5" data-reveal="up" data-cursor-text="MYRA">
+              <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 story-media"><img src="assets/myra.jpg" alt="Portrait of Myra J Todd" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale"></div>
+              <div class="text-lg font-bold font-syne text-white">Myra J Todd</div>
+              <div class="text-xs font-mono text-neutral-400 uppercase tracking-wider">Model</div>
+            </div>
+            <div class="story-card !p-5" data-reveal="up" data-cursor-text="MACK">
+              <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 story-media"><img src="assets/mack.jpg" alt="Portrait of Mack E Spiegel" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale"></div>
+              <div class="text-lg font-bold font-syne text-white">Mack E Spiegel</div>
+              <div class="text-xs font-mono text-neutral-400 uppercase tracking-wider">Graphic Designer</div>
+            </div>
+            <div class="story-card !p-5" data-reveal="up" data-cursor-text="WILMA">
+              <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 story-media"><img src="assets/wilma.jpg" alt="Portrait of Wilma G Ventura in a feather headdress" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale"></div>
+              <div class="text-lg font-bold font-syne text-white">Wilma G Ventura</div>
+              <div class="text-xs font-mono text-neutral-400 uppercase tracking-wider">Model</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Outro CTA & Footer -->
+    <section id="scrollOutro" class="relative min-h-[100svh] flex flex-col justify-between px-6 md:px-12 pt-32 pb-10 overflow-hidden border-t border-white/10">
+      <div class="outro-glow" aria-hidden="true"></div>
+      <div class="relative max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center">
+        <span class="section-label mb-6" data-reveal="up" data-scramble>Next // Your Project</span>
+        <h2 class="outro-title font-syne font-black text-white" data-split>Let's make it<br>Black.</h2>
+        <div class="mt-12 md:mt-16 flex flex-col md:flex-row md:items-center gap-10">
+          <button onclick="openInquiryModal()" class="cta-circle" aria-haspopup="dialog" data-magnetic="0.4" data-cursor-text="LET'S GO">
+            <span>Book a<br>consultation</span>
+          </button>
+          <p class="text-sm text-neutral-400 font-jakarta leading-relaxed max-w-sm" data-reveal="up">
+            Contact our Milan & New York partners for acoustic design, creative direction, and campaign production.
+          </p>
+        </div>
+      </div>
+      <footer class="relative max-w-7xl mx-auto w-full mt-20 border-t border-white/10 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-[11px] font-mono tracking-widest text-neutral-400 uppercase">
+        <span>© 2026 Black. Studio Inc.</span>
+        <span>Milan <span id="footerClock" class="text-white">--:--:--</span></span>
+        <button onclick="scrollToTop()" class="link-line !text-[11px] self-start md:self-auto" data-cursor-text="TOP">Back to top ↑</button>
+      </footer>
+    </section>
+
+  </main>
+
+
+  <!-- ========================================================================
+       FLOATING BOTTOM DECK CONTROLS BAR
+       ======================================================================== -->
+  <div id="deckControlsBar" class="hidden fixed bottom-0 left-0 w-full z-40 px-6 md:px-12 py-5 pointer-events-none flex items-center justify-between">
+
+    <!-- Slide Progress & Numeric Counter -->
+    <div class="pointer-events-auto flex items-center gap-4 glass-panel px-4 py-2 rounded-full border border-white/10">
+      <div class="flex items-baseline gap-1 font-mono text-xs" aria-live="polite">
+        <span class="sr-only">Slide</span>
+        <span id="deckCounterCurrent" class="text-white font-bold text-sm">01</span>
+        <span class="text-white/60">/</span>
+        <span class="text-white/60">10</span>
+      </div>
+      <div class="w-24 md:w-32 h-1 bg-white/15 rounded-full overflow-hidden" aria-hidden="true">
+        <div id="deckProgressBar" class="h-full bg-white transition-all duration-300 w-[10%]"></div>
+      </div>
+    </div>
+
+    <!-- Center Pagination Dots -->
+    <div class="hidden md:flex pointer-events-auto items-center glass-panel px-2 py-1 rounded-full border border-white/10" role="group" aria-label="Choose slide">
+      <button class="deck-nav-dot" aria-label="Slide 1"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 2"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 3"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 4"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 5"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 6"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 7"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 8"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 9"><span></span></button>
+      <button class="deck-nav-dot" aria-label="Slide 10"><span></span></button>
+    </div>
+
+    <!-- Arrow Navigation Buttons -->
+    <div class="pointer-events-auto flex items-center gap-2">
+      <button id="deckPrevBtn" class="p-3 rounded-full glass-panel border border-white/15 text-white hover:bg-white hover:text-black transition-all duration-300" aria-label="Previous slide" data-cursor-text="PREV">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      </button>
+      <button id="deckNextBtn" class="p-3 rounded-full glass-panel border border-white/15 text-white hover:bg-white hover:text-black transition-all duration-300" aria-label="Next slide" data-cursor-text="NEXT">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- ========================================================================
+       SCROLL STORY CHROME: SECTION NAV + BACK TO TOP
+       ======================================================================== -->
+  <nav id="storyNav" class="story-nav scroll-only hidden lg:flex" aria-label="Story sections"></nav>
+
+  <button id="backToTop" onclick="scrollToTop()" class="back-to-top scroll-only" aria-label="Back to top" data-cursor-text="TOP">
+    <svg class="back-to-top-ring" viewBox="0 0 54 54" aria-hidden="true">
+      <circle cx="27" cy="27" r="26" class="ring-track"></circle>
+      <circle id="backToTopRing" cx="27" cy="27" r="26" class="ring-progress"></circle>
+    </svg>
+    <i data-lucide="arrow-up" class="w-4 h-4 relative"></i>
+  </button>
+
+
+  <!-- ========================================================================
+       MODAL 1: INDEX GRID (PRESS 'G' OR CLICK 'INDEX')
+       ======================================================================== -->
+  <div id="overviewModal" class="modal fixed inset-0 z-50 hidden items-start md:items-center justify-center bg-black/90 backdrop-blur-xl p-5 md:p-12 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="overviewTitle">
+    <div class="w-full max-w-6xl mx-auto space-y-6 my-auto">
+
+      <div class="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+        <div>
+          <span class="text-xs font-mono text-neutral-400 tracking-widest uppercase">Index</span>
+          <h2 id="overviewTitle" class="text-2xl md:text-3xl font-syne font-bold text-white mt-1">Jump to a chapter</h2>
+        </div>
+        <button id="closeOverviewBtn" class="shrink-0 w-11 h-11 flex items-center justify-center rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-colors" aria-label="Close index" data-cursor-text="CLOSE">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Grid Container (Populated by script.js) -->
+      <div id="overviewGridContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4"></div>
+
+      <div class="hidden md:block text-center pt-4">
+        <span class="text-xs font-mono text-neutral-400">PRESS <kbd>ESC</kbd> TO CLOSE // <kbd>G</kbd> TOGGLES THIS INDEX</span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================================
+       MODAL 2: CASE STUDY & PROFILE DEEP DIVE MODAL
+       ======================================================================== -->
+  <div id="detailModal" class="modal fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-xl p-4 md:p-8" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="relative w-full max-w-4xl max-h-[90vh] md:max-h-[88vh] flex flex-col bg-[#111116] border border-white/20 rounded-2xl overflow-hidden shadow-2xl">
+
+      <!-- Close Button (stays put while the content scrolls) -->
+      <button id="modalCloseBtn" class="absolute top-4 right-4 md:top-6 md:right-6 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-black/70 backdrop-blur border border-white/15 text-white hover:bg-white hover:text-black transition-colors" aria-label="Close details" data-cursor-text="CLOSE">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="overflow-y-auto overscroll-contain p-5 md:p-10">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
+          <!-- Visual Column -->
+          <div class="md:col-span-5 aspect-[4/3] md:aspect-[3/4] rounded-xl overflow-hidden bg-black border border-white/10">
+            <img id="modalImage" src="assets/headphones.jpg" alt="" class="w-full h-full object-cover grayscale brightness-95">
+          </div>
+
+          <!-- Info Column -->
+          <div class="md:col-span-7 space-y-5">
+            <div class="flex items-center gap-3 pr-12">
+              <span id="modalNumber" class="text-xs font-mono px-2 py-0.5 rounded bg-white text-black font-bold">01</span>
+              <span id="modalTag" class="text-xs font-mono text-neutral-400 tracking-widest uppercase">OVERVIEW</span>
+            </div>
+
+            <h2 id="modalTitle" class="text-2xl md:text-4xl font-syne font-black text-white leading-tight">
+              Title
+            </h2>
+            <div id="modalSubtitle" class="text-xs md:text-sm font-mono text-neutral-400">
+              Subtitle
+            </div>
+
+            <p id="modalDesc" class="text-sm text-neutral-300 font-jakarta leading-relaxed">
+              Description
+            </p>
+
+            <!-- Dynamic Stats List -->
+            <div id="modalStatsList" class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2"></div>
+
+            <!-- Dynamic extra block: scope list, quote or team members -->
+            <div id="modalExtra" class="pt-4 border-t border-white/10"></div>
+
+            <div class="pt-2 flex flex-wrap items-center gap-3">
+              <button onclick="closeDetailModal(); openInquiryModal();" class="px-6 py-3 bg-white text-black text-xs font-mono tracking-wider uppercase font-semibold rounded hover:bg-neutral-200 transition-colors" aria-haspopup="dialog">
+                Start a project
+              </button>
+              <div class="flex items-center gap-2 ml-auto">
+                <button id="modalPrevBtn" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/15 text-white hover:bg-white hover:text-black transition-colors" aria-label="Previous chapter" data-cursor-text="PREV">
+                  <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                </button>
+                <button id="modalNextBtn" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/15 text-white hover:bg-white hover:text-black transition-colors" aria-label="Next chapter" data-cursor-text="NEXT">
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================================
+       MODAL 3: INQUIRY & TRANSMISSION DRAWER
+       ======================================================================== -->
+  <div id="inquiryModal" class="modal fixed inset-0 z-50 hidden items-start sm:items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="inquiryTitle">
+    <div class="relative w-full max-w-xl my-auto bg-[#111116] border border-white/20 rounded-2xl p-6 md:p-10 shadow-2xl">
+
+      <button id="closeInquiryBtn" class="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white hover:text-black transition-colors" aria-label="Close inquiry form" data-cursor-text="CLOSE">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-6 pr-12">
+        <span class="text-xs font-mono text-neutral-400 tracking-widest uppercase">Start a project</span>
+        <h2 id="inquiryTitle" class="text-2xl md:text-3xl font-syne font-bold text-white mt-1">Book a consultation</h2>
+        <p class="text-sm text-neutral-400 font-jakarta mt-2">
+          Tell us about your project and our Milan & New York partners will get back to you.
+        </p>
+      </div>
+
+      <form id="inquiryForm" class="space-y-4" novalidate>
+        <div>
+          <label for="inqName" class="block text-[11px] font-mono text-neutral-300 uppercase tracking-widest mb-1.5">Name or studio</label>
+          <input id="inqName" name="name" type="text" required autocomplete="name" placeholder="e.g. Laurent V. Studio" class="form-field">
+          <p class="field-error" id="inqNameError">Please tell us who you are.</p>
+        </div>
+
+        <div>
+          <label for="inqEmail" class="block text-[11px] font-mono text-neutral-300 uppercase tracking-widest mb-1.5">Email address</label>
+          <input id="inqEmail" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="name@domain.com" class="form-field">
+          <p class="field-error" id="inqEmailError">Please enter a valid email address.</p>
+        </div>
+
+        <div>
+          <label for="inqFocus" class="block text-[11px] font-mono text-neutral-300 uppercase tracking-widest mb-1.5">What do you need?</label>
+          <select id="inqFocus" name="focus" class="form-field">
+            <option>Acoustic Engineering & Hardware Design</option>
+            <option>Editorial Monochrome Photography</option>
+            <option>Brand Identity & Custom Type Foundry</option>
+            <option>Haute Scenography & Creative Direction</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="inqBrief" class="block text-[11px] font-mono text-neutral-300 uppercase tracking-widest mb-1.5">Project brief</label>
+          <textarea id="inqBrief" name="brief" rows="4" required placeholder="Timeline, aesthetic vision and deliverables…" class="form-field resize-y"></textarea>
+          <p class="field-error" id="inqBriefError">A sentence or two about the project helps us reply properly.</p>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-white text-black font-mono text-xs font-bold tracking-widest uppercase rounded hover:bg-neutral-200 transition-all duration-300 disabled:opacity-70" data-cursor-text="SEND">
+          Send inquiry
+        </button>
+        <p id="inquiryStatus" class="text-xs font-mono text-neutral-300 text-center min-h-[1rem]" role="status" aria-live="polite"></p>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Lucide Icon Renderer & Script Loader -->
+  <script src="script.js"></script>
+  <script>
+    // Initialize Lucide icons
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

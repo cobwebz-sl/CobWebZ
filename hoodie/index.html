@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth motion-reduce:scroll-auto">
+<head>
+  <meta charset="utf-8">
+  <!-- Demo site: kept out of search results so the studio ranks, not the fictional business -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>MUTE — Quiet essentials | Heavyweight hoodies in muted tones</title>
+  <meta name="description" content="MUTE makes heavyweight hoodies in muted tones. Minimal design, maximum comfort. Free shipping on orders over $100.">
+  <meta name="theme-color" content="#F5F2ED">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141414'/%3E%3Cpath d='M15 46V18h7l10 15 10-15h7v28h-7V30l-10 14-10-14v16z' fill='%23F5F2ED'/%3E%3C/svg%3E">
+
+  <!-- Fonts: Archivo (display, variable width 62–125%) + Inter (body & UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@300..700&display=swap">
+
+  <!-- Styles: Tailwind CSS v4, built ahead of time from src/index.css (how to rebuild is noted there) -->
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="has-intro">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-bone">Skip to content</a>
+
+  <!-- ===================== SVG SPRITE: garments + icons ===================== -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="sprite" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="hd-vol" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#000" stop-opacity=".2"/><stop offset=".18" stop-color="#000" stop-opacity=".03"/>
+        <stop offset=".4" stop-color="#fff" stop-opacity=".09"/><stop offset=".7" stop-color="#000" stop-opacity="0"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".22"/>
+      </linearGradient>
+      <linearGradient id="hd-vert" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".07"/><stop offset=".55" stop-color="#000" stop-opacity="0"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".12"/>
+      </linearGradient>
+      <linearGradient id="hd-sl" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".45" stop-color="#fff" stop-opacity=".06"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".28"/>
+      </linearGradient>
+      <linearGradient id="hd-sr" x1="1" x2="0" y1="0" y2="0">
+        <stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".45" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".28"/>
+      </linearGradient>
+      <radialGradient id="hd-in" cx=".5" cy=".3" r=".75">
+        <stop offset="0" stop-color="#000" stop-opacity=".62"/><stop offset="1" stop-color="#000" stop-opacity=".36"/>
+      </radialGradient>
+      <radialGradient id="hd-cast" cx=".5" cy=".2" r=".6">
+        <stop offset="0" stop-color="#000" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>
+      <pattern id="hd-rib" width="3.2" height="8" patternUnits="userSpaceOnUse">
+        <rect width="1.1" height="8" fill="#000" fill-opacity=".14"/><rect x="1.4" width=".7" height="8" fill="#fff" fill-opacity=".07"/>
+      </pattern>
+
+      <g id="hd-base">
+        <path style="fill:var(--hd)" d="M150 104C122 108 96 116 78 132C64 200 54 280 46 352L83 357C89 310 97 262 108 224Z"/>
+        <path fill="url(#hd-sl)" d="M150 104C122 108 96 116 78 132C64 200 54 280 46 352L83 357C89 310 97 262 108 224Z"/>
+        <path style="fill:var(--hd)" d="M250 104C278 108 304 116 322 132C336 200 346 280 354 352L317 357C311 310 303 262 292 224Z"/>
+        <path fill="url(#hd-sr)" d="M250 104C278 108 304 116 322 132C336 200 346 280 354 352L317 357C311 310 303 262 292 224Z"/>
+        <g fill="none" stroke-linecap="round" stroke-width="1.6">
+          <path stroke="#000" stroke-opacity=".1" d="M60 258C70 264 80 265 92 262M54 296C64 302 74 302 86 299M50 328C60 333 70 333 82 331"/>
+          <path stroke="#fff" stroke-opacity=".08" d="M60 263C70 269 80 270 91 267M54 301C64 307 74 307 85 304"/>
+          <path stroke="#000" stroke-opacity=".1" d="M340 258C330 264 320 265 308 262M346 296C336 302 326 302 314 299M350 328C340 333 330 333 318 331"/>
+          <path stroke="#fff" stroke-opacity=".08" d="M340 263C330 269 320 270 309 267M346 301C336 307 326 307 315 304"/>
+        </g>
+        <path style="fill:var(--hd)" d="M45 350L84 356L81 390C70 393 58 392 48 388Z"/>
+        <path fill="url(#hd-rib)" d="M45 350L84 356L81 390C70 393 58 392 48 388Z"/>
+        <path fill="#000" fill-opacity=".1" d="M45 350L84 356L81 390C70 393 58 392 48 388Z"/>
+        <path style="fill:var(--hd)" d="M355 350L316 356L319 390C330 393 342 392 352 388Z"/>
+        <path fill="url(#hd-rib)" d="M355 350L316 356L319 390C330 393 342 392 352 388Z"/>
+        <path fill="#000" fill-opacity=".1" d="M355 350L316 356L319 390C330 393 342 392 352 388Z"/>
+        <path style="fill:var(--hd)" d="M152 96C132 102 102 112 82 128C92 160 100 188 104 214C103 270 102 320 102 366L298 366C298 320 297 270 296 214C300 188 308 160 318 128C298 112 268 102 248 96Z"/>
+        <path fill="url(#hd-vol)" d="M152 96C132 102 102 112 82 128C92 160 100 188 104 214C103 270 102 320 102 366L298 366C298 320 297 270 296 214C300 188 308 160 318 128C298 112 268 102 248 96Z"/>
+        <path fill="url(#hd-vert)" d="M152 96C132 102 102 112 82 128C92 160 100 188 104 214C103 270 102 320 102 366L298 366C298 320 297 270 296 214C300 188 308 160 318 128C298 112 268 102 248 96Z"/>
+        <g fill="none" stroke-linecap="round">
+          <path stroke="#000" stroke-opacity=".2" stroke-width="1.1" d="M82 128C92 160 100 188 104 214M318 128C308 160 300 188 296 214"/>
+          <path stroke="#000" stroke-opacity=".07" stroke-width="1.6" d="M112 230C124 240 132 254 134 270M288 230C276 240 268 254 266 270"/>
+          <path stroke="#000" stroke-opacity=".08" stroke-width="1.4" d="M128 346C131 354 131 359 129 364M160 348C162 355 162 359 161 364M240 348C238 355 238 359 239 364M272 346C269 354 269 359 271 364"/>
+        </g>
+        <path style="fill:var(--hd)" d="M102 364L298 364L294 398C232 402 168 402 106 398Z"/>
+        <path fill="url(#hd-rib)" d="M102 364L298 364L294 398C232 402 168 402 106 398Z"/>
+        <path fill="url(#hd-vol)" d="M102 364L298 364L294 398C232 402 168 402 106 398Z"/>
+        <path fill="none" stroke="#000" stroke-opacity=".22" stroke-width="1.2" d="M102 364.5L298 364.5"/>
+      </g>
+      <g id="hd-hood">
+        <ellipse cx="200" cy="186" rx="78" ry="34" fill="url(#hd-cast)"/>
+        <path style="fill:var(--hd)" d="M138 120C120 72 146 20 200 14C254 20 280 72 262 120C248 146 226 166 200 184C174 166 152 146 138 120Z"/>
+        <path fill="url(#hd-vol)" d="M138 120C120 72 146 20 200 14C254 20 280 72 262 120C248 146 226 166 200 184C174 166 152 146 138 120Z"/>
+        <path style="fill:var(--hd)" d="M200 168C182 154 166 136 163 112C160 78 176 42 200 38C224 42 240 78 237 112C234 136 218 154 200 168Z"/>
+        <path fill="url(#hd-in)" d="M200 168C182 154 166 136 163 112C160 78 176 42 200 38C224 42 240 78 237 112C234 136 218 154 200 168Z"/>
+        <path fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="2.4" d="M200 170.5C180 156 163.5 137 160.5 112C157.5 76 175 35.5 200 35.5C225 35.5 242.5 76 239.5 112C236.5 137 220 156 200 170.5"/>
+        <path fill="none" stroke="#000" stroke-opacity=".22" d="M200 168C182 154 166 136 163 112C160 78 176 42 200 38C224 42 240 78 237 112C234 136 218 154 200 168"/>
+        <path fill="#000" fill-opacity=".12" d="M200 168L212 160C210 168 206 177 200 184Z"/>
+        <path fill="none" stroke="#000" stroke-opacity=".2" d="M200 183.5C206 176 210 168 212 160"/>
+      </g>
+      <g id="hd-strings">
+        <g fill="none" stroke-linecap="round">
+          <path stroke="#000" stroke-opacity=".28" stroke-width="4.6" d="M181 164C179 190 175 214 176 242M219 164C222 192 225 218 223 248"/>
+          <path style="stroke:var(--hd)" stroke-width="3" d="M181 164C179 190 175 214 176 242M219 164C222 192 225 218 223 248"/>
+          <path stroke="#fff" stroke-opacity=".18" stroke-width="1" d="M180.4 166C178.4 190 174.6 214 175.4 240M218.4 166C221.4 192 224.4 218 222.4 246"/>
+        </g>
+        <rect x="173.6" y="240" width="5" height="12" rx="1.6" style="fill:var(--hd-ink)"/>
+        <rect x="220.6" y="246" width="5" height="12" rx="1.6" style="fill:var(--hd-ink)"/>
+        <circle cx="181" cy="162" r="2.6" fill="#000" fill-opacity=".3" stroke="#fff" stroke-opacity=".2"/>
+        <circle cx="219" cy="162" r="2.6" fill="#000" fill-opacity=".3" stroke="#fff" stroke-opacity=".2"/>
+      </g>
+      <g id="hd-pocket-lines" fill="none" stroke-linecap="round">
+        <path stroke="#000" stroke-opacity=".12" stroke-width="4" d="M147 265C137 289 127 309 119 323M253 265C263 289 273 309 281 323"/>
+        <path stroke="#000" stroke-opacity=".3" stroke-width="1.4" d="M150 262C140 286 130 306 122 320M250 262C260 286 270 306 278 320"/>
+        <path stroke="#fff" stroke-opacity=".12" d="M151 263.5L249 263.5"/>
+      </g>
+    </defs>
+
+    <symbol id="hoodie" viewBox="0 0 400 420">
+      <use href="#hd-base"/>
+      <path style="fill:var(--hd)" d="M150 262L250 262C260 286 270 306 278 320L280 364L120 364L122 320C130 306 140 286 150 262Z"/>
+      <path fill="url(#hd-vert)" d="M150 262L250 262C260 286 270 306 278 320L280 364L120 364L122 320C130 306 140 286 150 262Z"/>
+      <use href="#hd-pocket-lines"/>
+      <path fill="none" stroke="#000" stroke-opacity=".18" stroke-width=".8" stroke-dasharray="2.5 2.5" d="M152 266L248 266M153 268C144 290 134 308 127 320M247 268C256 290 266 308 273 320"/>
+      <use href="#hd-hood"/>
+      <text x="200" y="216" text-anchor="middle" style="fill:var(--hd-ink);font:800 9.5px Archivo,sans-serif;font-stretch:125%;letter-spacing:1.6px">MUTE</text>
+      <text x="200" y="224.5" text-anchor="middle" style="fill:var(--hd-ink);font:600 3.6px Inter,sans-serif;letter-spacing:1.1px">QUIET ESSENTIALS</text>
+      <use href="#hd-strings"/>
+    </symbol>
+    <symbol id="hoodie-back" viewBox="0 0 400 420">
+      <use href="#hd-base"/>
+      <ellipse cx="200" cy="196" rx="70" ry="22" fill="url(#hd-cast)"/>
+      <path style="fill:var(--hd)" d="M136 124C118 76 146 18 200 12C254 18 282 76 264 124C258 158 236 186 200 192C164 186 142 158 136 124Z"/>
+      <path fill="url(#hd-vol)" d="M136 124C118 76 146 18 200 12C254 18 282 76 264 124C258 158 236 186 200 192C164 186 142 158 136 124Z"/>
+      <path fill="url(#hd-vert)" d="M136 124C118 76 146 18 200 12C254 18 282 76 264 124C258 158 236 186 200 192C164 186 142 158 136 124Z"/>
+      <path fill="none" stroke="#000" stroke-opacity=".18" stroke-width="1.1" d="M200 13L200 191"/>
+      <path fill="none" stroke="#fff" stroke-opacity=".1" d="M201.5 14L201.5 190"/>
+      <text x="200" y="268" text-anchor="middle" style="fill:var(--hd-ink);font:900 40px Archivo,sans-serif;font-stretch:125%;letter-spacing:-.5px">MUTE</text>
+      <text x="200" y="286" text-anchor="middle" style="fill:var(--hd-ink);font:600 7px Inter,sans-serif;letter-spacing:3.6px">QUIET ESSENTIALS</text>
+    </symbol>
+    <symbol id="crew" viewBox="0 0 400 420">
+      <use href="#hd-base"/>
+      <path style="fill:var(--hd)" d="M160 98C172 92 228 92 240 98C228 118 172 118 160 98Z"/>
+      <path fill="#000" fill-opacity=".45" d="M160 98C172 92 228 92 240 98C228 118 172 118 160 98Z"/>
+      <path style="fill:var(--hd)" fill-rule="evenodd" d="M146 98C162 132 238 132 254 98C238 84 162 84 146 98ZM160 98C172 92 228 92 240 98C228 118 172 118 160 98Z"/>
+      <path fill="url(#hd-rib)" fill-rule="evenodd" d="M146 98C162 132 238 132 254 98C238 84 162 84 146 98ZM160 98C172 92 228 92 240 98C228 118 172 118 160 98Z"/>
+      <path fill="#000" fill-opacity=".12" d="M146 98C162 84 238 84 254 98C240 93 160 93 146 98Z"/>
+      <path fill="none" stroke="#000" stroke-opacity=".2" d="M146 98C162 132 238 132 254 98"/>
+      <text x="200" y="190" text-anchor="middle" style="fill:var(--hd-ink);font:800 9.5px Archivo,sans-serif;font-stretch:125%;letter-spacing:1.6px">MUTE</text>
+    </symbol>
+    <symbol id="zip" viewBox="0 0 400 420">
+      <use href="#hd-base"/>
+      <path style="fill:var(--hd)" d="M150 262L196 262L196 364L120 364L122 320C130 306 140 286 150 262Z"/>
+      <path style="fill:var(--hd)" d="M250 262L204 262L204 364L280 364L278 320C270 306 260 286 250 262Z"/>
+      <use href="#hd-pocket-lines"/>
+      <path fill="none" stroke="#000" stroke-opacity=".18" stroke-width=".8" stroke-dasharray="2.5 2.5" d="M152 266L194 266M206 266L248 266"/>
+      <use href="#hd-hood"/>
+      <path fill="#000" fill-opacity=".1" d="M196.5 178H203.5V400H196.5Z"/>
+      <path fill="none" style="stroke:var(--hd-ink)" stroke-width="3" stroke-dasharray="1.4 1.2" d="M200 180V399"/>
+      <rect x="196.4" y="182" width="7.2" height="15" rx="2.2" style="fill:var(--hd-ink)"/>
+      <text x="240" y="214" text-anchor="middle" style="fill:var(--hd-ink);font:800 6.5px Archivo,sans-serif;font-stretch:125%;letter-spacing:1px">MUTE</text>
+      <use href="#hd-strings"/>
+    </symbol>
+
+    <!-- icons: 24px grid, 1.5 stroke -->
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.75"/><path d="M4.75 20c.9-3.6 3.8-5.75 7.25-5.75s6.35 2.15 7.25 5.75"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.25h13l-.95 11.5a1.5 1.5 0 0 1-1.5 1.37H7.95a1.5 1.5 0 0 1-1.5-1.37L5.5 8.25Z"/><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.75 9h16.5M3.75 15h16.5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-arrow-ur" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8.5 7H17v8.5"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 20.25s-7.5-4.45-7.5-10.1A4.15 4.15 0 0 1 12 7.6a4.15 4.15 0 0 1 7.5 2.55c0 5.65-7.5 10.1-7.5 10.1Z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 3.2 2.6 5.5 6 .75-4.4 4.15 1.15 5.95L12 16.6l-5.35 2.95 1.15-5.95L3.4 9.45l6-.75L12 3.2Z"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.75 6.75h11v9.5h-11zM13.75 10.25h3.9l2.85 3v3h-6.75"/><circle cx="7" cy="17.5" r="1.75" fill="#F5F2ED"/><circle cx="17" cy="17.5" r="1.75" fill="#F5F2ED"/></symbol>
+    <symbol id="i-return" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v3.75h3.75"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.25 19 6v5.25c0 4.6-3 8-7 9.5-4-1.5-7-4.9-7-9.5V6l7-2.75Z"/><path d="m9 12 2.1 2.1L15 10.2"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.25"/><path d="m8.6 13.1-1.35 7.65L12 18.5l4.75 2.25-1.35-7.65"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 6.5v11l9-5.5-9-5.5Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-tiktok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 3.5v11a3.75 3.75 0 1 1-3.75-3.75"/><path d="M14 3.5c.4 2.6 2.5 4.6 5.25 4.75"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="8.75"/><path d="m10.6 20.6 1.9-8.1M9.3 14.6c-.9-2.9 1-6.1 3.9-6.1 2.3 0 3.6 1.5 3.6 3.4 0 2.5-1.3 4.4-3.1 4.4-1.1 0-1.9-.8-1.6-1.9"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4.5 4.5 16.25 19.5h3.25L7.75 4.5H4.5Z"/><path d="m19.25 4.5-6.1 6.9M4.75 19.5l6.1-6.9"/></symbol>
+  </svg>
+
+  <!-- ===================== INTRO CURTAIN ===================== -->
+  <div class="intro pointer-events-none fixed inset-0 z-[90] grid place-items-center bg-ink text-bone" aria-hidden="true">
+    <div class="intro-word flex overflow-hidden font-wide text-[19vw] font-black leading-[.8] tracking-[-.05em] sm:text-[11vw]">
+      <span class="intro-l" style="--i:0">M</span><span class="intro-l" style="--i:1">U</span><span class="intro-l" style="--i:2">T</span><span class="intro-l" style="--i:3">E</span>
+    </div>
+    <p class="intro-word eyebrow absolute bottom-10 text-bone/50">Quiet essentials — FW26</p>
+  </div>
+
+  <div class="scroll-progress fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-ink" aria-hidden="true"></div>
+
+  <!-- ===================== ANNOUNCEMENT BAR ===================== -->
+  <div class="bg-ink text-bone">
+    <div class="wrap flex h-9 items-center justify-between gap-4 text-[12px]">
+      <span class="hidden text-bone/60 sm:inline">EN · USD $</span>
+      <div class="mx-auto h-4 overflow-hidden text-center sm:mx-0">
+        <ul class="ticker motion-reduce:animate-none">
+          <li class="flex h-4 items-center justify-center gap-2 leading-4"><svg class="size-4"><use href="#i-truck"/></svg>Free shipping on orders over $100</li>
+          <li class="h-4 leading-4">Free 30-day returns &amp; exchanges</li>
+          <li class="h-4 leading-4">Drop 03 — heavyweight 450 GSM is live</li>
+          <li class="flex h-4 items-center justify-center gap-2 leading-4" aria-hidden="true"><svg class="size-4"><use href="#i-truck"/></svg>Free shipping on orders over $100</li>
+        </ul>
+      </div>
+      <a href="#help" class="u-line hidden text-bone/60 hover:text-bone sm:inline">Help &amp; FAQ</a>
+    </div>
+  </div>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header sticky top-0 z-40 border-b border-line bg-bone/90 backdrop-blur-md">
+    <div class="wrap grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-4 lg:h-[72px]">
+      <div class="flex items-center">
+        <a href="#menu" class="icon-btn lg:hidden" aria-label="Open menu"><svg class="size-5"><use href="#i-menu"/></svg></a>
+        <a href="index.html" class="hidden font-wide text-[22px] font-black tracking-[-.05em] lg:block" aria-label="MUTE home">MUTE</a>
+      </div>
+      <div class="flex justify-center">
+        <a href="index.html" class="font-wide text-[22px] font-black tracking-[-.05em] lg:hidden" aria-label="MUTE home">MUTE</a>
+        <nav class="hidden items-center gap-9 text-[13px] font-medium lg:flex" aria-label="Primary">
+          <a href="#shop" class="group"><span class="roll"><span data-text="Shop">Shop</span></span></a>
+          <a href="#collections"><span class="roll"><span data-text="Collections">Collections</span></span></a>
+          <a href="#spotlight"><span class="roll"><span data-text="Oversized">Oversized</span></span></a>
+          <a href="#lookbook"><span class="roll"><span data-text="Lookbook">Lookbook</span></span></a>
+          <a href="#story"><span class="roll"><span data-text="Our story">Our story</span></span></a>
+          <a href="#sale" class="flex items-center gap-1.5"><span class="roll"><span data-text="Sale">Sale</span></span><span class="rounded-full bg-ink px-1.5 py-px text-[10px] font-semibold text-bone">-30%</span></a>
+        </nav>
+      </div>
+      <div class="flex items-center justify-end gap-1.5">
+        <button type="button" class="icon-btn" popovertarget="search" aria-label="Search"><svg class="size-[18px]"><use href="#i-search"/></svg></button>
+        <a href="#account" class="icon-btn hidden sm:grid" aria-label="Account"><svg class="size-[18px]"><use href="#i-user"/></svg></a>
+        <button type="button" class="icon-btn" popovertarget="cart" aria-label="Open bag, 1 item">
+          <svg class="size-[18px]"><use href="#i-bag"/></svg>
+          <span class="absolute -right-0.5 -top-0.5 grid size-[18px] place-items-center rounded-full bg-ink text-[10px] font-semibold text-bone ring-2 ring-bone">1</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HERO ===================== -->
+    <section id="hero" class="relative isolate overflow-hidden" aria-labelledby="hero-title">
+      <div aria-hidden="true" class="hero-glow pointer-events-none absolute left-1/2 top-[34%] -z-10 aspect-square w-[150vw] max-w-[70rem] -translate-x-1/2 rounded-full lg:top-[22%]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 hidden lg:block">
+        <div class="wrap relative h-full">
+          <span class="absolute inset-y-0 left-1/4 w-px bg-line/70"></span>
+          <span class="absolute inset-y-0 left-1/2 w-px bg-line/70"></span>
+          <span class="absolute inset-y-0 left-3/4 w-px bg-line/70"></span>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="flex items-center justify-between gap-6 pt-6 text-mist lg:pt-8">
+          <p class="eyebrow motion-safe:animate-fade-up" style="animation-delay:1.4s">Quiet essentials — FW26</p>
+          <p class="eyebrow hidden text-right motion-safe:animate-fade-up sm:block" style="animation-delay:1.5s">The best hoodies are made slowly</p>
+        </div>
+
+        <h1 id="hero-title" class="hero-word relative mt-3 lg:mt-2">
+          <span class="sr-only">MUTE — quiet essentials. Heavyweight hoodies in muted tones.</span>
+          <span aria-hidden="true" class="flex justify-center font-wide text-[24vw] font-black leading-[.8] tracking-[-.05em] xl:text-[21rem]">
+            <span class="overflow-hidden"><span class="block motion-safe:animate-rise" style="animation-delay:1.05s">M</span></span>
+            <span class="overflow-hidden"><span class="block motion-safe:animate-rise" style="animation-delay:1.13s">U</span></span>
+            <span class="overflow-hidden"><span class="block motion-safe:animate-rise" style="animation-delay:1.21s">T</span></span>
+            <span class="overflow-hidden"><span class="block motion-safe:animate-rise" style="animation-delay:1.29s">E</span></span>
+          </span>
+        </h1>
+
+        <div class="relative grid gap-10 pb-14 lg:grid-cols-12 lg:gap-6 lg:pb-16">
+          <!-- hoodie -->
+          <div class="relative z-10 mx-auto -mt-[12vw] w-[86vw] max-w-[34rem] lg:col-span-6 lg:col-start-4 lg:row-start-1 lg:-mt-[10.5rem] lg:w-full">
+            <div class="hero-lift">
+              <div class="motion-safe:animate-fade-up" style="animation-delay:1.35s">
+                <div class="relative motion-safe:animate-float">
+                  <div class="relative aspect-[400/420] w-full">
+                    <img src="images/hoodie-sand-front.webp" alt="MUTE Essential Hoodie in Sand" class="hero-img hero-img-sand absolute inset-0 size-full object-contain">
+                    <img src="images/hoodie-bone-front.webp" alt="MUTE Essential Hoodie in Bone" class="hero-img hero-img-bone absolute inset-0 size-full object-contain">
+                    <img src="images/hoodie-sage-front.webp" alt="MUTE Essential Hoodie in Sage" class="hero-img hero-img-sage absolute inset-0 size-full object-contain">
+                    <img src="images/hoodie-mocha-front.webp" alt="MUTE Essential Hoodie in Mocha" class="hero-img hero-img-mocha absolute inset-0 size-full object-contain">
+                    <img src="images/hoodie-charcoal-front.webp" alt="MUTE Essential Hoodie in Charcoal" class="hero-img hero-img-charcoal absolute inset-0 size-full object-contain">
+                    <img src="images/hoodie-ink-front.webp" alt="MUTE Essential Hoodie in Ink" class="hero-img hero-img-ink absolute inset-0 size-full object-contain">
+                  </div>
+                  <span aria-hidden="true" class="group/hs absolute left-[61%] top-[11%] hidden sm:block">
+                    <span class="relative grid size-6 place-items-center"><span class="absolute inset-0 rounded-full bg-ink/25 motion-safe:animate-ping"></span><span class="relative size-2.5 rounded-full bg-ink ring-4 ring-white/70"></span></span>
+                    <span class="pointer-events-none absolute left-8 top-1/2 -translate-x-1 -translate-y-1/2 whitespace-nowrap rounded-full bg-ink px-3 py-1.5 text-[11px] font-medium text-bone opacity-0 transition duration-500 ease-out-expo group-hover/hs:translate-x-0 group-hover/hs:opacity-100">Double-layered hood</span>
+                  </span>
+                  <span aria-hidden="true" class="group/hs absolute left-[30%] top-[70%] hidden sm:block">
+                    <span class="relative grid size-6 place-items-center"><span class="absolute inset-0 rounded-full bg-ink/25 motion-safe:animate-ping" style="animation-delay:.6s"></span><span class="relative size-2.5 rounded-full bg-ink ring-4 ring-white/70"></span></span>
+                    <span class="pointer-events-none absolute left-8 top-1/2 -translate-x-1 -translate-y-1/2 whitespace-nowrap rounded-full bg-ink px-3 py-1.5 text-[11px] font-medium text-bone opacity-0 transition duration-500 ease-out-expo group-hover/hs:translate-x-0 group-hover/hs:opacity-100">Deep kangaroo pocket</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div aria-hidden="true" class="mx-auto -mt-3 h-6 w-[60%] rounded-[50%] bg-[#3a2e22]/20 blur-xl motion-safe:animate-shadow"></div>
+          </div>
+
+          <!-- copy -->
+          <div class="text-center motion-safe:animate-fade-up lg:col-span-3 lg:row-start-1 lg:self-end lg:text-left" style="animation-delay:1.55s">
+            <p class="mx-auto max-w-sm text-[15px] leading-relaxed text-mist text-pretty lg:mx-0">Heavyweight hoodies in muted tones. Designed in small batches, made to be lived in — and to quietly outlast every trend.</p>
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+              <a href="#shop" class="btn btn-ink"><span class="roll"><span data-text="Shop the drop">Shop the drop</span></span><svg class="i-move size-4"><use href="#i-arrow"/></svg></a>
+              <a href="#story" class="btn btn-line"><span class="roll"><span data-text="Our story">Our story</span></span></a>
+            </div>
+          </div>
+
+          <!-- tone picker -->
+          <fieldset class="mx-auto w-full max-w-sm rounded-tile bg-white/70 p-5 ring-1 ring-line backdrop-blur-md motion-safe:animate-fade-up lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:max-w-none lg:self-end" style="animation-delay:1.65s">
+            <legend class="sr-only">Pick a tone for the hoodie</legend>
+            <div class="flex items-baseline justify-between">
+              <span class="eyebrow text-mist">Pick your tone</span>
+              <span class="tone-name text-sm font-medium" aria-hidden="true"></span>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center gap-2.5">
+              <label class="cursor-pointer"><input class="sr-only" type="radio" name="tone" id="tone-sand" checked><span class="swatch bg-hd-sand"></span><span class="sr-only">Sand</span></label>
+              <label class="cursor-pointer"><input class="sr-only" type="radio" name="tone" id="tone-bone"><span class="swatch bg-hd-bone"></span><span class="sr-only">Bone</span></label>
+              <label class="cursor-pointer"><input class="sr-only" type="radio" name="tone" id="tone-sage"><span class="swatch bg-hd-sage"></span><span class="sr-only">Sage</span></label>
+              <label class="cursor-pointer"><input class="sr-only" type="radio" name="tone" id="tone-mocha"><span class="swatch bg-hd-mocha"></span><span class="sr-only">Mocha</span></label>
+              <label class="cursor-pointer"><input class="sr-only" type="radio" name="tone" id="tone-charcoal"><span class="swatch bg-hd-charcoal"></span><span class="sr-only">Charcoal</span></label>
+              <label class="cursor-pointer"><input class="sr-only" type="radio" name="tone" id="tone-ink"><span class="swatch bg-hd-ink"></span><span class="sr-only">Ink</span></label>
+            </div>
+            <a href="product.html" class="group mt-5 flex items-center justify-between border-t border-line pt-4 text-[13px] font-medium">
+              <span>Essential Hoodie <span class="text-mist">— $59</span></span>
+              <span class="line-arrow"></span>
+            </a>
+          </fieldset>
+        </div>
+      </div>
+
+      <a href="#collections" class="group absolute right-[6%] top-[42%] hidden size-32 place-items-center rounded-full bg-bone/70 ring-1 ring-line backdrop-blur-md lg:grid xl:right-[9%]" aria-label="Scroll to collections">
+        <svg class="absolute inset-0 size-full motion-safe:animate-spin-slow" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="badge-path" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs>
+          <text fill="currentColor" style="font:600 9.4px Inter,sans-serif;letter-spacing:2.4px;text-transform:uppercase"><textPath href="#badge-path" textLength="284">Quiet essentials · Drop 03 · FW26 ·</textPath></text>
+        </svg>
+        <svg class="size-5 rotate-90 transition duration-500 ease-out-expo group-hover:translate-y-1"><use href="#i-arrow"/></svg>
+      </a>
+    </section>
+
+    <!-- ===================== MARQUEE ===================== -->
+    <section aria-label="What we stand for" class="overflow-hidden border-y border-line py-5 lg:py-7">
+      <div class="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none">
+        <ul class="flex shrink-0 items-center gap-8 pr-8 font-narrow text-4xl font-extrabold uppercase tracking-tight lg:gap-12 lg:pr-12 lg:text-6xl">
+          <li>Quiet essentials</li><li aria-hidden="true"><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+          <li class="text-outline">Heavyweight cotton</li><li aria-hidden="true"><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+          <li>Made to be lived in</li><li aria-hidden="true"><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+          <li class="text-outline">The best hoodies 2026</li><li aria-hidden="true"><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+        </ul>
+        <ul aria-hidden="true" class="flex shrink-0 items-center gap-8 pr-8 font-narrow text-4xl font-extrabold uppercase tracking-tight lg:gap-12 lg:pr-12 lg:text-6xl">
+          <li>Quiet essentials</li><li><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+          <li class="text-outline">Heavyweight cotton</li><li><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+          <li>Made to be lived in</li><li><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+          <li class="text-outline">The best hoodies 2026</li><li><svg class="size-6 lg:size-8"><use href="#i-spark"/></svg></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== COLLECTIONS ===================== -->
+    <section id="collections" class="scroll-mt-20 py-20 lg:py-32">
+      <div class="wrap">
+        <div class="flex items-end justify-between gap-6">
+          <div class="reveal">
+            <p class="eyebrow text-mist">Collections</p>
+            <h2 class="mt-3 font-display text-4xl font-bold tracking-[-.035em] lg:text-6xl">Shop by fit</h2>
+          </div>
+          <a href="#shop" class="group reveal inline-flex shrink-0 items-center gap-3 text-[12px] font-semibold uppercase tracking-[.16em]">View all <span class="line-arrow"></span></a>
+        </div>
+
+        <ul class="stagger mt-10 grid grid-cols-2 gap-3 lg:mt-14 lg:grid-cols-4 lg:gap-5">
+          <li class="reveal">
+            <a href="product.html" class="group relative block aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+              <span class="eyebrow absolute left-4 top-4 z-10 text-mist">01</span>
+              <img src="images/hoodie-ink-front.webp" alt="Oversized hoodie in Ink" class="absolute inset-0 m-auto size-[84%] object-contain transition duration-700 ease-out-expo group-hover:-translate-y-2 group-hover:scale-[1.05]">
+              <span class="absolute inset-x-2.5 bottom-2.5 z-10 rounded-xl bg-white/90 p-3.5 backdrop-blur sm:inset-x-3 sm:bottom-3 sm:p-4">
+                <span class="block font-display text-base font-bold tracking-tight sm:text-lg">Oversized</span>
+                <span class="mt-1 flex items-center justify-between gap-2 text-[10px] font-semibold uppercase tracking-[.16em] text-mist sm:text-[11px]">Shop now <span class="line-arrow text-ink"></span></span>
+              </span>
+            </a>
+          </li>
+          <li class="reveal">
+            <a href="product.html" class="group relative block aspect-[4/5] overflow-hidden rounded-tile bg-[#E6DFD4]">
+              <span class="eyebrow absolute left-4 top-4 z-10 text-mist">02</span>
+              <img src="images/hoodie-sand-front.webp" alt="Essentials hoodie in Sand" class="absolute inset-0 m-auto size-[84%] object-contain transition duration-700 ease-out-expo group-hover:-translate-y-2 group-hover:scale-[1.05]">
+              <span class="absolute inset-x-2.5 bottom-2.5 z-10 rounded-xl bg-white/90 p-3.5 backdrop-blur sm:inset-x-3 sm:bottom-3 sm:p-4">
+                <span class="block font-display text-base font-bold tracking-tight sm:text-lg">Essentials</span>
+                <span class="mt-1 flex items-center justify-between gap-2 text-[10px] font-semibold uppercase tracking-[.16em] text-mist sm:text-[11px]">Shop now <span class="line-arrow text-ink"></span></span>
+              </span>
+            </a>
+          </li>
+          <li class="reveal">
+            <a href="product.html" class="group relative block aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+              <span class="eyebrow absolute left-4 top-4 z-10 text-mist">03</span>
+              <img src="images/hoodie-charcoal-back.webp" alt="Heavyweight hoodie in Charcoal, back view" class="absolute inset-0 m-auto size-[84%] object-contain transition duration-700 ease-out-expo group-hover:-translate-y-2 group-hover:scale-[1.05]">
+              <span class="absolute inset-x-2.5 bottom-2.5 z-10 rounded-xl bg-white/90 p-3.5 backdrop-blur sm:inset-x-3 sm:bottom-3 sm:p-4">
+                <span class="block font-display text-base font-bold tracking-tight sm:text-lg">Heavyweight</span>
+                <span class="mt-1 flex items-center justify-between gap-2 text-[10px] font-semibold uppercase tracking-[.16em] text-mist sm:text-[11px]">Shop now <span class="line-arrow text-ink"></span></span>
+              </span>
+            </a>
+          </li>
+          <li class="reveal">
+            <a href="product.html" class="group relative block aspect-[4/5] overflow-hidden rounded-tile bg-[#E6DFD4]">
+              <span class="eyebrow absolute left-4 top-4 z-10 text-mist">04</span>
+              <img loading="lazy" decoding="async" src="images/hoodie-kids-bone.webp" alt="Kids hoodie in Bone" class="absolute inset-0 m-auto size-[70%] object-contain transition duration-700 ease-out-expo group-hover:-translate-y-2 group-hover:scale-[1.06]">
+              <span class="absolute inset-x-2.5 bottom-2.5 z-10 rounded-xl bg-white/90 p-3.5 backdrop-blur sm:inset-x-3 sm:bottom-3 sm:p-4">
+                <span class="block font-display text-base font-bold tracking-tight sm:text-lg">Kids</span>
+                <span class="mt-1 flex items-center justify-between gap-2 text-[10px] font-semibold uppercase tracking-[.16em] text-mist sm:text-[11px]">Shop now <span class="line-arrow text-ink"></span></span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== BEST SELLERS ===================== -->
+    <section id="shop" class="scroll-mt-20 pb-20 lg:pb-32">
+      <div class="wrap">
+        <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="reveal">
+            <p class="eyebrow text-mist">Best sellers</p>
+            <h2 class="mt-3 font-display text-4xl font-bold tracking-[-.035em] lg:text-6xl">Worn on repeat</h2>
+          </div>
+          <fieldset class="reveal flex flex-wrap gap-2">
+            <legend class="sr-only">Filter products</legend>
+            <span><input class="sr-only" type="radio" name="filter" id="f-all" checked><label class="pill" for="f-all">All</label></span>
+            <span><input class="sr-only" type="radio" name="filter" id="f-hoodie"><label class="pill" for="f-hoodie">Hoodies</label></span>
+            <span><input class="sr-only" type="radio" name="filter" id="f-zip"><label class="pill" for="f-zip">Zip-ups</label></span>
+            <span><input class="sr-only" type="radio" name="filter" id="f-crew"><label class="pill" for="f-crew">Crewnecks</label></span>
+          </fieldset>
+        </div>
+
+        <ul class="stagger mt-10 grid grid-cols-2 gap-x-3 gap-y-10 lg:mt-14 lg:grid-cols-4 lg:gap-x-5 lg:gap-y-14">
+          <!-- product -->
+          <li class="filter-item" data-cat="hoodie">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <span class="absolute left-3 top-3 z-10 rounded-full bg-ink px-2.5 py-1 text-[11px] font-medium text-bone">−30%</span>
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Essential Oversized Hoodie</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/hoodie-charcoal-front.webp" alt="Essential Oversized Hoodie in Charcoal" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/hoodie-charcoal-back.webp" alt="Essential Oversized Hoodie in Charcoal, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Essential Oversized Hoodie</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Charcoal · 5 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$59 <s class="ml-1 font-normal text-mist">$84</s></p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.8</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="hoodie">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <span class="absolute left-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium">Best seller</span>
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Essential Hoodie</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/hoodie-sand-front.webp" alt="Essential Hoodie in Sand" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/hoodie-sand-back.webp" alt="Essential Hoodie in Sand, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Essential Hoodie</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Sand · 4 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$59</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.8</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="zip">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <span class="absolute left-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium">New</span>
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Zip-Up Hoodie</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/zip-sage-front.webp" alt="Zip-Up Hoodie in Sage" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/hoodie-sage-back.webp" alt="Zip-Up Hoodie in Sage, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Zip-Up Hoodie</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Sage · 3 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$68</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.8</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="crew">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Classic Crewneck</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/crew-stone-front.webp" alt="Classic Crewneck in Stone" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/crew-stone-front.webp" alt="Classic Crewneck in Stone, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Classic Crewneck</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Stone · 3 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$49</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.7</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="hoodie">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <span class="absolute left-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium">450 GSM</span>
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Heavyweight Hoodie</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/hoodie-ink-front.webp" alt="Heavyweight Hoodie in Ink" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/hoodie-ink-back.webp" alt="Heavyweight Hoodie in Ink, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Heavyweight Hoodie</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Ink · 2 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$72</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.9</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="hoodie">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Comfort Hoodie</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/hoodie-mocha-front.webp" alt="Comfort Hoodie in Mocha" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/hoodie-mocha-back.webp" alt="Comfort Hoodie in Mocha, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Comfort Hoodie</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Mocha · 3 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$62</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.8</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="zip">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <span class="absolute left-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium">Low stock</span>
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Easy Zip Hoodie</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/zip-bone-front.webp" alt="Easy Zip Hoodie in Bone" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/hoodie-bone-back.webp" alt="Easy Zip Hoodie in Bone, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Easy Zip Hoodie</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Bone · 4 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$64</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.6</p>
+                </div>
+              </div>
+            </article>
+          </li>
+          <!-- product -->
+          <li class="filter-item" data-cat="crew">
+            <article class="reveal group relative">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-tile bg-oat">
+                <label class="absolute right-3 top-3 z-20 grid size-9 cursor-pointer place-items-center rounded-full bg-white/80 backdrop-blur transition hover:bg-white">
+                  <input type="checkbox" class="peer sr-only"><svg class="size-[18px] fill-transparent transition peer-checked:fill-ink peer-checked:motion-safe:animate-pop"><use href="#i-heart"/></svg>
+                  <span class="sr-only">Save Everyday Crewneck</span>
+                </label>
+                <img loading="lazy" decoding="async" src="images/crew-sand-front.webp" alt="Everyday Crewneck in Sand" class="absolute inset-0 m-auto size-[82%] object-contain transition duration-700 ease-out-expo group-hover:scale-95 group-hover:opacity-0">
+                <img loading="lazy" decoding="async" src="images/crew-sand-front.webp" alt="Everyday Crewneck in Sand, back view" class="absolute inset-0 m-auto size-[82%] scale-105 object-contain opacity-0 transition duration-700 ease-out-expo group-hover:scale-100 group-hover:opacity-100" aria-hidden="true">
+                <div class="absolute inset-x-3 bottom-3 z-10 hidden translate-y-[calc(100%+1rem)] rounded-xl bg-white/95 p-3 backdrop-blur transition duration-500 ease-out-expo group-hover:translate-y-0 group-focus-within:translate-y-0 sm:block">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.16em] text-mist">Quick add</p>
+                  <div class="mt-2 grid grid-cols-5 gap-1.5 text-[12px] font-medium">
+                    <a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">S</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">M</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">L</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">XL</a><a href="product.html" class="grid h-8 place-items-center rounded-full ring-1 ring-line transition hover:bg-ink hover:text-bone hover:ring-ink">2XL</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-[14px] font-medium sm:text-[15px]"><a href="product.html" class="after:absolute after:inset-0">Everyday Crewneck</a></h3>
+                  <p class="mt-1 text-[13px] text-mist">Sand · 3 colours</p>
+                </div>
+                <div class="mt-2 flex items-center justify-between sm:mt-0 sm:block sm:shrink-0 sm:text-right">
+                  <p class="text-[14px] font-semibold sm:text-[15px]">$52</p>
+                  <p class="flex items-center gap-1 text-[13px] text-mist sm:mt-1 sm:justify-end"><svg class="size-3.5 text-ink"><use href="#i-star"/></svg>4.7</p>
+                </div>
+              </div>
+            </article>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== SPOTLIGHT ===================== -->
+    <section id="spotlight" class="scroll-mt-20 border-t border-line py-20 lg:py-32">
+      <div class="wrap grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <aside class="hidden text-sm lg:col-span-2 lg:block">
+          <p class="font-display text-lg font-semibold">Shop</p>
+          <ul class="mt-6 space-y-3 text-mist">
+            <li><a href="#shop" class="u-line hover:text-ink">Hoodies</a></li>
+            <li><a href="#shop" class="u-line hover:text-ink">Zip-ups</a></li>
+            <li class="flex items-center gap-2"><a href="#shop" class="u-line hover:text-ink">Crewnecks</a><span class="rounded-full bg-oat px-1.5 text-[10px] font-medium text-ink">New</span></li>
+            <li><a href="#collections" class="u-line hover:text-ink">Kids</a></li>
+          </ul>
+          <p class="mt-16 font-display text-lg font-semibold">Info</p>
+          <ul class="mt-6 space-y-3 text-mist">
+            <li><a href="product.html" class="u-line hover:text-ink">Size guide</a></li>
+            <li><a href="#story" class="u-line hover:text-ink">Fabric &amp; care</a></li>
+            <li><a href="#help" class="u-line hover:text-ink">Shipping</a></li>
+          </ul>
+        </aside>
+
+        <div class="lg:col-span-5">
+          <p class="reveal text-sm text-mist">Drop 03 — Streetwear essentials</p>
+          <h2 class="reveal mt-2 font-display text-[clamp(3.5rem,15vw,7.25rem)] font-black leading-[.85] tracking-[-.065em] lg:text-[clamp(4rem,7.8vw,7.25rem)]">Oversized</h2>
+          <p class="reveal mt-6 max-w-md text-[15px] leading-relaxed text-mist text-pretty">Our best-selling silhouette, rebuilt in a dense 450 GSM loopback fleece. A double-layered hood that holds its shape, dropped shoulders, and a boxy body that drapes instead of clings.</p>
+          <dl class="reveal mt-8 grid max-w-md grid-cols-3 divide-x divide-line border-y border-line text-[13px]">
+            <div class="py-4 pr-4"><dt class="text-mist">Fit</dt><dd class="mt-1 font-medium">Boxy</dd></div>
+            <div class="px-4 py-4"><dt class="text-mist">Weight</dt><dd class="mt-1 font-medium">450 GSM</dd></div>
+            <div class="py-4 pl-4"><dt class="text-mist">Fabric</dt><dd class="mt-1 font-medium">Organic cotton</dd></div>
+          </dl>
+          <div class="reveal mt-8 flex flex-wrap gap-3">
+            <a href="product.html" class="btn btn-ink"><svg class="size-4"><use href="#i-bag"/></svg><span class="roll"><span data-text="Shop Oversized">Shop Oversized</span></span></a>
+            <a href="#story" class="btn btn-line"><svg class="size-4"><use href="#i-play"/></svg><span class="roll"><span data-text="How it's made">How it's made</span></span></a>
+          </div>
+          <ul class="reveal mt-12 flex h-56 gap-2" aria-label="Features">
+            <li class="vcard relative overflow-hidden rounded-xl bg-white p-4 ring-1 ring-line" tabindex="0">
+              <span class="text-[11px] font-semibold text-mist">01</span>
+              <span class="absolute bottom-4 left-4 font-display text-[13px] font-semibold [writing-mode:vertical-rl] rotate-180">Double-layered hood</span>
+              <span class="v-desc absolute bottom-4 left-12 w-40 text-[12px] leading-snug">Two layers of fleece, so the hood keeps its shape — and its warmth.</span>
+            </li>
+            <li class="vcard relative overflow-hidden rounded-xl bg-white p-4 ring-1 ring-line" tabindex="0">
+              <span class="text-[11px] font-semibold text-mist">02</span>
+              <span class="absolute bottom-4 left-4 font-display text-[13px] font-semibold [writing-mode:vertical-rl] rotate-180">Secure kangaroo pocket</span>
+              <span class="v-desc absolute bottom-4 left-12 w-40 text-[12px] leading-snug">Deep and bar-tacked, so it never sags — even with your phone in it.</span>
+            </li>
+            <li class="vcard relative overflow-hidden rounded-xl bg-white p-4 ring-1 ring-line" tabindex="0">
+              <span class="text-[11px] font-semibold text-mist">03</span>
+              <span class="absolute bottom-4 left-4 font-display text-[13px] font-semibold [writing-mode:vertical-rl] rotate-180">Brushed-back fleece</span>
+              <span class="v-desc absolute bottom-4 left-12 w-40 text-[12px] leading-snug">Brushed inside for a soft, broken-in feel from the very first wear.</span>
+            </li>
+            <li class="vcard relative overflow-hidden rounded-xl bg-white p-4 ring-1 ring-line" tabindex="0">
+              <span class="text-[11px] font-semibold text-mist">04</span>
+              <span class="absolute bottom-4 left-4 font-display text-[13px] font-semibold [writing-mode:vertical-rl] rotate-180">Garment-dyed tone</span>
+              <span class="v-desc absolute bottom-4 left-12 w-40 text-[12px] leading-snug">Dyed after sewing for rich, even colour that ages beautifully.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="relative lg:col-span-5">
+          <div class="reveal relative aspect-[4/5] overflow-hidden rounded-tile bg-white ring-1 ring-line lg:sticky lg:top-28">
+            <div aria-hidden="true" class="absolute inset-0 bg-[linear-gradient(to_right,var(--color-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-line)_1px,transparent_1px)] bg-[size:25%_20%] opacity-50"></div>
+            <input class="sr-only" type="radio" name="sv" id="sv-1" checked aria-label="Front view">
+            <input class="sr-only" type="radio" name="sv" id="sv-2" aria-label="Back view">
+            <input class="sr-only" type="radio" name="sv" id="sv-3" aria-label="Hood and drawcords">
+            <input class="sr-only" type="radio" name="sv" id="sv-4" aria-label="Pocket and rib">
+            <div class="absolute inset-0">
+              <img loading="lazy" decoding="async" src="images/hoodie-charcoal-front.webp" alt="Oversized hoodie in Charcoal, front view" class="sv-view absolute inset-0 m-auto size-[84%] object-contain" data-v="1">
+              <img loading="lazy" decoding="async" src="images/hoodie-charcoal-back.webp" alt="Oversized hoodie in Charcoal, back view" class="sv-view absolute inset-0 m-auto size-[84%] object-contain" data-v="2">
+              <img loading="lazy" decoding="async" src="images/detail-hood.webp" alt="Detail: double-layer hood and organic cotton fleece knit" class="sv-view absolute inset-0 size-full object-cover" data-v="3">
+              <img loading="lazy" decoding="async" src="images/detail-pocket.webp" alt="Detail: kangaroo pocket and 450 GSM rib hem" class="sv-view absolute inset-0 size-full object-cover" data-v="4">
+            </div>
+            <div class="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col items-end gap-3 font-display font-semibold tabular-nums">
+              <label for="sv-1" class="sv-num cursor-pointer text-[13px] text-mist hover:text-ink">01</label>
+              <label for="sv-2" class="sv-num cursor-pointer text-[13px] text-mist hover:text-ink">02</label>
+              <label for="sv-3" class="sv-num cursor-pointer text-[13px] text-mist hover:text-ink">03</label>
+              <label for="sv-4" class="sv-num cursor-pointer text-[13px] text-mist hover:text-ink">04</label>
+            </div>
+            <p class="sv-cap eyebrow absolute bottom-6 left-6 text-mist" data-v="1">Front</p>
+            <p class="sv-cap eyebrow absolute bottom-6 left-6 text-mist" data-v="2">Back print</p>
+            <p class="sv-cap eyebrow absolute bottom-6 left-6 text-mist" data-v="3">Hood &amp; drawcords</p>
+            <p class="sv-cap eyebrow absolute bottom-6 left-6 text-mist" data-v="4">Pocket &amp; rib hem</p>
+            <div class="absolute bottom-0 right-0 rounded-tl-tile bg-ink text-bone">
+              <div class="sv-arrows" data-v="1"><label for="sv-4" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-l"/></svg><span class="sr-only">Previous view</span></label><label for="sv-2" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-r"/></svg><span class="sr-only">Next view</span></label></div>
+              <div class="sv-arrows" data-v="2"><label for="sv-1" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-l"/></svg><span class="sr-only">Previous view</span></label><label for="sv-3" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-r"/></svg><span class="sr-only">Next view</span></label></div>
+              <div class="sv-arrows" data-v="3"><label for="sv-2" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-l"/></svg><span class="sr-only">Previous view</span></label><label for="sv-4" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-r"/></svg><span class="sr-only">Next view</span></label></div>
+              <div class="sv-arrows" data-v="4"><label for="sv-3" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-l"/></svg><span class="sr-only">Previous view</span></label><label for="sv-1" class="grid size-14 cursor-pointer place-items-center hover:bg-charcoal"><svg class="size-5"><use href="#i-chev-r"/></svg><span class="sr-only">Next view</span></label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SPLIT BANNERS ===================== -->
+    <section id="sale" class="scroll-mt-20 pb-20 lg:pb-32">
+      <div class="wrap grid gap-3 lg:grid-cols-2 lg:gap-5">
+        <article class="reveal group relative flex min-h-[32rem] flex-col justify-end overflow-hidden rounded-tile bg-sage p-7 text-bone lg:min-h-[40rem] lg:p-12">
+          <img loading="lazy" decoding="async" src="images/zip-sage-front.webp" alt="Zip-Up Hoodie in Sage" class="absolute -right-[8%] top-[4%] w-[78%] max-w-[30rem] object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.35)] transition duration-1000 ease-out-expo group-hover:-rotate-2 group-hover:scale-105 lg:-right-[4%] lg:w-[64%]">
+          <div class="relative">
+            <p class="eyebrow text-bone/70">Just landed</p>
+            <h3 class="mt-3 font-display text-5xl font-bold tracking-[-.045em] lg:text-7xl">New arrivals</h3>
+            <p class="mt-3 max-w-xs text-[15px] text-bone/80">Zip-ups and crews in four new muted tones, sized for everyone.</p>
+            <div class="mt-7 flex gap-3">
+              <a href="#shop" class="btn btn-bone"><span class="roll"><span data-text="Men">Men</span></span></a>
+              <a href="#shop" class="btn btn-ghost"><span class="roll"><span data-text="Women">Women</span></span></a>
+            </div>
+          </div>
+        </article>
+        <article class="reveal group relative flex min-h-[32rem] flex-col justify-end overflow-hidden rounded-tile bg-ink p-7 text-bone lg:min-h-[40rem] lg:p-12">
+          <img loading="lazy" decoding="async" src="images/hoodie-charcoal-back.webp" alt="Essential Hoodie back print" class="absolute -right-[10%] top-[4%] w-[78%] max-w-[30rem] object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.5)] transition duration-1000 ease-out-expo group-hover:rotate-2 group-hover:scale-105 lg:-right-[8%] lg:w-[62%]">
+          <div class="relative">
+            <p class="eyebrow text-bone/60">Limited offer</p>
+            <h3 class="mt-3 font-narrow text-[clamp(4.5rem,9vw,7.75rem)] font-black uppercase leading-[.82] tracking-[-.02em] [word-spacing:.1em]">Up to<br>30% off</h3>
+            <p class="mt-4 max-w-xs text-[15px] text-bone/70">On selected essentials, while stock lasts. Ends Sunday.</p>
+            <a href="#shop" class="btn btn-bone mt-7"><span class="roll"><span data-text="Shop sale">Shop sale</span></span><svg class="i-move size-4"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== EDITORIAL LOOKBOOK ===================== -->
+    <section id="lookbook" class="scroll-mt-20 border-t border-line py-20 lg:py-32">
+      <div class="wrap">
+        <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="reveal">
+            <p class="eyebrow text-mist">FW26 — Lookbook</p>
+            <h2 class="mt-3 font-display text-4xl font-bold tracking-[-.035em] lg:text-6xl">Quiet in motion.</h2>
+          </div>
+          <p class="reveal max-w-sm text-[15px] leading-relaxed text-mist">Minimal luxury streetwear. Clean oversized proportions, custom 450 GSM organic loopback fleece, and muted tones designed for quiet confidence.</p>
+        </div>
+
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          <div class="reveal group relative aspect-[3/4] overflow-hidden rounded-tile bg-oat">
+            <img loading="lazy" decoding="async" src="images/lookbook-charcoal-front.jpg" alt="Lookbook Essential Oversized Hoodie in Charcoal, front view" class="size-full object-cover transition duration-1000 ease-out-expo group-hover:scale-105">
+            <div class="absolute inset-x-4 bottom-4 z-10 flex items-center justify-between rounded-xl bg-white/85 p-3.5 backdrop-blur sm:p-4">
+              <div>
+                <p class="font-display text-sm font-bold tracking-tight">Essential Oversized Hoodie</p>
+                <p class="text-[11px] font-medium text-mist">Charcoal · Front silhouette</p>
+              </div>
+              <a href="product.html" class="grid size-8 place-items-center rounded-full bg-ink text-bone transition hover:scale-110" aria-label="View product"><svg class="size-3.5"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+          <div class="reveal group relative aspect-[3/4] overflow-hidden rounded-tile bg-oat">
+            <img loading="lazy" decoding="async" src="images/lookbook-charcoal-back.jpg" alt="Lookbook Essential Oversized Hoodie in Charcoal, back drape view" class="size-full object-cover transition duration-1000 ease-out-expo group-hover:scale-105">
+            <div class="absolute inset-x-4 bottom-4 z-10 flex items-center justify-between rounded-xl bg-white/85 p-3.5 backdrop-blur sm:p-4">
+              <div>
+                <p class="font-display text-sm font-bold tracking-tight">Essential Oversized Hoodie</p>
+                <p class="text-[11px] font-medium text-mist">Charcoal · Back hood drape</p>
+              </div>
+              <a href="product.html" class="grid size-8 place-items-center rounded-full bg-ink text-bone transition hover:scale-110" aria-label="View product"><svg class="size-3.5"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+          <div class="reveal group relative aspect-[3/4] overflow-hidden rounded-tile bg-oat sm:col-span-2 lg:col-span-1">
+            <img loading="lazy" decoding="async" src="images/lookbook-bone-front.jpg" alt="Lookbook Essential Hoodie in Bone, front view" class="size-full object-cover transition duration-1000 ease-out-expo group-hover:scale-105">
+            <div class="absolute inset-x-4 bottom-4 z-10 flex items-center justify-between rounded-xl bg-white/85 p-3.5 backdrop-blur sm:p-4">
+              <div>
+                <p class="font-display text-sm font-bold tracking-tight">Essential Hoodie</p>
+                <p class="text-[11px] font-medium text-mist">Bone · Crossover collar</p>
+              </div>
+              <a href="product.html" class="grid size-8 place-items-center rounded-full bg-ink text-bone transition hover:scale-110" aria-label="View product"><svg class="size-3.5"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STORY ===================== -->
+    <section id="story" class="scroll-mt-20 border-t border-line py-20 lg:py-32">
+      <div class="wrap">
+        <div class="grid gap-8 lg:grid-cols-12">
+          <p class="eyebrow text-mist lg:col-span-3 lg:pt-4">Our story — made slow</p>
+          <p class="story font-display text-[1.75rem] font-medium leading-[1.12] tracking-[-.03em] text-balance sm:text-4xl lg:col-span-9 lg:text-[3.5rem]">
+            <span class="w" style="--i:0">We</span> <span class="w" style="--i:1">make</span> <span class="w" style="--i:2">one</span> <span class="w" style="--i:3">thing,</span> <span class="w" style="--i:4">and</span> <span class="w" style="--i:5">we</span> <span class="w" style="--i:6">make</span> <span class="w" style="--i:7">it</span> <span class="w" style="--i:8">slowly:</span> <span class="w" style="--i:9">the</span> <span class="w" style="--i:10">hoodie</span> <span class="w" style="--i:11">you</span> <span class="w" style="--i:12">reach</span> <span class="w" style="--i:13">for</span> <span class="w" style="--i:14">first.</span> <span class="w text-mist" style="--i:15">Heavyweight</span> <span class="w text-mist" style="--i:16">organic</span> <span class="w text-mist" style="--i:17">cotton,</span> <span class="w text-mist" style="--i:18">muted</span> <span class="w text-mist" style="--i:19">tones,</span> <span class="w text-mist" style="--i:20">and</span> <span class="w text-mist" style="--i:21">nothing</span> <span class="w text-mist" style="--i:22">shouting</span> <span class="w text-mist" style="--i:23">for</span> <span class="w text-mist" style="--i:24">attention.</span>
+          </p>
+        </div>
+
+        <ol class="stagger mt-16 grid gap-px overflow-hidden rounded-tile bg-line ring-1 ring-line sm:grid-cols-2 lg:mt-24 lg:grid-cols-4">
+          <li class="reveal bg-bone p-6 lg:p-8">
+            <span class="font-display text-sm font-semibold text-mist">01</span>
+            <h3 class="mt-10 font-display text-2xl font-bold tracking-[-.03em]">Source</h3>
+            <p class="mt-2 text-[14px] leading-relaxed text-mist">Long-staple organic cotton, traceable back to the farm.</p>
+          </li>
+          <li class="reveal bg-bone p-6 lg:p-8">
+            <span class="font-display text-sm font-semibold text-mist">02</span>
+            <h3 class="mt-10 font-display text-2xl font-bold tracking-[-.03em]">Knit</h3>
+            <p class="mt-2 text-[14px] leading-relaxed text-mist">Loopback-knit into a dense 450 GSM fleece that keeps its shape.</p>
+          </li>
+          <li class="reveal bg-bone p-6 lg:p-8">
+            <span class="font-display text-sm font-semibold text-mist">03</span>
+            <h3 class="mt-10 font-display text-2xl font-bold tracking-[-.03em]">Cut &amp; sew</h3>
+            <p class="mt-2 text-[14px] leading-relaxed text-mist">Made in small batches by one family-run workshop in Porto.</p>
+          </li>
+          <li class="reveal bg-bone p-6 lg:p-8">
+            <span class="font-display text-sm font-semibold text-mist">04</span>
+            <h3 class="mt-10 font-display text-2xl font-bold tracking-[-.03em]">Dye</h3>
+            <p class="mt-2 text-[14px] leading-relaxed text-mist">Garment-dyed for soft, lived-in tones from the very first day.</p>
+          </li>
+        </ol>
+
+        <dl class="stagger mt-16 grid grid-cols-2 gap-x-6 gap-y-10 lg:mt-24 lg:grid-cols-4">
+          <div class="reveal border-t border-ink pt-5">
+            <dt class="text-[13px] text-mist">Heavyweight fleece</dt>
+            <dd class="mt-2 font-display text-5xl font-bold tracking-[-.04em] lg:text-7xl"><span class="count" style="--to:450" aria-hidden="true"></span><span class="sr-only">450</span><span class="ml-1.5 text-2xl text-mist lg:text-3xl">GSM</span></dd>
+          </div>
+          <div class="reveal border-t border-ink pt-5">
+            <dt class="text-[13px] text-mist">Organic cotton</dt>
+            <dd class="mt-2 font-display text-5xl font-bold tracking-[-.04em] lg:text-7xl"><span class="count" style="--to:100" aria-hidden="true"></span><span class="sr-only">100</span><span class="text-2xl text-mist lg:text-3xl">%</span></dd>
+          </div>
+          <div class="reveal border-t border-ink pt-5">
+            <dt class="text-[13px] text-mist">Free returns</dt>
+            <dd class="mt-2 font-display text-5xl font-bold tracking-[-.04em] lg:text-7xl"><span class="count" style="--to:30" aria-hidden="true"></span><span class="sr-only">30</span><span class="ml-1.5 text-2xl text-mist lg:text-3xl">days</span></dd>
+          </div>
+          <div class="reveal border-t border-ink pt-5">
+            <dt class="text-[13px] text-mist">Happy customers</dt>
+            <dd class="mt-2 font-display text-5xl font-bold tracking-[-.04em] lg:text-7xl"><span class="count" style="--to:12" aria-hidden="true"></span><span class="sr-only">12,000+</span><span class="text-2xl text-mist lg:text-3xl">k+</span></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================== TESTIMONIALS ===================== -->
+    <section aria-labelledby="reviews-title" class="bg-oat py-20 lg:py-32">
+      <div class="wrap grid gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <p id="reviews-title" class="eyebrow text-mist">What our customers say</p>
+          <p class="mt-4 flex items-baseline gap-2 font-display text-6xl font-bold tracking-[-.04em]">4.9 <span class="text-base font-medium tracking-normal text-mist">/ 5</span></p>
+          <p class="mt-2 flex items-center gap-1 text-ink"><svg class="size-4"><use href="#i-star"/></svg><svg class="size-4"><use href="#i-star"/></svg><svg class="size-4"><use href="#i-star"/></svg><svg class="size-4"><use href="#i-star"/></svg><svg class="size-4"><use href="#i-star"/></svg><span class="ml-2 text-[13px] text-mist">from 2,400+ reviews</span></p>
+        </div>
+        <div class="t-wrap lg:col-span-8">
+          <svg class="size-10 text-ink/20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 18v-5.5C4 8.4 6.1 6 10 5.5v2.6c-2 .5-3 1.9-3 4.4h3V18H4Zm10 0v-5.5c0-4.1 2.1-6.5 6-7v2.6c-2 .5-3 1.9-3 4.4h3V18h-6Z"/></svg>
+          <div class="mt-6 grid">
+            <figure class="t-slide">
+              <blockquote class="font-display text-2xl font-medium leading-snug tracking-[-.02em] text-balance lg:text-4xl">The quality is unreal. Super soft, heavy in the best way, and the fit is exactly right. It’s my go-to hoodie now.</blockquote>
+              <figcaption class="mt-8 flex items-center gap-3 text-[13px]"><span class="grid size-10 place-items-center rounded-full bg-ink font-semibold text-bone">JM</span><span><span class="block font-semibold">Jason M.</span><span class="text-mist">Essential Oversized Hoodie · Charcoal</span></span></figcaption>
+            </figure>
+            <figure class="t-slide">
+              <blockquote class="font-display text-2xl font-medium leading-snug tracking-[-.02em] text-balance lg:text-4xl">I’ve washed mine thirty times and it still looks new. The colours are even better in person.</blockquote>
+              <figcaption class="mt-8 flex items-center gap-3 text-[13px]"><span class="grid size-10 place-items-center rounded-full bg-sage font-semibold text-bone">AK</span><span><span class="block font-semibold">Amara K.</span><span class="text-mist">Essential Hoodie · Sand</span></span></figcaption>
+            </figure>
+            <figure class="t-slide">
+              <blockquote class="font-display text-2xl font-medium leading-snug tracking-[-.02em] text-balance lg:text-4xl">Minimal, no logos screaming at you — just a perfect hoodie. I came back for a second one in sage.</blockquote>
+              <figcaption class="mt-8 flex items-center gap-3 text-[13px]"><span class="grid size-10 place-items-center rounded-full bg-[#7A5F4C] font-semibold text-bone">LR</span><span><span class="block font-semibold">Leo R.</span><span class="text-mist">Zip-Up Hoodie · Sage</span></span></figcaption>
+            </figure>
+          </div>
+          <div class="mt-10 flex gap-2" aria-hidden="true"><span class="t-dot h-1.5 rounded-full"></span><span class="t-dot h-1.5 rounded-full"></span><span class="t-dot h-1.5 rounded-full"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PERKS ===================== -->
+    <section id="help" aria-label="Why shop with us" class="border-b border-line">
+      <ul class="wrap stagger grid grid-cols-2 gap-y-10 py-14 lg:grid-cols-4 lg:py-16">
+        <li class="reveal flex flex-col gap-4 pr-4 sm:flex-row sm:items-center"><span class="grid size-12 shrink-0 place-items-center rounded-full bg-white ring-1 ring-line"><svg class="size-5"><use href="#i-award"/></svg></span><span><span class="block text-[13px] font-semibold uppercase tracking-[.08em]">Premium quality</span><span class="mt-1 block text-[13px] text-mist">Crafted from the finest materials.</span></span></li>
+        <li class="reveal flex flex-col gap-4 pr-4 sm:flex-row sm:items-center"><span class="grid size-12 shrink-0 place-items-center rounded-full bg-white ring-1 ring-line"><svg class="size-5"><use href="#i-truck"/></svg></span><span><span class="block text-[13px] font-semibold uppercase tracking-[.08em]">Free shipping</span><span class="mt-1 block text-[13px] text-mist">On all orders over $100.</span></span></li>
+        <li class="reveal flex flex-col gap-4 pr-4 sm:flex-row sm:items-center"><span class="grid size-12 shrink-0 place-items-center rounded-full bg-white ring-1 ring-line"><svg class="size-5"><use href="#i-return"/></svg></span><span><span class="block text-[13px] font-semibold uppercase tracking-[.08em]">Easy returns</span><span class="mt-1 block text-[13px] text-mist">Hassle-free within 30 days.</span></span></li>
+        <li class="reveal flex flex-col gap-4 pr-4 sm:flex-row sm:items-center"><span class="grid size-12 shrink-0 place-items-center rounded-full bg-white ring-1 ring-line"><svg class="size-5"><use href="#i-shield"/></svg></span><span><span class="block text-[13px] font-semibold uppercase tracking-[.08em]">Secure payment</span><span class="mt-1 block text-[13px] text-mist">100% safe &amp; secure checkout.</span></span></li>
+      </ul>
+    </section>
+
+    <!-- ===================== NEWSLETTER ===================== -->
+    <section aria-labelledby="news-title" class="py-20 lg:py-32">
+      <div class="wrap">
+        <div class="reveal grid overflow-hidden rounded-tile bg-white ring-1 ring-line lg:grid-cols-2">
+          <div class="flex flex-col justify-center p-7 sm:p-10 lg:p-16">
+            <p class="eyebrow text-mist">Stay updated</p>
+            <h2 id="news-title" class="mt-3 font-display text-4xl font-bold tracking-[-.035em] lg:text-6xl">New tones, first.</h2>
+            <p class="mt-4 max-w-md text-[15px] leading-relaxed text-mist">Get early access to drops, restocks and members-only offers. No spam — just good hoodies.</p>
+            <form method="dialog" class="group/nl mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
+              <label for="email" class="sr-only">Email address</label>
+              <input id="email" type="email" required autocomplete="email" placeholder="Enter your email" class="h-12 flex-1 rounded-full bg-bone px-5 text-[14px] ring-1 ring-line transition placeholder:text-mist focus:outline-none focus:ring-2 focus:ring-ink">
+              <button type="button" popovertarget="subscribed" class="btn btn-ink transition-opacity group-has-[input:invalid]/nl:pointer-events-none group-has-[input:invalid]/nl:opacity-40"><span class="roll"><span data-text="Subscribe">Subscribe</span></span></button>
+            </form>
+            <p class="mt-4 text-[12px] text-mist">By subscribing you agree to our <a href="#" class="underline underline-offset-2">Privacy Policy</a>.</p>
+          </div>
+          <div class="relative min-h-[22rem] overflow-hidden bg-oat">
+            <img loading="lazy" decoding="async" src="images/hoodie-sand-back.webp" alt="MUTE Essential Hoodie back in Sand" class="drift absolute inset-0 m-auto h-[84%] w-auto object-contain" style="--dy:1.5rem">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="border-t border-line pt-16 lg:pt-24">
+    <div class="wrap">
+      <div class="grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <a href="index.html" class="font-wide text-3xl font-black tracking-[-.05em]">MUTE</a>
+          <p class="mt-4 max-w-xs text-[14px] leading-relaxed text-mist">Minimal design. Maximum comfort.<br>Worldwide shipping.</p>
+          <div class="mt-6 flex gap-2">
+            <a href="#" class="icon-btn" aria-label="Instagram"><svg class="size-[18px]"><use href="#i-ig"/></svg></a>
+            <a href="#" class="icon-btn" aria-label="TikTok"><svg class="size-[18px]"><use href="#i-tiktok"/></svg></a>
+            <a href="#" class="icon-btn" aria-label="Pinterest"><svg class="size-[18px]"><use href="#i-pin"/></svg></a>
+            <a href="#" class="icon-btn" aria-label="X"><svg class="size-[18px]"><use href="#i-x"/></svg></a>
+          </div>
+        </div>
+        <nav class="grid grid-cols-2 gap-10 text-[14px] sm:grid-cols-4 lg:col-span-8" aria-label="Footer">
+          <div><p class="eyebrow">Shop</p><ul class="mt-5 space-y-3 text-mist"><li><a href="#shop" class="u-line hover:text-ink">All products</a></li><li><a href="#shop" class="u-line hover:text-ink">New arrivals</a></li><li><a href="#shop" class="u-line hover:text-ink">Best sellers</a></li><li><a href="#sale" class="u-line hover:text-ink">Sale</a></li></ul></div>
+          <div><p class="eyebrow">Company</p><ul class="mt-5 space-y-3 text-mist"><li><a href="#story" class="u-line hover:text-ink">About us</a></li><li><a href="#story" class="u-line hover:text-ink">Our story</a></li><li><a href="#story" class="u-line hover:text-ink">Sustainability</a></li><li><a href="#" class="u-line hover:text-ink">Careers</a></li></ul></div>
+          <div><p class="eyebrow">Help</p><ul class="mt-5 space-y-3 text-mist"><li><a href="#help" class="u-line hover:text-ink">FAQ</a></li><li><a href="#help" class="u-line hover:text-ink">Shipping &amp; returns</a></li><li><a href="product.html" class="u-line hover:text-ink">Size guide</a></li><li><a href="#" class="u-line hover:text-ink">Contact us</a></li></ul></div>
+          <div id="account"><p class="eyebrow">Account</p><ul class="mt-5 space-y-3 text-mist"><li><a href="#" class="u-line hover:text-ink">Log in</a></li><li><a href="#" class="u-line hover:text-ink">Register</a></li><li><a href="#" class="u-line hover:text-ink">Order tracking</a></li><li><a href="#" class="u-line hover:text-ink">Wishlist</a></li></ul></div>
+        </nav>
+      </div>
+
+      <p class="foot-word mt-16 flex justify-center overflow-hidden font-wide text-[25vw] font-black leading-[.8] tracking-[-.05em] lg:mt-24 xl:text-[22rem]" aria-hidden="true">
+        <span class="inline-block" style="--i:0">M</span><span class="inline-block" style="--i:1">U</span><span class="inline-block" style="--i:2">T</span><span class="inline-block" style="--i:3">E</span>
+      </p>
+
+      <div class="flex flex-col gap-3 border-t border-line py-6 text-[12px] text-mist sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 MUTE Studio. All rights reserved.</p>
+        <div class="flex gap-6"><a href="#" class="u-line hover:text-ink">Privacy Policy</a><a href="#" class="u-line hover:text-ink">Terms of Service</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== MOBILE MENU (CSS :target) ===================== -->
+  <div id="menu" class="menu fixed inset-0 z-50 lg:hidden" role="dialog" aria-label="Menu">
+    <a href="#close" class="menu-scrim absolute inset-0 bg-ink/40 backdrop-blur-[2px]" tabindex="-1" aria-label="Close menu"></a>
+    <div class="menu-panel relative flex h-full w-full flex-col overflow-y-auto bg-bone p-5 sm:max-w-sm">
+      <div class="flex items-center justify-between">
+        <span class="font-wide text-[22px] font-black tracking-[-.05em]">MUTE</span>
+        <a href="#close" class="icon-btn" aria-label="Close menu"><svg class="size-5"><use href="#i-close"/></svg></a>
+      </div>
+      <ul class="stagger-in mt-12 space-y-1 font-display text-5xl font-bold tracking-[-.045em]">
+        <li><a href="#shop" class="flex items-center justify-between py-1">Shop <svg class="size-6 text-mist"><use href="#i-arrow-ur"/></svg></a></li>
+        <li><a href="#collections" class="flex items-center justify-between py-1">Collections <svg class="size-6 text-mist"><use href="#i-arrow-ur"/></svg></a></li>
+        <li><a href="#spotlight" class="flex items-center justify-between py-1">Oversized <svg class="size-6 text-mist"><use href="#i-arrow-ur"/></svg></a></li>
+        <li><a href="#lookbook" class="flex items-center justify-between py-1">Lookbook <svg class="size-6 text-mist"><use href="#i-arrow-ur"/></svg></a></li>
+        <li><a href="#story" class="flex items-center justify-between py-1">Our story <svg class="size-6 text-mist"><use href="#i-arrow-ur"/></svg></a></li>
+        <li><a href="#sale" class="flex items-center justify-between py-1">Sale <span class="rounded-full bg-ink px-2 py-0.5 font-sans text-xs font-semibold tracking-normal text-bone">-30%</span></a></li>
+      </ul>
+      <div class="mt-auto space-y-6 pt-12">
+        <div class="flex gap-6 text-[14px] text-mist"><a href="#account">Account</a><a href="#help">Help</a><a href="product.html">Size guide</a></div>
+        <div class="flex gap-2"><a href="#" class="icon-btn" aria-label="Instagram"><svg class="size-[18px]"><use href="#i-ig"/></svg></a><a href="#" class="icon-btn" aria-label="TikTok"><svg class="size-[18px]"><use href="#i-tiktok"/></svg></a><a href="#" class="icon-btn" aria-label="Pinterest"><svg class="size-[18px]"><use href="#i-pin"/></svg></a></div>
+        <p class="flex items-center gap-2 text-[12px] text-mist"><svg class="size-4"><use href="#i-truck"/></svg>Free shipping on orders over $100</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SEARCH (popover) ===================== -->
+  <div id="search" popover class="sheet">
+    <div class="wrap py-6 lg:py-10">
+      <div class="flex items-center justify-between">
+        <p class="eyebrow text-mist">Search</p>
+        <button type="button" class="icon-btn" popovertarget="search" popovertargetaction="hide" aria-label="Close search"><svg class="size-5"><use href="#i-close"/></svg></button>
+      </div>
+      <form method="dialog" class="mt-6 flex items-center gap-4 border-b border-ink pb-4" role="search">
+        <svg class="size-7 shrink-0"><use href="#i-search"/></svg>
+        <label for="q" class="sr-only">Search products</label>
+        <input id="q" type="search" autofocus placeholder="Hoodies, zips, crews…" class="w-full bg-transparent font-display text-3xl font-semibold tracking-[-.03em] placeholder:text-ink/25 focus:outline-none lg:text-5xl">
+      </form>
+      <div class="stagger-in mt-8 flex flex-wrap items-center gap-2">
+        <span class="mr-2 text-[13px] text-mist">Popular:</span>
+        <a href="product.html" class="pill">Oversized hoodie</a><a href="product.html" class="pill">Zip-up</a><a href="product.html" class="pill">Crewneck</a><a href="product.html" class="pill">Heavyweight</a><a href="product.html" class="pill">Sage</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== BAG (popover drawer) ===================== -->
+  <aside id="cart" popover class="drawer" aria-label="Shopping bag">
+    <div class="flex min-h-full flex-col">
+      <div class="flex items-center justify-between border-b border-line px-6 py-5">
+        <p class="font-display text-xl font-bold tracking-[-.03em]">Your bag <span class="text-mist">(1)</span></p>
+        <button type="button" class="icon-btn" popovertarget="cart" popovertargetaction="hide" aria-label="Close bag"><svg class="size-5"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="border-b border-line px-6 py-5">
+        <p class="text-[13px]">You’re <strong>$41</strong> away from free shipping</p>
+        <div class="mt-3 h-1 overflow-hidden rounded-full bg-line"><div class="h-full w-[59%] rounded-full bg-ink"></div></div>
+      </div>
+      <ul class="stagger-in flex-1 divide-y divide-line px-6">
+        <li class="flex gap-4 py-6">
+          <div class="grid size-24 shrink-0 place-items-center rounded-xl bg-oat overflow-hidden p-1.5"><img src="images/hoodie-charcoal-front.webp" alt="Essential Oversized Hoodie" class="size-full object-contain"></div>
+          <div class="flex flex-1 flex-col">
+            <div class="flex justify-between gap-3"><p class="text-[14px] font-medium">Essential Oversized Hoodie</p><p class="text-[14px] font-semibold">$59</p></div>
+            <p class="mt-1 text-[13px] text-mist">Charcoal · M</p>
+            <div class="mt-auto flex items-center justify-between pt-3 text-[13px]"><span class="rounded-full px-3 py-1 ring-1 ring-line">Qty 1</span><a href="#" class="u-line text-mist hover:text-ink">Remove</a></div>
+          </div>
+        </li>
+      </ul>
+      <div class="sticky bottom-0 space-y-4 border-t border-line bg-bone px-6 py-6">
+        <div class="flex justify-between text-[14px]"><span class="text-mist">Subtotal</span><span class="font-semibold">$59.00</span></div>
+        <a href="#" class="btn btn-ink w-full"><span class="roll"><span data-text="Checkout">Checkout</span></span><svg class="i-move size-4"><use href="#i-arrow"/></svg></a>
+        <button type="button" popovertarget="cart" popovertargetaction="hide" class="block w-full text-center text-[13px] text-mist underline underline-offset-4 hover:text-ink">Continue shopping</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== TOAST (popover) ===================== -->
+  <div id="subscribed" popover class="toast">
+    <div class="flex items-center gap-3 rounded-full bg-ink py-2 pl-2 pr-5 text-[13px] text-bone shadow-2xl">
+      <span class="grid size-8 place-items-center rounded-full bg-bone text-ink"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+      You’re on the list — welcome to MUTE.
+    </div>
+  </div>
+</body>
+</html>

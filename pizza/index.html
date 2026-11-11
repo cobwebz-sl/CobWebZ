@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <!-- Demo site: kept out of search results so the studio ranks, not the fictional business -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forno Nero — Wood-Fired Pizzeria</title>
+  <meta name="description" content="Forno Nero is a wood-fired Neapolitan pizzeria in Brooklyn. 48-hour dough, San Marzano tomatoes and fior di latte, baked at 485°C in 90 seconds. Order online, build your own pizza or book a table.">
+  <meta name="theme-color" content="#0b0908">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Forno Nero — Wood-Fired Pizzeria">
+  <meta property="og:description" content="Real fire. Real pizza. Order online, build your own or book a table.">
+  <meta property="og:image" content="images/hero-pizza.webp">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Caveat:wght@600;700&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+  <link rel="preload" as="image" href="images/hero-pizza.webp" fetchpriority="high">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Forno Nero",
+    "servesCuisine": ["Pizza", "Italian"],
+    "priceRange": "$$",
+    "telephone": "+1-555-214-7788",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "128 Ember Street",
+      "addressLocality": "Brooklyn",
+      "addressRegion": "NY",
+      "postalCode": "11211",
+      "addressCountry": "US"
+    },
+    "openingHours": ["Tu-Th 12:00-22:00", "Fr-Sa 12:00-23:30", "Su 12:00-21:00"],
+    "acceptsReservations": true
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Shared gradients + icon sprite -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-fire" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffb347"/>
+        <stop offset=".5" stop-color="#ff5a2b"/>
+        <stop offset="1" stop-color="#ff3f8e"/>
+      </linearGradient>
+      <linearGradient id="g-basil" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="#1c7a3a"/>
+        <stop offset="1" stop-color="#5fd884"/>
+      </linearGradient>
+      <linearGradient id="g-chili" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ff6a3d"/>
+        <stop offset="1" stop-color="#c81d12"/>
+      </linearGradient>
+      <radialGradient id="g-tomato" cx=".4" cy=".35" r=".7">
+        <stop offset="0" stop-color="#ff7a5c"/>
+        <stop offset="1" stop-color="#e2321f"/>
+      </radialGradient>
+    </defs>
+
+    <symbol id="logo-mark" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="23" fill="url(#g-fire)"/>
+      <path d="M24 39.5 11.2 15.2c8-5.6 17.6-5.6 25.6 0Z" fill="#140c09"/>
+      <path d="M11.2 15.2c8-5.6 17.6-5.6 25.6 0" fill="none" stroke="#140c09" stroke-width="4.4" stroke-linecap="round"/>
+      <circle cx="20.4" cy="20.2" r="2.6" fill="#ff7a3a"/>
+      <circle cx="27.8" cy="22.4" r="2.3" fill="#ff5a6a"/>
+      <circle cx="23.6" cy="29.4" r="2.1" fill="#ffb347"/>
+    </symbol>
+
+    <!-- illustrated ingredients -->
+    <symbol id="i-basil" viewBox="0 0 64 64">
+      <path d="M6 58C4 32 24 8 60 4c2 34-22 56-54 54Z" fill="url(#g-basil)"/>
+      <path d="M8 56C22 42 38 24 56 8" fill="none" stroke="#d2f8db" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
+      <path d="M19 45c-1-5-1-10 1-14M28 36c-1-5 0-10 2-14M37 27c0-5 1-9 4-12M19 45c5 1 10 1 14-1M28 36c5 1 10 0 14-2M37 27c5 0 9-1 12-4" fill="none" stroke="#d2f8db" stroke-opacity=".3" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-tomato" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#c42418"/>
+      <circle cx="32" cy="32" r="26.5" fill="url(#g-tomato)"/>
+      <g fill="#ff9c84">
+        <ellipse cx="32" cy="17" rx="6.5" ry="8.5"/>
+        <ellipse cx="32" cy="17" rx="6.5" ry="8.5" transform="rotate(72 32 32)"/>
+        <ellipse cx="32" cy="17" rx="6.5" ry="8.5" transform="rotate(144 32 32)"/>
+        <ellipse cx="32" cy="17" rx="6.5" ry="8.5" transform="rotate(216 32 32)"/>
+        <ellipse cx="32" cy="17" rx="6.5" ry="8.5" transform="rotate(288 32 32)"/>
+      </g>
+      <g fill="#fff0c2">
+        <path d="M30 13.5h.1M34 18.5h.1" stroke="#fff0c2" stroke-width="2.6" stroke-linecap="round"/>
+        <g transform="rotate(72 32 32)"><path d="M30 13.5h.1M34 18.5h.1" stroke="#fff0c2" stroke-width="2.6" stroke-linecap="round"/></g>
+        <g transform="rotate(144 32 32)"><path d="M30 13.5h.1M34 18.5h.1" stroke="#fff0c2" stroke-width="2.6" stroke-linecap="round"/></g>
+        <g transform="rotate(216 32 32)"><path d="M30 13.5h.1M34 18.5h.1" stroke="#fff0c2" stroke-width="2.6" stroke-linecap="round"/></g>
+        <g transform="rotate(288 32 32)"><path d="M30 13.5h.1M34 18.5h.1" stroke="#fff0c2" stroke-width="2.6" stroke-linecap="round"/></g>
+      </g>
+      <circle cx="32" cy="32" r="4.5" fill="#ff8a6c"/>
+      <ellipse cx="21" cy="19" rx="7" ry="3.6" fill="#fff" fill-opacity=".2" transform="rotate(-38 21 19)"/>
+    </symbol>
+    <symbol id="i-chili" viewBox="0 0 64 64">
+      <path d="M15 19c-6 18 6 38 41 40-13-7-22-20-25-38-5-5-11-6-16-2Z" fill="url(#g-chili)"/>
+      <path d="M13 20c1-6 9-10 17-3-6-1-11 0-17 3Z" fill="#2fb35a"/>
+      <path d="M20 15c-1-5 1-9 6-11" fill="none" stroke="#2fb35a" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M20 26c2 11 9 21 21 28" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-mushroom" viewBox="0 0 64 64">
+      <path d="M6 33C6 17 18 7 32 7s26 10 26 26c-6 2-12 2-16 1l2 20c-6 4-14 4-20 0l2-20c-4 1-10 1-16-1Z" fill="#f3e3c7" stroke="#b08d64" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M10 31c12-4 32-4 44 0" fill="none" stroke="#b08d64" stroke-width="2" stroke-linecap="round"/>
+      <path d="M28 40c0 4 0 8 1 12M36 40c0 4 0 8-1 12" fill="none" stroke="#d9c3a0" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- line icons -->
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 22c4.2 0 7-2.8 7-6.7 0-3.3-2-5.9-3.8-7.6-.3 1.9-1.2 3.2-2.6 3.9.3-3.6-1.1-6.9-4.1-9.1.2 3.2-1.6 5.6-3.2 7.6C4.1 11.6 5 13.4 5 15.3 5 19.2 7.8 22 12 22Z"/><path d="M12 22c-1.9 0-3.2-1.3-3.2-3.1 0-1.7 1.2-2.8 2.2-3.9.2 1 .8 1.7 1.6 2 .1-1.1.7-2 1.6-2.6.4 1 1 1.9 1 3.1 0 2.3-1.3 4.5-3.2 4.5Z"/></symbol>
+    <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M6 2h12M6 22h12"/><path d="M7 2v3.5a5 5 0 0 0 2 4L12 12l3-2.5a5 5 0 0 0 2-4V2"/><path d="M7 22v-3.5a5 5 0 0 1 2-4L12 12l3 2.5a5 5 0 0 1 2 4V22"/><path d="M9.5 19h5"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M4 20C4 10.5 10 4.5 20 4c0 10-6 16-16 16Z"/><path d="M4 20 14 10"/></symbol>
+    <symbol id="i-scooter" viewBox="0 0 24 24"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M8 17.5h7.5l2.6-7H14"/><path d="M15.5 4.5h2.2l1.6 6"/><path d="M2.5 8.5h7v5h-7z"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4Z"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1.5c.7 5.6 4.9 9.8 10.5 10.5-5.6.7-9.8 4.9-10.5 10.5C11.3 16.9 7.1 12.7 1.5 12 7.1 11.3 11.3 7.1 12 1.5Z"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V10H6.5v3.5H9V21h3.5v-7.5H15l.5-3.5h-3V7a1 1 0 0 1 1-1H15Z"/></symbol>
+    <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.8 2.3 4.6 5 5"/></symbol>
+    <symbol id="i-cat-pizza" viewBox="0 0 24 24"><path d="M12 21.5 3 6.2a16 16 0 0 1 18 0Z"/><path d="M4.6 9a13 13 0 0 1 14.8 0"/><circle cx="10" cy="12" r="1.2"/><circle cx="14.2" cy="13.6" r="1.1"/><circle cx="12" cy="17" r=".9"/></symbol>
+    <symbol id="i-cat-pasta" viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0Z"/><path d="M8 11c0-3.5 1.5-6 4.5-7.5M12 11c0-3 1.5-5.5 5-6.5M16 11c0-1.5.5-2.5 1.5-3.5"/></symbol>
+    <symbol id="i-cat-salad" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M7 12c-1-3 1-6 4-6 1.5-2.5 5-2.5 6.5 0 2 .5 3 3 2 6"/></symbol>
+    <symbol id="i-cat-dessert" viewBox="0 0 24 24"><path d="M5 13h14l-2 8H7Z"/><path d="M4.5 13a7.5 7.5 0 0 1 15 0"/><path d="M12 5.5V3"/></symbol>
+    <symbol id="i-cat-drink" viewBox="0 0 24 24"><path d="M6 8h12l-1.6 12.2a2 2 0 0 1-2 1.8H9.6a2 2 0 0 1-2-1.8Z"/><path d="M13 8l2.2-6H19"/><path d="M6.6 12.5h10.8"/></symbol>
+  </svg>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a class="logo" href="#home" aria-label="Forno Nero — back to top">
+        <svg class="logo__mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+        <span class="logo__text"><strong>Forno Nero</strong><small>Wood-fired pizzeria</small></span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Main">
+        <a href="#menu">Menu</a>
+        <a href="#build">Build your own</a>
+        <a href="#deals">Deals</a>
+        <a href="#story">Our story</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#visit">Visit us</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="cart-btn" id="cartOpen" type="button" aria-label="Open your order" aria-controls="cart">
+          <svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg>
+          <span class="cart-btn__count" id="cartCount">0</span>
+        </button>
+        <a class="btn btn--fire btn--sm header__cta" href="#menu">Order now</a>
+        <button class="burger" id="burger" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav">
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="status-pill" data-open-status>Wood-fired in Brooklyn since 2009</p>
+          <h1 class="hero__title">
+            <span>Real fire.</span>
+            <span class="text-fire">Real pizza.</span>
+          </h1>
+          <p class="hero__lead">Neapolitan-style pies from 48-hour slow-proofed dough, San Marzano tomatoes and creamy fior di latte, blistered in our beechwood oven in just 90 seconds.</p>
+          <div class="hero__cta">
+            <a class="btn btn--fire btn--lg" href="#menu">Order online <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost btn--lg" href="#build">Build your own</a>
+          </div>
+          <ul class="hero__stats">
+            <li><strong>4.9<span>★</span></strong><small>2,300+ reviews</small></li>
+            <li><strong>90<span>s</span></strong><small>bake time</small></li>
+            <li><strong>48<span>h</span></strong><small>slow-proofed dough</small></li>
+          </ul>
+        </div>
+
+        <div class="hero__visual" id="heroVisual">
+          <div class="hero__glow" aria-hidden="true"></div>
+          <div class="hero__ring" aria-hidden="true"></div>
+          <img class="hero__pizza" src="images/hero-pizza.webp" width="1000" height="1000" alt="Margherita pizza topped with cherry tomatoes, mozzarella and fresh basil" fetchpriority="high">
+
+          <div class="hero__note" aria-hidden="true">
+            <span>baked in 90 sec!</span>
+            <svg viewBox="0 0 90 60" fill="none"><path d="M6 8c22-4 50 4 62 28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M58 32l10 6 2-12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="hero__card" aria-hidden="true">
+            <span class="hero__card-icon"><svg class="ico"><use href="#i-scooter"/></svg></span>
+            <span><strong>30 min delivery</strong><small>Free over $30</small></span>
+          </div>
+
+          <div class="hero__sticker" aria-hidden="true">
+            <svg viewBox="0 0 120 120" class="hero__sticker-ring">
+              <defs><path id="stickerPath" d="M60 60m-45 0a45 45 0 1 1 90 0a45 45 0 1 1-90 0"/></defs>
+              <text><textPath href="#stickerPath" textLength="280" lengthAdjust="spacing">HOT • FRESH • WOOD-FIRED • HANDMADE •</textPath></text>
+            </svg>
+            <span class="hero__sticker-core"><small>from</small><strong>$12</strong></span>
+          </div>
+
+          <span class="float" style="--x:46%;--y:-5%;--s:13%;--r:-30deg;--d:0s;--depth:1.4" aria-hidden="true"><svg><use href="#i-basil"/></svg></span>
+          <span class="float" style="--x:93%;--y:50%;--s:12%;--r:10deg;--d:-1.5s;--depth:1" aria-hidden="true"><svg><use href="#i-tomato"/></svg></span>
+          <span class="float" style="--x:80%;--y:84%;--s:15%;--r:18deg;--d:-3s;--depth:1.8" aria-hidden="true"><svg><use href="#i-chili"/></svg></span>
+          <span class="float" style="--x:36%;--y:90%;--s:11%;--r:150deg;--d:-2s;--depth:1.2" aria-hidden="true"><svg><use href="#i-basil"/></svg></span>
+          <span class="float" style="--x:-7%;--y:40%;--s:10%;--r:-14deg;--d:-4s;--depth:.8" aria-hidden="true"><svg><use href="#i-mushroom"/></svg></span>
+          <span class="float" style="--x:3%;--y:18%;--s:8%;--r:30deg;--d:-2.6s;--depth:2" aria-hidden="true"><svg><use href="#i-tomato"/></svg></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="features" aria-label="Why Forno Nero">
+      <div class="container features__grid">
+        <article class="feature feature--orange reveal">
+          <span class="feature__icon"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg></span>
+          <h3>Wood-fired at 485°C</h3>
+          <p>Beechwood flames blister every crust with that signature leopard-spotted char.</p>
+        </article>
+        <article class="feature feature--gold reveal" style="--d:.08s">
+          <span class="feature__icon"><svg class="ico" aria-hidden="true"><use href="#i-hourglass"/></svg></span>
+          <h3>48-hour dough</h3>
+          <p>Slow fermentation for a light, airy crust that is easy to digest.</p>
+        </article>
+        <article class="feature feature--green reveal" style="--d:.16s">
+          <span class="feature__icon"><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg></span>
+          <h3>Fresh &amp; Italian</h3>
+          <p>San Marzano tomatoes, fior di latte and basil from our rooftop garden.</p>
+        </article>
+        <article class="feature feature--pink reveal" style="--d:.24s">
+          <span class="feature__icon"><svg class="ico" aria-hidden="true"><use href="#i-scooter"/></svg></span>
+          <h3>Hot in 30 minutes</h3>
+          <p>Insulated boxes, speedy riders and free delivery on orders over $30.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ MENU ============ -->
+    <section class="menu section" id="menu">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="script">Taste the fire</p>
+          <h2 class="section-title">Our <span class="text-fire">menu</span></h2>
+          <p class="section-sub">Hand-stretched to order and baked in 90 seconds. Tap <b>+</b> to add anything to your order.</p>
+        </header>
+
+        <div class="tabs reveal" role="tablist" aria-label="Menu categories">
+          <button class="tab" type="button" role="tab" id="tab-pizza" data-cat="pizza" aria-selected="true" aria-controls="menuGrid" style="--c:var(--tomato)"><svg class="ico" aria-hidden="true"><use href="#i-cat-pizza"/></svg>Pizza</button>
+          <button class="tab" type="button" role="tab" id="tab-pasta" data-cat="pasta" aria-selected="false" aria-controls="menuGrid" tabindex="-1" style="--c:var(--cheese)"><svg class="ico" aria-hidden="true"><use href="#i-cat-pasta"/></svg>Pasta</button>
+          <button class="tab" type="button" role="tab" id="tab-sides" data-cat="sides" aria-selected="false" aria-controls="menuGrid" tabindex="-1" style="--c:var(--basil)"><svg class="ico" aria-hidden="true"><use href="#i-cat-salad"/></svg>Sides &amp; Salads</button>
+          <button class="tab" type="button" role="tab" id="tab-desserts" data-cat="desserts" aria-selected="false" aria-controls="menuGrid" tabindex="-1" style="--c:var(--berry)"><svg class="ico" aria-hidden="true"><use href="#i-cat-dessert"/></svg>Desserts</button>
+          <button class="tab" type="button" role="tab" id="tab-drinks" data-cat="drinks" aria-selected="false" aria-controls="menuGrid" tabindex="-1" style="--c:var(--violet)"><svg class="ico" aria-hidden="true"><use href="#i-cat-drink"/></svg>Drinks</button>
+        </div>
+
+        <div class="menu-grid" id="menuGrid" role="tabpanel" aria-labelledby="tab-pizza">
+          <noscript><p class="noscript">Our full menu needs JavaScript to load. Call us on (555) 214-7788 to order.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__band marquee__band--back">
+        <div class="marquee__track">
+          <span>Pizza</span><svg><use href="#i-spark"/></svg><span>Pasta</span><svg><use href="#i-spark"/></svg><span>Gelato</span><svg><use href="#i-spark"/></svg><span>Spritz</span><svg><use href="#i-spark"/></svg><span>Amore</span><svg><use href="#i-spark"/></svg><span>Pizza</span><svg><use href="#i-spark"/></svg><span>Pasta</span><svg><use href="#i-spark"/></svg><span>Gelato</span><svg><use href="#i-spark"/></svg><span>Spritz</span><svg><use href="#i-spark"/></svg><span>Amore</span><svg><use href="#i-spark"/></svg>
+        </div>
+        <div class="marquee__track">
+          <span>Pizza</span><svg><use href="#i-spark"/></svg><span>Pasta</span><svg><use href="#i-spark"/></svg><span>Gelato</span><svg><use href="#i-spark"/></svg><span>Spritz</span><svg><use href="#i-spark"/></svg><span>Amore</span><svg><use href="#i-spark"/></svg><span>Pizza</span><svg><use href="#i-spark"/></svg><span>Pasta</span><svg><use href="#i-spark"/></svg><span>Gelato</span><svg><use href="#i-spark"/></svg><span>Spritz</span><svg><use href="#i-spark"/></svg><span>Amore</span><svg><use href="#i-spark"/></svg>
+        </div>
+      </div>
+      <div class="marquee__band marquee__band--front">
+        <div class="marquee__track">
+          <span>Wood-fired</span><svg><use href="#i-spark"/></svg><span>Hand-stretched</span><svg><use href="#i-spark"/></svg><span>San Marzano</span><svg><use href="#i-spark"/></svg><span>Fior di latte</span><svg><use href="#i-spark"/></svg><span>48h dough</span><svg><use href="#i-spark"/></svg><span>Since 2009</span><svg><use href="#i-spark"/></svg>
+        </div>
+        <div class="marquee__track">
+          <span>Wood-fired</span><svg><use href="#i-spark"/></svg><span>Hand-stretched</span><svg><use href="#i-spark"/></svg><span>San Marzano</span><svg><use href="#i-spark"/></svg><span>Fior di latte</span><svg><use href="#i-spark"/></svg><span>48h dough</span><svg><use href="#i-spark"/></svg><span>Since 2009</span><svg><use href="#i-spark"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BUILD YOUR OWN ============ -->
+    <section class="builder section" id="build">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="script">Make it yours</p>
+          <h2 class="section-title">Build your <span class="text-fire">dream pizza</span></h2>
+          <p class="section-sub">Pick a size, crust and sauce, then pile on the toppings and watch it come together.</p>
+        </header>
+
+        <div class="builder__grid">
+          <div class="builder__stage reveal">
+            <div class="builder__plate">
+              <svg id="pizzaSvg" viewBox="0 0 400 400" role="img" aria-label="Preview of your custom pizza"></svg>
+            </div>
+            <div class="builder__summary">
+              <div>
+                <p class="builder__label">Your pizza</p>
+                <p class="builder__desc" id="buildSummary">Medium · Classic · San Marzano</p>
+              </div>
+              <strong class="builder__total" id="buildTotal">$12.00</strong>
+              <button class="btn btn--fire btn--block" id="buildAdd" type="button">
+                <svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg> Add to order
+              </button>
+            </div>
+          </div>
+
+          <form class="builder__options" id="builderForm" aria-label="Pizza builder">
+            <fieldset class="step reveal">
+              <legend><span class="step__num">1</span> Choose a size</legend>
+              <div class="choices choices--3" data-group="size"></div>
+            </fieldset>
+            <fieldset class="step reveal">
+              <legend><span class="step__num">2</span> Pick your crust</legend>
+              <div class="choices choices--2" data-group="crust"></div>
+            </fieldset>
+            <fieldset class="step reveal">
+              <legend><span class="step__num">3</span> Choose a sauce</legend>
+              <div class="choices choices--2" data-group="sauce"></div>
+            </fieldset>
+            <fieldset class="step reveal">
+              <legend><span class="step__num">4</span> Add toppings <small>tap to toggle</small></legend>
+              <div class="toppings" data-group="toppings"></div>
+              <button class="link-btn" id="clearToppings" type="button">Clear toppings</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DEAL ============ -->
+    <section class="deal section" id="deals">
+      <div class="container">
+        <div class="deal__card reveal">
+          <div class="deal__copy">
+            <span class="pill"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> This week only</span>
+            <h2 class="deal__title">Family Feast</h2>
+            <p class="deal__text">Two large pizzas of your choice, garlic bread, a big garden salad and a 1.5&nbsp;L drink. Feeds four hungry humans.</p>
+            <p class="deal__price"><strong>$34.99</strong> <s>$52.00</s></p>
+            <p class="countdown__label">Offer ends in</p>
+            <div class="countdown" id="countdown" role="timer" aria-live="off">
+              <div><strong data-unit="d">0</strong><span>Days</span></div>
+              <div><strong data-unit="h">00</strong><span>Hours</span></div>
+              <div><strong data-unit="m">00</strong><span>Mins</span></div>
+              <div><strong data-unit="s">00</strong><span>Secs</span></div>
+            </div>
+            <button class="btn btn--dark btn--lg" id="dealAdd" type="button">Grab the deal <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          </div>
+          <div class="deal__media">
+            <img src="images/deal-slice.webp" width="1000" height="800" loading="lazy" decoding="async" alt="A slice of pepperoni pizza lifted with a long stretch of melted cheese">
+            <span class="deal__sticker" aria-hidden="true"><small>save</small>33%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section class="story section" id="story">
+      <div class="container story__inner">
+        <div class="story__media reveal">
+          <figure class="story__main"><img src="images/about-oven.webp" width="1100" height="734" loading="lazy" decoding="async" alt="A freshly baked Neapolitan pizza resting in front of a glowing wood-fired oven"></figure>
+          <figure class="story__second"><img src="images/about-chef.webp" width="600" height="700" loading="lazy" decoding="async" alt="A pizzaiolo finishing a pizza with fresh herbs"></figure>
+          <div class="story__badge"><strong>15</strong><span>years of<br>fire &amp; flour</span></div>
+        </div>
+        <div class="story__copy">
+          <p class="script reveal">Our story</p>
+          <h2 class="section-title reveal">Born in Naples, <span class="text-fire">raised in Brooklyn</span></h2>
+          <p class="story__text reveal">Forno Nero started in 2009 with one oven, one recipe and a stubborn belief: pizza should be simple, honest and blisteringly hot. Our founder Marco learned the craft in his nonna's kitchen in Naples. Today his team still stretches every base by hand and feeds our black-tiled oven with beechwood every morning.</p>
+          <ul class="checks reveal">
+            <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Dough rested for 48 hours, never rushed</li>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Flour, tomatoes &amp; cheese from Campania</li>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Vegan, vegetarian &amp; gluten-free friendly</li>
+          </ul>
+          <div class="counters reveal">
+            <div><strong data-count="120" data-suffix="K+">120K+</strong><span>pizzas baked a year</span></div>
+            <div><strong data-count="26">26</strong><span>pizzaiolos &amp; cooks</span></div>
+            <div><strong data-count="4.9" data-decimals="1">4.9</strong><span>average rating</span></div>
+          </div>
+          <div class="signature reveal">
+            <span class="script">Marco Bellini</span>
+            <small>Founder &amp; head pizzaiolo</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="gallery section" id="gallery">
+      <div class="container">
+        <header class="section-head section-head--split reveal">
+          <div>
+            <p class="script">Fresh from the oven</p>
+            <h2 class="section-title">Life at <span class="text-fire">Forno Nero</span></h2>
+          </div>
+          <a class="btn btn--ghost" href="#" data-soon="Instagram">
+            <svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg> @forno.nero
+          </a>
+        </header>
+        <div class="bento">
+          <figure class="bento__item bento__item--a reveal"><button type="button" data-full="images/gallery/sharing.webp"><img src="images/gallery/sharing.webp" width="1000" height="600" loading="lazy" decoding="async" alt="Pepperoni pizza on a table laid with cheese and wine"></button><figcaption>Friday pizza night</figcaption></figure>
+          <figure class="bento__item bento__item--b reveal"><button type="button" data-full="images/gallery/peel.webp"><img src="images/gallery/peel.webp" width="600" height="900" loading="lazy" decoding="async" alt="Pepperoni pizza on a peel straight out of the oven"></button><figcaption>Straight off the peel</figcaption></figure>
+          <figure class="bento__item bento__item--c reveal"><button type="button" data-full="images/gallery/chef.webp"><img src="images/gallery/chef.webp" width="600" height="900" loading="lazy" decoding="async" alt="A chef working under copper lamps in the kitchen"></button><figcaption>Our kitchen crew</figcaption></figure>
+          <figure class="bento__item bento__item--d reveal"><button type="button" data-full="images/gallery/slice.webp"><img src="images/gallery/slice.webp" width="600" height="600" loading="lazy" decoding="async" alt="Lifting a slice of margherita with cherry tomatoes"></button><figcaption>That first slice</figcaption></figure>
+          <figure class="bento__item bento__item--e reveal"><button type="button" data-full="images/gallery/cheese-pull.webp"><img src="images/gallery/cheese-pull.webp" width="600" height="600" loading="lazy" decoding="async" alt="Steaming slice with a long cheese pull"></button><figcaption>Cheese-pull champions</figcaption></figure>
+          <figure class="bento__item bento__item--f reveal"><button type="button" data-full="images/gallery/prosciutto.webp"><img src="images/gallery/prosciutto.webp" width="1000" height="600" loading="lazy" decoding="async" alt="Prosciutto and rocket pizza slices being shared"></button><figcaption>Prosciutto e rucola</figcaption></figure>
+          <figure class="bento__item bento__item--g reveal"><button type="button" data-full="images/gallery/neapolitan.webp"><img src="images/gallery/neapolitan.webp" width="600" height="600" loading="lazy" decoding="async" alt="Neapolitan margherita on a white plate, seen from above"></button><figcaption>Classic Margherita</figcaption></figure>
+          <figure class="bento__item bento__item--h reveal"><button type="button" data-full="images/gallery/dark-margherita.webp"><img src="images/gallery/dark-margherita.webp" width="600" height="600" loading="lazy" decoding="async" alt="Close-up of a charred Neapolitan crust"></button><figcaption>Leopard-spotted crust</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REVIEWS ============ -->
+    <section class="reviews section" id="reviews">
+      <div class="container">
+        <header class="section-head section-head--split reveal">
+          <div>
+            <p class="script">Loved by locals</p>
+            <h2 class="section-title">Happy <span class="text-fire">pizza people</span></h2>
+          </div>
+          <div class="rating">
+            <strong>4.9</strong>
+            <div>
+              <span class="stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+              <small>from 2,300+ reviews on Google &amp; Yelp</small>
+            </div>
+          </div>
+        </header>
+
+        <div class="reviews__track" id="reviewsTrack" tabindex="0" aria-label="Customer reviews">
+          <article class="review">
+            <span class="stars" role="img" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+            <blockquote>Best Margherita I've had outside of Naples. The crust is light, chewy and perfectly charred. I genuinely dream about it.</blockquote>
+            <footer><span class="avatar" style="--a:#ffb347;--b:#ff5a2b">SM</span><span><strong>Sofia Martinez</strong><small>Google review</small></span></footer>
+          </article>
+          <article class="review">
+            <span class="stars" role="img" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+            <blockquote>Built my own with pesto, burrata and jalapeños. Weird combo? Maybe. Delicious? Absolutely. The builder is way too fun.</blockquote>
+            <footer><span class="avatar" style="--a:#7ef0b0;--b:#1fbf74">DK</span><span><strong>Daniel Kim</strong><small>Yelp Elite</small></span></footer>
+          </article>
+          <article class="review">
+            <span class="stars" role="img" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+            <blockquote>Ordered the Family Feast for game night and it arrived piping hot in 25 minutes. The kids demolished it before halftime.</blockquote>
+            <footer><span class="avatar" style="--a:#ff8ab8;--b:#ff3f8e">PN</span><span><strong>Priya Nair</strong><small>Delivery order</small></span></footer>
+          </article>
+          <article class="review">
+            <span class="stars" role="img" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+            <blockquote>Cozy, loud in the best way, and the staff remembered our names on our second visit. Do not skip the tiramisu.</blockquote>
+            <footer><span class="avatar" style="--a:#c4a6ff;--b:#8b5cf6">JO</span><span><strong>James O'Connor</strong><small>Google review</small></span></footer>
+          </article>
+          <article class="review">
+            <span class="stars" role="img" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+            <blockquote>A gluten-free base that actually tastes like pizza. Finally! This is my Friday ritual now.</blockquote>
+            <footer><span class="avatar" style="--a:#ffe07a;--b:#ffb02e">AC</span><span><strong>Amelia Chen</strong><small>Instagram</small></span></footer>
+          </article>
+          <article class="review">
+            <span class="stars" role="img" aria-label="4 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg class="is-off"><use href="#i-star"/></svg></span>
+            <blockquote>That Diavola has real heat. Paired it with truffle fries and a spritz on the terrace: perfect summer evening.</blockquote>
+            <footer><span class="avatar" style="--a:#ff9a7a;--b:#ff4930">MJ</span><span><strong>Marcus Johnson</strong><small>Tripadvisor</small></span></footer>
+          </article>
+        </div>
+        <div class="reviews__nav">
+          <button class="round-btn" id="revPrev" type="button" aria-label="Previous reviews"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
+          <button class="round-btn" id="revNext" type="button" aria-label="Next reviews"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VISIT / RESERVE ============ -->
+    <section class="visit section" id="visit">
+      <div class="visit__bg" aria-hidden="true"><img src="images/interior.webp" width="1800" height="1200" loading="lazy" decoding="async" alt=""></div>
+      <div class="container visit__grid">
+        <form class="reserve reveal" id="reserveForm" novalidate>
+          <p class="script">Save your seat</p>
+          <h2 class="section-title">Book a <span class="text-fire">table</span></h2>
+          <p class="reserve__sub">Walk-ins are always welcome, but Friday nights fill up fast.</p>
+          <div class="field-grid">
+            <label class="field">
+              <span>Your name</span>
+              <input name="name" type="text" autocomplete="name" placeholder="Sofia Martinez" required>
+              <small class="field__error"></small>
+            </label>
+            <label class="field">
+              <span>Phone</span>
+              <input name="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567" required>
+              <small class="field__error"></small>
+            </label>
+            <label class="field">
+              <span>Date</span>
+              <input name="date" type="date" required>
+              <small class="field__error"></small>
+            </label>
+            <label class="field">
+              <span>Time</span>
+              <select name="time" required></select>
+              <small class="field__error"></small>
+            </label>
+            <label class="field">
+              <span>Guests</span>
+              <select name="guests">
+                <option value="1">1 guest</option>
+                <option value="2" selected>2 guests</option>
+                <option value="3">3 guests</option>
+                <option value="4">4 guests</option>
+                <option value="5">5 guests</option>
+                <option value="6">6 guests</option>
+                <option value="8">7–8 guests</option>
+                <option value="10">9+ guests</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Occasion</span>
+              <select name="occasion">
+                <option value="">Just hungry</option>
+                <option>Birthday</option>
+                <option>Date night</option>
+                <option>Anniversary</option>
+                <option>Business</option>
+              </select>
+            </label>
+            <label class="field field--full">
+              <span>Special requests <em>(optional)</em></span>
+              <textarea name="note" rows="3" placeholder="High chair, allergies, a window seat..."></textarea>
+            </label>
+          </div>
+          <button class="btn btn--fire btn--lg btn--block" type="submit">Reserve my table <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </form>
+
+        <div class="info">
+          <div class="info__card reveal">
+            <div class="info__head">
+              <h3><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> Opening hours</h3>
+              <span class="status" id="openStatus">Hours</span>
+            </div>
+            <ul class="hours" id="hoursList"></ul>
+          </div>
+          <div class="info__card info__card--contact reveal">
+            <a href="https://www.openstreetmap.org/?mlat=40.7158&amp;mlon=-73.9567#map=16/40.7158/-73.9567" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg><span><small>Address</small>128 Ember Street, Brooklyn, NY 11211</span></a>
+            <a href="tel:+15552147788"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span><small>Call us</small>(555) 214-7788</span></a>
+            <a href="mailto:ciao@fornonero.com"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><small>Email</small>ciao@fornonero.com</span></a>
+          </div>
+          <div class="map reveal">
+            <iframe title="Map showing Forno Nero's location" loading="lazy" referrerpolicy="no-referrer"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-73.9667%2C40.7108%2C-73.9467%2C40.7208&amp;layer=mapnik&amp;marker=40.7158%2C-73.9567"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a class="logo" href="#home" aria-label="Forno Nero — back to top">
+          <svg class="logo__mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+          <span class="logo__text"><strong>Forno Nero</strong><small>Wood-fired pizzeria</small></span>
+        </a>
+        <p>Wood-fired Neapolitan pizza, slow-proofed dough and good times since 2009.</p>
+        <div class="socials">
+          <a href="#" data-soon="Instagram" aria-label="Instagram"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg></a>
+          <a href="#" data-soon="Facebook" aria-label="Facebook"><svg class="ico" aria-hidden="true"><use href="#i-facebook"/></svg></a>
+          <a href="#" data-soon="TikTok" aria-label="TikTok"><svg class="ico" aria-hidden="true"><use href="#i-tiktok"/></svg></a>
+        </div>
+      </div>
+      <nav class="footer__col" aria-label="Footer">
+        <h4>Explore</h4>
+        <a href="#menu">Menu</a>
+        <a href="#build">Build your own</a>
+        <a href="#deals">Deals</a>
+        <a href="#story">Our story</a>
+        <a href="#visit">Book a table</a>
+      </nav>
+      <div class="footer__col">
+        <h4>Visit</h4>
+        <p>128 Ember Street<br>Brooklyn, NY 11211</p>
+        <a href="tel:+15552147788">(555) 214-7788</a>
+        <a href="mailto:ciao@fornonero.com">ciao@fornonero.com</a>
+      </div>
+      <div class="footer__news">
+        <h4>Join the Pizza Club</h4>
+        <p>Free garlic bread on your first order, plus secret deals every week.</p>
+        <form class="news-form" id="newsForm" novalidate>
+          <label class="sr-only" for="newsEmail">Email address</label>
+          <input id="newsEmail" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
+          <button type="submit" aria-label="Subscribe"><svg class="ico" aria-hidden="true"><use href="#i-send"/></svg></button>
+        </form>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <p>© <span id="year">2026</span> Forno Nero Pizzeria. All rights reserved.</p>
+      <p>Photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a> · Made with fire in Brooklyn</p>
+    </div>
+  </footer>
+
+  <!-- ============ CART DRAWER ============ -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="cart" role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1">
+    <header class="drawer__head">
+      <h2 id="cartTitle">Your order</h2>
+      <button class="round-btn" id="cartClose" type="button" aria-label="Close your order"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="drawer__progress" id="cartProgress">
+      <p id="cartProgressText">Add $30.00 more for free delivery</p>
+      <div class="progress"><span id="cartProgressBar"></span></div>
+    </div>
+    <ul class="drawer__items" id="cartItems"></ul>
+    <div class="drawer__empty" id="cartEmpty">
+      <svg class="drawer__empty-art" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="56" fill="#1d1715"/>
+        <path d="M60 104 26 36c21-14 47-14 68 0Z" fill="#f2c27a"/>
+        <path d="M26 36c21-14 47-14 68 0" fill="none" stroke="#d58b3c" stroke-width="9" stroke-linecap="round"/>
+        <path d="M60 92 34 42c17-9 35-9 52 0Z" fill="#ffdf8a"/>
+        <circle cx="52" cy="54" r="7" fill="#e2412a"/><circle cx="69" cy="62" r="6" fill="#e2412a"/><circle cx="58" cy="76" r="5" fill="#e2412a"/>
+        <path d="M70 48c3-3 7-3 9 0" stroke="#2f9d4a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+      <h3>Your order is hungry</h3>
+      <p>Add a pizza or two and we'll fire up the oven.</p>
+      <a class="btn btn--fire" href="#menu" data-close-cart>Browse the menu</a>
+    </div>
+    <footer class="drawer__foot" id="cartFoot">
+      <div class="drawer__row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+      <div class="drawer__row"><span>Delivery</span><span id="cartDelivery">$0.00</span></div>
+      <div class="drawer__row drawer__row--total"><span>Total</span><strong id="cartTotal">$0.00</strong></div>
+      <button class="btn btn--fire btn--lg btn--block" id="checkoutBtn" type="button">Checkout <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </footer>
+  </aside>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <figure>
+      <img id="lightboxImg" src="data:," alt="">
+      <figcaption id="lightboxCap"></figcaption>
+    </figure>
+    <button class="round-btn lightbox__close" id="lightboxClose" type="button" aria-label="Close photo"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <button class="round-btn lightbox__prev" id="lightboxPrev" type="button" aria-label="Previous photo"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
+    <button class="round-btn lightbox__next" id="lightboxNext" type="button" aria-label="Next photo"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </dialog>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top"><svg class="ico" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
