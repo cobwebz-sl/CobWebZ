@@ -10,7 +10,7 @@ const CUBE_CONFIG = {
   availability: 'Available for new projects',
 
   contact: {
-    email: 'cowebzsl@gmail.com',
+    email: 'cobwebzsl@gmail.com',
     phone: '+94 71 907 0320', // shown as typed; must match the Google Business Profile and the structured data in index.html
     whatsapp: '94719070320' // 071 907 0320, international format, digits only. Enquiries go here.
   },
