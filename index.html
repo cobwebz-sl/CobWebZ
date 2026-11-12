@@ -220,15 +220,13 @@
         <span class="site-header__brand-name">CobWebZ</span>
       </a>
 
-      <!-- The dot under the links slides to the section on screen ([data-nav-dot], script.js).
-           Products is its own page, so it never lights up here. -->
+      <!-- The dot under the links slides to the section on screen ([data-nav-dot], script.js). -->
       <nav class="site-nav" aria-label="Main navigation">
         <ul class="site-nav__list">
           <li><a href="#about" class="site-nav__link" data-nav>About</a></li>
           <li><a href="#services" class="site-nav__link" data-nav>Services</a></li>
           <li><a href="#work" class="site-nav__link" data-nav>Work</a></li>
           <li><a href="#lab" class="site-nav__link" data-nav>Lab</a></li>
-          <li><a href="products.html" class="site-nav__link">Products</a></li>
           <li><a href="#pricing" class="site-nav__link" data-nav>Pricing</a></li>
           <li><a href="#contact" class="site-nav__link" data-nav>Contact</a></li>
         </ul>
@@ -252,7 +250,6 @@
               <li><a href="#services" data-nav>Services</a></li>
               <li><a href="#work" data-nav>Work</a></li>
               <li><a href="#lab" data-nav>Lab</a></li>
-              <li><a href="products.html">Products</a></li>
               <li><a href="#pricing" data-nav>Pricing</a></li>
               <li><a href="#contact" data-nav>Contact</a></li>
             </ul>
@@ -262,8 +259,8 @@
                 <span>Dark mode</span>
                 <span class="menu__switch" aria-hidden="true"></span>
               </button>
-              <a href="#contact" class="menu__cta">
-                <span>Start a project</span>
+              <a href="work.html" class="menu__cta">
+                <span>Explore more</span>
                 <span class="site-header__cta-arrow" aria-hidden="true">
                   <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -288,8 +285,8 @@
           </svg>
         </button>
 
-        <a href="#contact" class="site-header__cta-btn" data-magnetic>
-          <span>Start a project</span>
+        <a href="work.html" class="site-header__cta-btn" data-magnetic>
+          <span>Explore more</span>
           <span class="site-header__cta-arrow" aria-hidden="true">
             <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
@@ -305,23 +302,19 @@
     <!-- ============ HERO ============ -->
     <!-- The name appears once in the heading's text. initHeroBrand() (script.js) draws the
          big rising letters as decoration over it, so screen readers, search engines and
-         copy-paste all get "CobWebZ" a single time. The letters lean toward the pointer. -->
-    <section class="hero" id="overview" aria-labelledby="hero-title">
-      <canvas class="particles" data-particles="hero" aria-hidden="true"></canvas>
-      <!-- Corner cobweb, built by initCobwebs() in script.js -->
-      <div class="cobweb cobweb--tr" data-cobweb="spider" data-reveal aria-hidden="true"></div>
+         copy-paste all get "CobWebZ" a single time. The letters lean toward the pointer, and
+         a band of colour runs through them every few seconds. Kept minimal on purpose: the
+         name, one line and the two buttons. -->
+    <section class="hero hero--home" id="overview" aria-labelledby="hero-title">
+      <!-- Wave Arcs, drawn by originkit.js -->
+      <div class="wave-arcs" data-wave-arcs aria-hidden="true"></div>
 
       <div class="container-cube hero__inner">
-        <p class="badge" data-hero-step data-glow-border><span class="badge__dot" aria-hidden="true"></span><span
-            data-config-text="availability">Available for new projects</span></p>
         <h1 id="hero-title" class="hero__title">
           <span class="hero__brand" data-hero-brand>CobWebZ</span>
           <span class="hero__tagline" data-split-words>We build the web <span class="accent">and keep it
               running.</span></span>
         </h1>
-        <p class="hero__lead" data-hero-step>A web design, development and infrastructure studio in Colombo, Sri
-          Lanka, working with clients at home and abroad. We write the code, deploy it on containers and the edge, and
-          keep your servers patched, monitored and secure.</p>
         <div class="hero__actions" data-hero-step>
           <a href="#contact" class="btn btn--primary btn--lg btn--sheen" data-magnetic data-spider-button>Start a project <span
               aria-hidden="true">→</span></a>
@@ -338,7 +331,6 @@
          landed the spider can be dragged and its web plucked (initSpiderMark); its back legs
          are web threads. -->
     <section class="section about" id="about" aria-labelledby="about-title">
-      <canvas class="particles" data-particles="about" aria-hidden="true"></canvas>
       <div class="container-cube">
         <h2 id="about-title" class="sr-only">About CobWebZ</h2>
 
@@ -382,9 +374,6 @@
 
     <!-- ============ OUR SERVICES ============ -->
     <section class="section services" id="services" aria-labelledby="services-title">
-      <div class="particles-pin" aria-hidden="true">
-        <div class="particles-pin__view"><canvas class="particles" data-particles="services"></canvas></div>
-      </div>
       <div class="container-cube">
         <header class="section-head services__head reveal">
           <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Services</p>
@@ -504,7 +493,6 @@
          designed and built ourselves); the badge says so. When real client work is added, give
          it the label "Client project" instead. -->
     <section class="section work" id="work" aria-labelledby="work-title">
-      <canvas class="particles" data-particles="work" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
           <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Selected work</p>
@@ -570,131 +558,212 @@
     </section>
 
     <!-- ============ HOW WE WORK ============ -->
-    <!-- Five steps on a rail: across the page on wide screens, down the left on narrow ones.
-         The rail fills and each step lights up as the section scrolls past (initProcess sets
-         --p on the list and is-reached on the steps). Without script, every step shows. -->
+    <!-- Five steps along one climbing line. On wide screens the intro sits top left and the
+         steps rise from bottom left to top right; the line comes in from the left edge of the
+         screen, dips into step 1 and climbs in an S-curve to each step after it. On narrow
+         screens the steps stack and the line snakes down beside them. initProcess (script.js)
+         builds the line through the markers' real positions and draws it in as you scroll,
+         lighting each step as the line reaches it; on tall wide screens the section holds
+         still while it draws. Without script, every step simply shows. -->
     <section class="section process" id="process" aria-labelledby="process-title">
-      <div class="container-cube">
-        <header class="section-head reveal">
-          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Process</p>
-          <h2 id="process-title" class="h-section" data-split-words>How we <span class="accent">work.</span></h2>
-          <p class="section-lead">Five steps from your first message to a site that keeps running. You always know
-            which one we're on, and what comes next.</p>
-        </header>
+      <div class="process__pin">
+        <div class="process__orb" aria-hidden="true"></div>
+        <svg class="process__line process__line--glow" aria-hidden="true" focusable="false">
+          <path class="process__glow" pathLength="1" />
+        </svg>
+        <svg class="process__line" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="process-grad" gradientUnits="userSpaceOnUse">
+              <stop offset="0" class="process__stop-a" />
+              <stop offset="1" class="process__stop-b" />
+            </linearGradient>
+          </defs>
+          <path class="process__guide" />
+          <path class="process__ink" pathLength="1" />
+          <g class="process__tip">
+            <circle class="process__tip-halo" r="13" />
+            <circle class="process__tip-core" r="4.5" />
+          </g>
+        </svg>
 
-        <ol class="process__track reveal" data-process>
-          <li class="process__step">
-            <span class="process__marker" aria-hidden="true">01</span>
-            <h3 class="process__title">Discovery</h3>
-            <p class="process__text">We learn how your business works, who the site is for and what it has to do.</p>
-            <ul class="process__out" aria-label="What you get">
-              <li>Discovery call</li>
-              <li>Scope &amp; sitemap</li>
-              <li>A fixed, written quote</li>
-            </ul>
-          </li>
-          <li class="process__step">
-            <span class="process__marker" aria-hidden="true">02</span>
-            <h3 class="process__title">Design</h3>
-            <p class="process__text">We set the visual direction and map the experience, page by page, on mobile and
-              desktop.</p>
-            <ul class="process__out" aria-label="What you get">
-              <li>Visual direction</li>
-              <li>Page layouts &amp; user flows</li>
-              <li>Your sign-off before we build</li>
-            </ul>
-          </li>
-          <li class="process__step">
-            <span class="process__marker" aria-hidden="true">03</span>
-            <h3 class="process__title">Development</h3>
-            <p class="process__text">We hand-code the site and build its features: HTML, CSS and JavaScript, plus
-              Django or PHP where it needs a back end.</p>
-            <ul class="process__out" aria-label="What you get">
-              <li>Responsive front end</li>
-              <li>Back end &amp; admin (web apps)</li>
-              <li>Staging to review on</li>
-            </ul>
-          </li>
-          <li class="process__step">
-            <span class="process__marker" aria-hidden="true">04</span>
-            <h3 class="process__title">Testing &amp; Launch</h3>
-            <p class="process__text">We test on phones, tablets and desktops, tune speed and accessibility, then go
-              live on your domain.</p>
-            <ul class="process__out" aria-label="What you get">
-              <li>Cross-device testing</li>
-              <li>Speed &amp; SEO checks</li>
-              <li>Domain, SSL &amp; go-live</li>
-            </ul>
-          </li>
-          <li class="process__step">
-            <span class="process__marker" aria-hidden="true">05</span>
-            <h3 class="process__title">Support</h3>
-            <p class="process__text">After launch we keep it running: updates, backups, content changes or full
-              infrastructure care.</p>
-            <ul class="process__out" aria-label="What you get">
-              <li>Maintenance from LKR&nbsp;5,000/mo</li>
-              <li>Content updates on request</li>
-              <li><a href="portal.html">Client portal <span class="tag tag--soon">Planned</span></a></li>
-            </ul>
-          </li>
-        </ol>
+        <div class="container-cube process__stage" data-process>
+          <header class="section-head process__intro reveal">
+            <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Process</p>
+            <h2 id="process-title" class="h-section" data-split-words>How we <span class="accent">work.</span></h2>
+            <p class="section-lead">Five steps from your first message to a site that keeps running. You always know
+              which one we're on, and what comes next.</p>
+            <a href="#contact" class="btn btn--primary btn--lg process__cta">Start your project <span
+                aria-hidden="true">→</span></a>
+          </header>
+
+          <ol class="process__steps">
+            <li class="process__step">
+              <span class="process__node" aria-hidden="true"><i></i></span>
+              <span class="process__num" aria-hidden="true">01</span>
+              <h3 class="process__title">Discovery</h3>
+              <p class="process__text">We learn how your business works, who the site is for and what it has to do.</p>
+              <ul class="process__out" aria-label="What you get">
+                <li>Discovery call</li>
+                <li>Scope &amp; sitemap</li>
+                <li>A fixed, written quote</li>
+              </ul>
+            </li>
+            <li class="process__step">
+              <span class="process__node" aria-hidden="true"><i></i></span>
+              <span class="process__num" aria-hidden="true">02</span>
+              <h3 class="process__title">Design</h3>
+              <p class="process__text">We set the visual direction and map the experience, page by page, on mobile and
+                desktop.</p>
+              <ul class="process__out" aria-label="What you get">
+                <li>Visual direction</li>
+                <li>Page layouts &amp; user flows</li>
+                <li>Your sign-off before we build</li>
+              </ul>
+            </li>
+            <li class="process__step">
+              <span class="process__node" aria-hidden="true"><i></i></span>
+              <span class="process__num" aria-hidden="true">03</span>
+              <h3 class="process__title">Development</h3>
+              <p class="process__text">We hand-code the site and build its features: HTML, CSS and JavaScript, plus
+                Django or PHP where it needs a back end.</p>
+              <ul class="process__out" aria-label="What you get">
+                <li>Responsive front end</li>
+                <li>Back end &amp; admin (web apps)</li>
+                <li>Staging to review on</li>
+              </ul>
+            </li>
+            <li class="process__step">
+              <span class="process__node" aria-hidden="true"><i></i></span>
+              <span class="process__num" aria-hidden="true">04</span>
+              <h3 class="process__title">Testing &amp; Launch</h3>
+              <p class="process__text">We test on phones, tablets and desktops, tune speed and accessibility, then go
+                live on your domain.</p>
+              <ul class="process__out" aria-label="What you get">
+                <li>Cross-device testing</li>
+                <li>Speed &amp; SEO checks</li>
+                <li>Domain, SSL &amp; go-live</li>
+              </ul>
+            </li>
+            <li class="process__step">
+              <span class="process__node" aria-hidden="true"><i></i></span>
+              <span class="process__num" aria-hidden="true">05</span>
+              <h3 class="process__title">Support</h3>
+              <p class="process__text">After launch we keep it running: updates, backups, content changes or full
+                infrastructure care.</p>
+              <ul class="process__out" aria-label="What you get">
+                <li>Maintenance from LKR&nbsp;5,000/mo</li>
+                <li>Content updates on request</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
       </div>
     </section>
 
     <!-- ============ THE STUDIO ============ -->
-    <!-- Philosophy, approach and principles. The founder card is filled from CUBE_CONFIG.founder
-         in script.js and stays hidden until a name is set there, so no one is invented. -->
-    <section class="section studio" id="studio" aria-labelledby="studio-title">
+    <!-- Wide screens: the heading and a chapter index stay put (CSS sticky) while the story
+         beside them scrolls. initStudio() (script.js) lights the chapter nearest the middle
+         of the screen and its line in the index, fills the index rail as you read, underlines
+         the marked phrases of the opening statement as they rise past, and lets the principle
+         cards drift apart and settle. Narrow screens stack it all in one column. Without
+         script, or with reduced motion, everything simply shows. The founder card is filled
+         from CUBE_CONFIG.founder and stays hidden until a name is set there, so no one is
+         invented. -->
+    <section class="section studio" id="studio" aria-labelledby="studio-title" data-studio>
       <div class="container-cube">
-        <header class="section-head reveal">
-          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>The studio</p>
-          <h2 id="studio-title" class="h-section" data-split-words>The minds behind <span class="accent">the
-              web.</span></h2>
-          <p class="section-lead">CobWebZ is a design and engineering studio in Colombo. We believe a website should
-            be fast, honest and easy to look after, long after launch day.</p>
-        </header>
+        <div class="studio__layout">
+          <div class="studio__aside">
+            <header class="studio__head reveal">
+              <p class="badge"><span class="badge__dot" aria-hidden="true"></span>The studio</p>
+              <h2 id="studio-title" class="h-section" data-split-words>The minds behind <span class="accent">the
+                  web.</span></h2>
+              <p class="section-lead">CobWebZ is a design and engineering studio in Colombo. We believe a website should
+                be fast, honest and easy to look after, long after launch day.</p>
+            </header>
+            <ol class="studio__index reveal" aria-label="Our approach" data-studio-index>
+              <li><a href="#approach-front" data-chapter-link><span>01</span>Front end</a></li>
+              <li><a href="#approach-back" data-chapter-link><span>02</span>Back end</a></li>
+              <li><a href="#approach-infra" data-chapter-link><span>03</span>Infrastructure</a></li>
+              <li><a href="#approach-quality" data-chapter-link><span>04</span>Quality</a></li>
+            </ol>
+          </div>
 
-        <div class="studio__grid" data-studio>
-          <figure class="founder card reveal" data-founder hidden>
-            <div class="founder__photo" data-founder-photo aria-hidden="true"></div>
-            <figcaption class="founder__body">
-              <p class="founder__role" data-founder-role></p>
-              <p class="founder__name" data-founder-name></p>
-              <p class="founder__bio" data-founder-bio></p>
-              <a class="link-arrow founder__link" data-founder-link href="#" target="_blank" rel="noopener" hidden>
-                <span data-founder-link-label>Profile</span> <span aria-hidden="true">↗</span></a>
-            </figcaption>
-          </figure>
+          <div class="studio__story">
+            <figure class="founder card reveal" data-founder hidden>
+              <div class="founder__photo" data-founder-photo aria-hidden="true"></div>
+              <figcaption class="founder__body">
+                <p class="founder__role" data-founder-role></p>
+                <p class="founder__name" data-founder-name></p>
+                <p class="founder__bio" data-founder-bio></p>
+                <a class="link-arrow founder__link" data-founder-link href="#" target="_blank" rel="noopener" hidden>
+                  <span data-founder-link-label>Profile</span> <span aria-hidden="true">↗</span></a>
+              </figcaption>
+            </figure>
 
-          <div class="studio__copy reveal">
-            <p class="studio__lede">Most websites are built once and then left alone. We'd rather build yours properly
-              and keep it running: designed around the people who use it, engineered to stay fast and secure, and
-              looked after once it's live.</p>
-            <dl class="studio__approach" aria-label="Our technical approach">
-              <div>
-                <dt>Front end</dt>
-                <dd>Semantic HTML, modern CSS and plain JavaScript first. Frameworks only when a project needs them.
-                </dd>
-              </div>
-              <div>
-                <dt>Back end</dt>
-                <dd>Python/Django or PHP with MySQL, for accounts, data and admin dashboards.</dd>
-              </div>
-              <div>
-                <dt>Infrastructure</dt>
-                <dd>Cloudflare's edge for static sites; Docker, Nginx and Apache on Linux servers for applications.</dd>
-              </div>
-              <div>
-                <dt>Quality</dt>
-                <dd>Tested across phones, tablets and desktops, checked with Lighthouse, shipped with security headers
-                  on.</dd>
-              </div>
-            </dl>
+            <p class="studio__lede reveal">Most websites are built once and then left alone. We'd rather build yours
+              properly and <span class="studio__mark" data-mark>keep it running</span>: designed around <span
+                class="studio__mark" data-mark>the people who use it</span>, engineered to stay <span
+                class="studio__mark" data-mark>fast and secure</span>, and <span class="studio__mark"
+                data-mark>looked after once it's live</span>.</p>
+
+            <div class="studio__chapters">
+              <article class="studio__chapter" id="approach-front" aria-labelledby="approach-front-title" data-chapter>
+                <div class="studio__chapter-head">
+                  <span class="studio__chapter-icon" aria-hidden="true"><svg viewBox="0 0 48 48">
+                      <path pathLength="1" d="M11 9h26a4 4 0 0 1 4 4v22a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V13a4 4 0 0 1 4-4Z" />
+                      <path pathLength="1" d="M7 17h34" />
+                      <path pathLength="1" d="M13 26h12M13 32h8" />
+                    </svg></span>
+                  <span class="studio__chapter-num" aria-hidden="true">01</span>
+                  <h3 id="approach-front-title" class="studio__chapter-title">Front end</h3>
+                </div>
+                <p class="studio__chapter-text">Semantic HTML, modern CSS and plain JavaScript first. Frameworks only
+                  when a project needs them.</p>
+              </article>
+              <article class="studio__chapter" id="approach-back" aria-labelledby="approach-back-title" data-chapter>
+                <div class="studio__chapter-head">
+                  <span class="studio__chapter-icon" aria-hidden="true"><svg viewBox="0 0 48 48">
+                      <path pathLength="1" d="M11 12c0 2.8 5.8 5 13 5s13-2.2 13-5-5.8-5-13-5-13 2.2-13 5Z" />
+                      <path pathLength="1" d="M11 12v24c0 2.8 5.8 5 13 5s13-2.2 13-5V12" />
+                      <path pathLength="1" d="M11 24c0 2.8 5.8 5 13 5s13-2.2 13-5" />
+                    </svg></span>
+                  <span class="studio__chapter-num" aria-hidden="true">02</span>
+                  <h3 id="approach-back-title" class="studio__chapter-title">Back end</h3>
+                </div>
+                <p class="studio__chapter-text">Python/Django or PHP with MySQL, for accounts, data and admin
+                  dashboards.</p>
+              </article>
+              <article class="studio__chapter" id="approach-infra" aria-labelledby="approach-infra-title" data-chapter>
+                <div class="studio__chapter-head">
+                  <span class="studio__chapter-icon" aria-hidden="true"><svg viewBox="0 0 48 48">
+                      <path pathLength="1" d="M11 8h26a4 4 0 0 1 4 4v5a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4v-5a4 4 0 0 1 4-4Z" />
+                      <path pathLength="1" d="M11 27h26a4 4 0 0 1 4 4v5a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4v-5a4 4 0 0 1 4-4Z" />
+                      <path pathLength="1" d="M14 14.5h.01M14 33.5h.01M21 14.5h9M21 33.5h9" />
+                    </svg></span>
+                  <span class="studio__chapter-num" aria-hidden="true">03</span>
+                  <h3 id="approach-infra-title" class="studio__chapter-title">Infrastructure</h3>
+                </div>
+                <p class="studio__chapter-text">Cloudflare's edge for static sites; Docker, Nginx and Apache on Linux
+                  servers for applications.</p>
+              </article>
+              <article class="studio__chapter" id="approach-quality" aria-labelledby="approach-quality-title" data-chapter>
+                <div class="studio__chapter-head">
+                  <span class="studio__chapter-icon" aria-hidden="true"><svg viewBox="0 0 48 48">
+                      <path pathLength="1" d="M24 6 39 11v11c0 9.5-6.4 17-15 20-8.6-3-15-10.5-15-20V11Z" />
+                      <path pathLength="1" d="m17.5 24 4.5 4.5 9-9.5" />
+                    </svg></span>
+                  <span class="studio__chapter-num" aria-hidden="true">04</span>
+                  <h3 id="approach-quality-title" class="studio__chapter-title">Quality</h3>
+                </div>
+                <p class="studio__chapter-text">Tested across phones, tablets and desktops, checked with Lighthouse,
+                  shipped with security headers on.</p>
+              </article>
+            </div>
           </div>
         </div>
 
         <h3 class="principles__title reveal">How we build</h3>
-        <ol class="principles reveal" data-stagger>
+        <ol class="principles reveal" data-stagger data-principles>
           <li class="principle">
             <span class="principle__num" aria-hidden="true">01</span>
             <h4 class="principle__name">Hand-coded, not assembled</h4>
@@ -726,221 +795,6 @@
               and no invented statistics.</p>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <!-- ============ WHY CHOOSE US: PROOF ============ -->
-    <!-- A dark panel that opens out as it scrolls in. initWhyChooseUs() draws a big web into
-         both [data-why-web] layers: the faint one is always there, the lit one only shows
-         around the pointer. Each card tilts toward the pointer and its edge catches the light.
-         Every number in this panel is measured live in the visitor's browser (initLiveChecks):
-         nothing here is typed in by hand, so nothing here can be out of date or made up. -->
-    <section class="section why-us" id="why-us" aria-labelledby="why-us-title">
-      <div class="container-cube">
-        <div class="why-us__panel" data-why data-dark data-reveal>
-          <div class="why-us__web" aria-hidden="true"><svg viewBox="-500 -500 1000 1000" data-why-web></svg></div>
-          <div class="why-us__web why-us__web--lit" aria-hidden="true"><svg viewBox="-500 -500 1000 1000"
-              data-why-web></svg></div>
-          <span class="why-us__glow" aria-hidden="true"></span>
-
-          <header class="why-us__head reveal">
-            <div>
-              <p class="why-us__eyebrow"><span class="badge__dot" aria-hidden="true"></span>Why CobWebZ</p>
-              <h2 id="why-us-title" class="why-us__title" data-split-words>Proof, <span class="accent">not
-                  promises.</span></h2>
-            </div>
-            <p class="why-us__lead">Every site is hand-coded for speed, security and search. Don't take our word for
-              it: everything on this panel is measured live, on the page you're reading, in your own browser.</p>
-          </header>
-
-          <!-- Filled in by initLiveChecks() from the browser's own performance records -->
-          <ul class="why-us__stats reveal" data-live-stats>
-            <li><b data-stat="paint">—</b> <span data-stat-label="paint">Largest paint</span></li>
-            <li><b data-stat="weight">—</b> <span>Transferred</span></li>
-            <li><b data-stat="requests">—</b> <span>Requests</span></li>
-            <li><b data-stat="third">—</b> <span>Third-party requests</span></li>
-          </ul>
-          <p class="why-us__note reveal" data-stats-note>Measured on this visit, in your browser. Results vary with your
-            device and connection.</p>
-
-          <div class="why-us__grid reveal" data-stagger>
-            <!-- 01 Custom Crafted: a pen-tool curve. The pointer pulls the middle handle;
-                 left alone, it moves itself. The path data below the curve updates live. -->
-            <article class="why-card why-card--wide" data-why-card>
-              <span class="why-card__num" aria-hidden="true">01</span>
-              <div class="why-card__inner">
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M12 2l2 2-9 9-3 1 1-3 9-9z" />
-                    </svg>
-                    Bespoke code
-                  </span>
-                  <h3 class="why-card__title">Custom crafted</h3>
-                  <p class="why-card__text">Designed and coded by hand for each project. No third-party themes, no
-                    page builders, no bloat.</p>
-                  <ul class="why-card__pills" aria-label="Highlights">
-                    <li>Hand-written code</li>
-                    <li>No page builders</li>
-                  </ul>
-                </div>
-
-                <div class="why-card__stage pen" aria-hidden="true" data-why-pen>
-                  <svg class="pen__svg" viewBox="0 0 600 220">
-                    <defs>
-                      <linearGradient id="why-pen-stroke" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0" stop-color="#8fa5c6" />
-                        <stop offset="1" stop-color="#d9a796" />
-                      </linearGradient>
-                      <linearGradient id="why-pen-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#8fa5c6" stop-opacity="0.22" />
-                        <stop offset="1" stop-color="#d9a796" stop-opacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <path class="pen__fill" d="" />
-                    <path class="pen__curve" pathLength="1" d="" />
-                    <path class="pen__handle" d="" />
-                    <circle class="pen__knob" r="8" data-pen-knob />
-                    <circle class="pen__knob" r="8" data-pen-knob />
-                    <rect class="pen__anchor" x="32" y="162" width="16" height="16" />
-                    <rect class="pen__anchor pen__anchor--on" x="292" y="102" width="16" height="16" />
-                    <rect class="pen__anchor" x="552" y="42" width="16" height="16" />
-                    <g class="pen__cursor" data-pen-cursor>
-                      <path d="M0 0l8 24 5-10 10-5z" />
-                      <rect x="22" y="22" width="150" height="32" rx="16" />
-                      <text x="97" y="43">Hand-drawn</text>
-                    </g>
-                  </svg>
-                  <code class="pen__code" data-pen-code>M40 170 C140 40, 220 60, 300 110</code>
-                </div>
-              </div>
-            </article>
-
-            <!-- 02 High Performance: a real request to this site, timed when the card comes into
-                 view and again from the button. The ring fills by how far under Google's "good"
-                 time to first byte (800 ms) it came in. -->
-            <article class="why-card" data-why-card>
-              <span class="why-card__num" aria-hidden="true">02</span>
-              <div class="why-card__inner">
-                <div class="why-card__stage gauge" data-speedtest>
-                  <div class="gauge__dial" aria-hidden="true">
-                    <svg viewBox="0 0 120 120">
-                      <defs>
-                        <linearGradient id="why-gauge-grad" x1="0" y1="0" x2="1" y2="1">
-                          <stop offset="0" stop-color="#8fa5c6" />
-                          <stop offset="1" stop-color="#d9a796" />
-                        </linearGradient>
-                      </defs>
-                      <circle class="gauge__track" cx="60" cy="60" r="50" pathLength="100" />
-                      <circle class="gauge__ring" cx="60" cy="60" r="50" pathLength="100" data-gauge-ring />
-                    </svg>
-                    <span class="gauge__score"><b data-speed-value>—</b><small>ms TTFB</small></span>
-                  </div>
-                  <dl class="gauge__metrics">
-                    <div><dt>Round trip</dt><dd data-speed="rtt">—</dd></div>
-                    <div><dt>Served from</dt><dd data-speed="edge">—</dd></div>
-                    <div><dt>Protocol</dt><dd data-speed="proto">—</dd></div>
-                  </dl>
-                  <button type="button" class="gauge__btn" data-speed-run>
-                    <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" aria-hidden="true">
-                      <path d="M9 1L2 9h6l-1 6 7-8H8l1-6z" />
-                    </svg>
-                    <span data-speed-label>Run speed test</span>
-                  </button>
-                  <p class="sr-only" role="status" data-speed-status></p>
-                </div>
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M9 1L2 9h6l-1 6 7-8H8l1-6z" />
-                    </svg>
-                    Live test
-                  </span>
-                  <h3 class="why-card__title">High performance</h3>
-                  <p class="why-card__text">Lean pages on a global edge network. The test times a fresh request to our
-                    server, from wherever you are.</p>
-                </div>
-              </div>
-            </article>
-
-            <!-- 03 SEO Optimized: a real audit of this page's own HTML, and the search snippet
-                 its title and description make. No rankings are claimed or shown. -->
-            <article class="why-card" data-why-card>
-              <span class="why-card__num" aria-hidden="true">03</span>
-              <div class="why-card__inner">
-                <div class="why-card__stage seo" data-seo-audit>
-                  <div class="seo__snippet">
-                    <p class="seo__site"><i aria-hidden="true"></i><span data-seo-url>cobwebz.lk</span></p>
-                    <p class="seo__title" data-seo-title>&nbsp;</p>
-                    <p class="seo__desc" data-seo-desc>&nbsp;</p>
-                  </div>
-                  <ul class="seo__checks" data-seo-checks aria-label="SEO checks on this page"></ul>
-                </div>
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <circle cx="7" cy="7" r="5" />
-                      <path d="M11 11l4 4" />
-                    </svg>
-                    Live audit
-                  </span>
-                  <h3 class="why-card__title">SEO optimized</h3>
-                  <p class="why-card__text">Clean structure that search engines can read. This checklist inspects this
-                    page's own code, right now.</p>
-                </div>
-              </div>
-            </article>
-
-            <!-- 04 Secure & Reliable: reads the security headers this page was actually served
-                 with (a same-site HEAD request), while the radar sweeps -->
-            <article class="why-card why-card--wide" data-why-card>
-              <span class="why-card__num" aria-hidden="true">04</span>
-              <div class="why-card__inner">
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <rect x="3" y="7" width="10" height="8" rx="1.5" />
-                      <path d="M5 7V4a3 3 0 0 1 6 0v3" />
-                    </svg>
-                    Live check
-                  </span>
-                  <h3 class="why-card__title">Secure &amp; reliable</h3>
-                  <p class="why-card__text">HTTPS everywhere, strict security headers and a content security policy
-                    that blocks third-party scripts. This reads the headers this page was served with.</p>
-                  <ul class="why-card__pills" aria-label="Highlights">
-                    <li>SSL / TLS</li>
-                    <li>Security headers</li>
-                    <li>Backups</li>
-                  </ul>
-                </div>
-
-                <div class="why-card__stage status" data-sec-check>
-                  <div class="status__radar" aria-hidden="true">
-                    <span class="status__sweep"></span>
-                    <svg viewBox="0 0 48 48" class="status__shield">
-                      <path d="M24 6 38 12v12c0 9-7 15-14 18-7-3-14-9-14-18V12Z" />
-                      <path d="m18 24 4 4 8-8" />
-                    </svg>
-                    <i class="status__blip" style="--x: 22%; --y: 30%; --d: 0.4s"></i>
-                    <i class="status__blip" style="--x: 74%; --y: 62%; --d: 1.6s"></i>
-                    <i class="status__blip" style="--x: 38%; --y: 78%; --d: 2.5s"></i>
-                  </div>
-                  <div class="status__board">
-                    <p class="status__head"><span class="status__dot" aria-hidden="true"></span><span
-                        data-sec-summary>Checking this page's security headers…</span> <span class="status__pct"
-                        data-sec-score></span></p>
-                    <ul class="sec__list" data-sec-list aria-label="Security checks on this page"></ul>
-                    <p class="sec__note" data-sec-note hidden></p>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1072,7 +926,6 @@
     <!-- Two rows that drift in opposite directions and react to scrolling. List each tool once:
          script.js repeats the items to fill the row. -->
     <section class="section stack" id="stack" aria-labelledby="stack-title">
-      <canvas class="particles" data-particles="stack" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
           <h2 id="stack-title" class="h-section" data-split-words>From first commit <span class="accent">to
@@ -1115,7 +968,6 @@
          and estimator value), the price and the list items. The enquiry form's plan dropdown is
          built from these cards. -->
     <section class="section pricing" id="pricing" aria-labelledby="pricing-title">
-      <canvas class="particles" data-particles="pricing" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
           <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Pricing</p>
@@ -1320,7 +1172,7 @@
         </div>
 
         <p class="fine-print reveal">Prices in Sri Lankan rupees. Domain, hosting and third-party fees are billed by
-          their providers. Want a head start? <a href="products.html">Browse our templates</a>.</p>
+          their providers.</p>
       </div>
     </section>
 
@@ -1382,7 +1234,7 @@
             <div class="faq__a">
               <p>We don't use page builders or third-party themes. Custom sites are designed and coded for your
                 business from scratch. If you'd like to launch sooner, you can start from one of <a
-                  href="products.html">our own hand-coded templates</a>, which we adapt to your brand, content and
+                  href="work.html">our own hand-coded templates</a>, which we adapt to your brand, content and
                 photos. Either way, static sites are written in HTML, CSS and JavaScript, and web applications in
                 Python/Django or PHP, so pages stay light and load fast.</p>
             </div>
@@ -1484,7 +1336,6 @@
          the enquiry form on the right. The reply-time line shows once contact.responseTime is
          set in script.js. -->
     <section class="section contact" id="contact" aria-labelledby="contact-title">
-      <canvas class="particles" data-particles="contact" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
           <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Contact</p>
@@ -1543,11 +1394,6 @@
           </aside>
 
           <form class="card enquiry reveal" id="enquiry-form" novalidate data-enquiry-form>
-            <!-- A template chosen on products.html (?template=…) shows here and is sent along -->
-            <p class="enquiry__chip" data-template-chip hidden><span>Template:</span> <b data-template-name></b>
-              <button type="button" class="enquiry__chip-x" data-template-clear aria-label="Remove template">×</button>
-            </p>
-            <input type="hidden" name="template" value="" data-template-input>
             <div class="enquiry__grid">
               <div class="field">
                 <label for="f-name">Name <span aria-hidden="true">*</span></label>
@@ -1624,7 +1470,7 @@
             </div>
             <p class="enquiry__privacy" data-privacy-note>We use your details only to reply to this enquiry. Pressing
               send opens WhatsApp with your message filled in; nothing is sent until you press Send there, and this
-              website stores nothing. <a href="privacy.html">Privacy notice</a></p>
+              website stores nothing.</p>
             <div class="form-status" role="status" aria-live="polite" tabindex="-1" hidden data-form-status></div>
           </form>
         </div>
@@ -1634,8 +1480,6 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
-    <canvas class="particles" data-particles="footer" aria-hidden="true"></canvas>
-    <div class="cobweb cobweb--br" data-cobweb data-reveal aria-hidden="true"></div>
     <div class="container-cube footer__inner">
       <div class="footer__brand">
         <a href="#overview" class="footer__logo" aria-label="CobWebZ — back to top">
@@ -1661,9 +1505,7 @@
           <h2 class="footer__h">Work</h2>
           <ul>
             <li><a href="work.html">Case studies</a></li>
-            <li><a href="products.html">Templates</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="portal.html">Client portal</a></li>
           </ul>
         </div>
         <!-- Contact and Social columns show only when their values are set in script.js -->
@@ -1693,7 +1535,6 @@
 
       <div class="footer__bottom">
         <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
-        <a href="privacy.html" class="footer__legal">Privacy</a>
         <a href="#overview" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
       </div>
     </div>

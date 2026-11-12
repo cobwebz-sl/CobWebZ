@@ -248,18 +248,6 @@ const CUBE_CONFIG = {
     .trim()
     .slice(0, max);
 
-  // Runs fn once, the first time el is at least `threshold` on screen
-  function whenSeen(el, fn, threshold = 0.4) {
-    if (!el) return;
-    if (!('IntersectionObserver' in window)) { fn(); return; }
-    const seen = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      seen.disconnect();
-      fn();
-    }, { threshold });
-    seen.observe(el);
-  }
-
   // Two toggles: the sun/moon button in the header, and the switch in the menu that stands
   // in for it on phones. Until a visitor picks one, the theme follows their device's
   // light/dark setting, live (the inline script in <head> does the same before first paint).
@@ -896,6 +884,10 @@ const CUBE_CONFIG = {
   // at its angle --a (CSS places the buttons from the same angle). Scrolling through the
   // section moves from one service to the next; each change walks the spider round that ring
   // to it, laying a thread behind it, rolls the number in the hub and shows its panel.
+  // The spider rides a critically damped spring, timed in seconds rather than frames, so it
+  // eases into and out of every move at any frame rate; it turns round instead of flipping,
+  // its legs step with the ground it covers, and it's placed with a transform, so it glides
+  // between pixels instead of jumping from one to the next.
   function initServices() {
     const root = $('[data-services]');
     if (!root) return;
@@ -903,6 +895,7 @@ const CUBE_CONFIG = {
     const silk = $('[data-services-silk]', root);
     const spider = $('[data-services-spider]', root);
     const count = $('[data-services-count]', root);
+    const panelBox = $('.services__panels', root);
     const tabs = $$('[data-service-tab]', root);
     const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
     if (!web || !silk || !spider || !tabs.length) return;
@@ -974,75 +967,133 @@ const CUBE_CONFIG = {
       return (Math.atan2(x1 - x0, -(y1 - y0)) * 180) / Math.PI;
     };
     const stops = tabs.map((tab) => (((parseFloat(tab.style.getPropertyValue('--a')) || 0) % 360) + 360) % 360 / 360);
+    // Placed with a transform, in pixels of the web's current size, so moving it never
+    // re-lays out the page and it can sit between pixels
+    let size = web.clientWidth || 560;
     const place = (x, y, h) => {
-      spider.style.left = `${50 + (x / 600) * 100}%`;
-      spider.style.top = `${50 + (y / 600) * 100}%`;
-      spider.style.setProperty('--h', `${h.toFixed(1)}deg`);
+      spider.style.transform = `translate3d(${((0.5 + x / 600) * size).toFixed(2)}px, ${((0.5 + y / 600) * size).toFixed(2)}px, 0) translate(-50%, -52%) rotate(${h.toFixed(2)}deg)`;
     };
 
     let current = 0;
-    let pos = stops[0];
-    let walk = 0;
-    let chase = 0;
     let landed = false; // until the spider has dropped onto the web
 
-    function walkTo(target, done) {
-      cancelAnimationFrame(walk);
-      cancelAnimationFrame(chase);
-      chase = 0;
-      let d = target - pos;
-      if (d > 0.5) d -= 1;
-      if (d <= -0.5) d += 1;
-      const dir = d < 0 ? -1 : 1;
-      if (reduceMotion.matches || Math.abs(d) < 1e-4) {
-        pos = target;
-        const [x, y] = ringPoint(pos);
-        place(x, y, facing(pos, dir));
-        done?.();
-        return;
+    // Its motion. pos (0…1 round the ring) chases aim on a critically damped spring. Walking
+    // to a service, aim itself travels to goal at a steady CRUISE (laps a second), so a long
+    // walk has a cruising pace; scrubbed by the scroll, aim is simply the goal. from is where
+    // the thread it's laying starts.
+    const K = 70;
+    const C = 2 * Math.sqrt(K);
+    const CRUISE = 0.35;
+    const wrap = (d) => d - Math.round(d); // the shorter way round, -0.5…0.5
+    let pos = stops[0];
+    let vel = 0;
+    let goal = pos;
+    let aim = pos;
+    let from = pos;
+    let cruising = false;
+    let heading = 1; // +1 clockwise, -1 anticlockwise
+    let angle = facing(pos, 1); // the way it's drawn facing, which turns toward heading
+    let phase = 0; // where its legs are in their stride
+    let stride = 0; // 0 standing still … 1 walking
+    let frame = 0;
+    let last = 0;
+
+    function draw() {
+      const [x, y] = ringPoint(pos);
+      place(x, y, angle);
+      spider.style.setProperty('--g', (Math.sin(phase) * stride).toFixed(3));
+      const len = wrap(pos - from);
+      const on = Math.abs(len) > 0.003;
+      trail.classList.toggle('is-on', on); // off, the last thread fades
+      if (on) {
+        trail.style.strokeDasharray = `${Math.abs(len).toFixed(4)} ${(1 - Math.abs(len)).toFixed(4)}`;
+        trail.style.strokeDashoffset = (-(len > 0 ? from : from + len)).toFixed(4);
       }
-      const from = pos;
-      const ms = Math.max(600, Math.abs(d) * 3600); // a quarter of the way round takes 0.9s
-      const t0 = performance.now();
-      spider.classList.add('is-walking');
-      trail.classList.add('is-on');
-      const step = (now) => {
-        const t = Math.min(1, (now - t0) / ms);
-        const e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
-        pos = from + d * e;
-        const [x, y] = ringPoint(pos);
-        place(x, y, facing(pos, dir));
-        // The thread it lays, from where it set off to where it is (dashes repeat every lap)
-        const len = Math.abs(pos - from);
-        trail.style.strokeDasharray = `${len.toFixed(4)} ${(1 - len).toFixed(4)}`;
-        trail.style.strokeDashoffset = (-(dir > 0 ? from : pos)).toFixed(4);
-        if (t < 1) {
-          walk = requestAnimationFrame(step);
-          return;
-        }
-        pos = ((target % 1) + 1) % 1;
-        spider.classList.remove('is-walking');
-        trail.classList.remove('is-on'); // the thread fades
-        done?.();
-      };
-      walk = requestAnimationFrame(step);
     }
 
-    function rollCount(text) {
-      if (!count || count.textContent === text) return;
+    function tick(now) {
+      frame = 0;
+      const dt = last ? Math.min(1 / 30, (now - last) / 1000) : 1 / 60;
+      last = now;
+      if (cruising) {
+        const d = wrap(goal - aim);
+        const step = CRUISE * dt;
+        aim = Math.abs(d) <= step ? goal : aim + Math.sign(d) * step;
+      } else {
+        aim = goal;
+      }
+      const disp = wrap(aim - pos);
+      vel += (K * disp - C * vel) * dt;
+      const move = vel * dt;
+      pos += move;
+      const speed = Math.abs(vel);
+      if (speed > 0.004) heading = vel < 0 ? -1 : 1;
+      // turn toward the way it's going, the short way round, rather than flipping at once
+      const turn = ((facing(pos, heading) - angle + 540) % 360) - 180;
+      angle += turn * (1 - Math.exp(-dt * 14));
+      // the legs step with the ground covered, and swing as wide as the pace calls for
+      phase += Math.abs(move) * 230;
+      stride += (Math.min(1, speed / 0.05) - stride) * (1 - Math.exp(-dt * 10));
+      const done = aim === goal && Math.abs(disp) < 2e-5 && speed < 5e-4 && Math.abs(turn) < 0.2 && stride < 0.01;
+      if (done) {
+        pos = aim;
+        vel = 0;
+        stride = 0;
+        if (cruising) {
+          cruising = false;
+          from = pos; // arrived: the thread it laid fades
+        }
+      }
+      draw();
+      if (done) last = 0;
+      else frame = requestAnimationFrame(tick);
+    }
+    const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
+
+    // With reduced motion it doesn't walk: it's simply at the service
+    function jump(to) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      last = 0;
+      pos = aim = goal = from = to;
+      vel = 0;
+      stride = 0;
+      cruising = false;
+      angle = facing(pos, heading);
+      draw();
+    }
+
+    function walkTo(target) {
+      if (reduceMotion.matches) { jump(target); return; }
+      from = pos;
+      goal = target;
+      cruising = true;
+      wake();
+    }
+
+    // The number in the hub rolls the way the scroll is going (--dir); a newer number always
+    // replaces one still on its way, so quick scrolling can't leave the wrong one showing
+    let rollTimer = 0;
+    function rollCount(text, dir) {
+      if (!count) return;
+      clearTimeout(rollTimer);
       if (reduceMotion.matches) { count.textContent = text; return; }
+      count.style.setProperty('--dir', dir);
+      count.classList.remove('is-in');
       count.classList.add('is-out');
-      setTimeout(() => {
+      rollTimer = setTimeout(() => {
         count.textContent = text;
         count.classList.replace('is-out', 'is-in');
-        void count.offsetWidth; // start the roll in from below
+        void count.offsetWidth; // start the roll in from the other side
         count.classList.remove('is-in');
-      }, 220);
+      }, 200);
     }
 
     function select(i) {
       if (i < 0 || i === current) return;
+      const dir = i > current ? 1 : -1;
       current = i;
+      panelBox?.style.setProperty('--dir', dir); // which way the panels slide (style.css)
       tabs.forEach((tab, j) => {
         const on = j === i;
         tab.classList.toggle('is-active', on);
@@ -1054,51 +1105,26 @@ const CUBE_CONFIG = {
         panel.classList.toggle('is-active', j === i);
         if (pinned()) panel.inert = j !== i; // stacked panels all stay readable
       });
-      rollCount(String(i + 1).padStart(2, '0'));
+      rollCount(String(i + 1).padStart(2, '0'), dir);
       // Before it lands, it simply drops onto the right one; pinned, the scroll walks it (scrubTo)
       if (landed && !pinned()) walkTo(stops[i]);
     }
 
     // Pinned, the spider is walked by the scroll itself, so even a short scroll visibly moves
     // it: it rests on each service for HOLD of the scroll either side, then heads for the
-    // next, and is exactly halfway there when the panel changes. It eases after the point the
-    // scroll sets (aim), laying a thread from the service it left (from).
+    // next, and is exactly halfway there when the panel changes. The spring eases it after
+    // the point the scroll sets, laying a thread from the service it left.
     const HOLD = 0.2;
-    const wrap = (d) => d - Math.round(d); // the shorter way round, -0.5…0.5
-    let aim = pos;
-    let from = pos;
-    let heading = 1;
     function scrubTo(p) {
       if (!landed || tabs.length < 2) return;
-      cancelAnimationFrame(walk);
-      if (reduceMotion.matches) {
-        pos = stops[current];
-        const [x, y] = ringPoint(pos);
-        place(x, y, facing(pos, 1));
-        return;
-      }
+      if (reduceMotion.matches) { jump(stops[current]); return; }
       const v = Math.min(tabs.length - 1, Math.max(0, p * tabs.length - 0.5));
       const i = Math.min(tabs.length - 2, Math.floor(v));
       const k = Math.min(1, Math.max(0, (v - i - HOLD) / (1 - 2 * HOLD)));
       from = stops[i];
-      aim = from + wrap(stops[i + 1] - from) * k * k * (3 - 2 * k);
-      if (!chase) chase = requestAnimationFrame(follow);
-    }
-    function follow() {
-      const d = wrap(aim - pos);
-      pos += Math.abs(d) < 1e-4 ? d : d * 0.16;
-      if (Math.abs(d) > 1e-5) heading = d < 0 ? -1 : 1;
-      const [x, y] = ringPoint(pos);
-      place(x, y, facing(pos, heading));
-      const len = wrap(pos - from);
-      const on = Math.abs(len) > 0.003;
-      trail.classList.toggle('is-on', on); // off, the last thread fades
-      if (on) {
-        trail.style.strokeDasharray = `${Math.abs(len).toFixed(4)} ${(1 - Math.abs(len)).toFixed(4)}`;
-        trail.style.strokeDashoffset = (-(len > 0 ? from : from + len)).toFixed(4);
-      }
-      spider.classList.toggle('is-walking', Math.abs(d) > 0.0006);
-      chase = Math.abs(d) < 1e-4 ? 0 : requestAnimationFrame(follow);
+      goal = from + wrap(stops[i + 1] - from) * k * k * (3 - 2 * k);
+      cruising = false;
+      wake();
     }
 
     // Scrolling picks the service. Wide, tall screens pin the section (.is-pinned, style.css)
@@ -1185,22 +1211,32 @@ const CUBE_CONFIG = {
         { duration: 700, easing: 'ease-out', id: 'shiver' });
     }));
 
-    // Threads stay about a pixel wide whatever size the web is drawn at
-    const fit = () => silk.style.setProperty('--sw', (600 / (silk.clientWidth || 600)).toFixed(3));
+    // Threads stay about a pixel wide whatever size the web is drawn at, and the spider is
+    // re-placed for the new size
+    const fit = () => {
+      size = web.clientWidth || size;
+      silk.style.setProperty('--sw', (600 / (silk.clientWidth || 600)).toFixed(3));
+      if (landed) draw();
+    };
     fit();
-    window.addEventListener('resize', fit);
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(web);
+    else window.addEventListener('resize', fit);
 
     // The first time it's on screen: the web spins (CSS), then the spider drops onto the
     // service the scroll has reached on a thread, bounces and turns to face along the web
     let introduced = false;
-    function land(at) {
+    function land(spot) {
       landed = true;
-      pos = at;
-      const [x, y] = ringPoint(pos);
-      place(x, y, facing(pos, 1));
+      pos = aim = goal = from = spot;
+      vel = 0;
+      heading = 1;
+      angle = 0; // it came down facing up; the spring turns it to face along the thread
       spider.classList.add('is-ready');
+      if (reduceMotion.matches) angle = facing(pos, heading);
+      draw();
       if (pinned()) onScroll(); // the scroll takes over from here
-      else if (stops[current] !== at) walkTo(stops[current]); // scrolled on while it was dropping
+      else if (stops[current] !== spot) walkTo(stops[current]); // scrolled on while it was dropping
+      if (!reduceMotion.matches) wake();
     }
     function intro() {
       introduced = true;
@@ -1209,8 +1245,8 @@ const CUBE_CONFIG = {
         return;
       }
       setTimeout(() => {
-        const at = stops[current];
-        const [x, y] = ringPoint(at);
+        const spot = stops[current];
+        const [x, y] = ringPoint(spot);
         const top = -300; // the web's top edge
         const t0 = performance.now();
         drop.setAttribute('x1', f(x));
@@ -1228,7 +1264,7 @@ const CUBE_CONFIG = {
             return;
           }
           drop.classList.add('is-gone');
-          land(at);
+          land(spot);
         };
         requestAnimationFrame(step);
       }, 1500);
@@ -1243,98 +1279,6 @@ const CUBE_CONFIG = {
       seen.observe(root);
     } else {
       intro();
-    }
-  }
-
-  /* ---------- Cobwebs in the page corners ---------- */
-  // Each [data-cobweb] gets a quarter web, drawn for the top-left corner (viewBox 0–100) and
-  // mirrored into place by CSS. [data-reveal] marks it is-visible on screen, which spins it
-  // in. data-cobweb="spider" also hangs the logo's spider, small, on a thread from it.
-  function initCobwebs() {
-    const webs = $$('[data-cobweb]');
-    if (!webs.length) return;
-    const r = (n) => Math.round(n * 10) / 10;
-
-    // The logo's spider: three left legs [path, pivot x, pivot y], mirrored for the right
-    const legs = [
-      ['M352 254C322 240 308 205 316 170C320 155 326 145 332 138', 352, 254],
-      ['M346 280C315 272 285 255 278 228C274 212 271 200 270 188', 346, 280],
-      ['M352 318C335 328 326 345 327 368C328 388 334 400 342 410', 352, 318]
-    ];
-    const mirror = (d) => d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, (m, x, y) => `${775 - x} ${y}`);
-    const spider = '<svg class="cobweb__spider" viewBox="255 125 265 300">' +
-      legs.map(([d, x, y], i) => {
-        const swing = i % 2 ? -9 : 9;
-        return `<path class="cobweb__leg" style="--o: ${x}px ${y}px; --s: ${swing}deg" d="${d}"/>` +
-          `<path class="cobweb__leg" style="--o: ${775 - x}px ${y}px; --s: ${-swing}deg" d="${mirror(d)}"/>`;
-      }).join('') +
-      '<path class="cobweb__body" fill-rule="evenodd" d="M347 244A40 40 0 0 1 427 244L427 318A40 40 0 0 1 347 318Z' +
-      'M373 249A14 20 0 1 0 401 249A14 20 0 1 0 373 249ZM374 318A13 15 0 1 0 400 318A13 15 0 1 0 374 318Z"/></svg>';
-
-    webs.forEach((host, w) => {
-      // Seeded jitter: every web is a little different, but the same on every visit
-      let seed = 7 + w * 101;
-      const wobble = (n) => {
-        seed = (seed * 16807) % 2147483647;
-        return (seed / 2147483647 - 0.5) * n;
-      };
-      const at = (radius, a) => [radius * Math.cos(a), radius * Math.sin(a)];
-      const angles = [9, 27, 45, 63, 81].map((deg) => ((deg + wobble(7)) * Math.PI) / 180);
-
-      const spokes = angles.map((a, i) => {
-        const [x, y] = at(97 + wobble(6), a);
-        return `<path class="cobweb__spoke" pathLength="1" style="--i: ${i}" d="M0 0L${r(x)} ${r(y)}"/>`;
-      });
-      // Each ring runs wall to wall through every spoke, each span sagging toward the corner
-      const rings = [18, 33, 49, 65, 82].map((radius, i) => {
-        const pts = [[radius + wobble(4), 0], ...angles.map((a) => at(radius + wobble(4), a)), [0, radius + wobble(4)]];
-        const d = pts.map(([x, y], j) => {
-          if (!j) return `M${r(x)} ${r(y)}`;
-          const [px, py] = pts[j - 1];
-          const sag = 0.84 + wobble(0.06);
-          return `Q${r(((px + x) / 2) * sag)} ${r(((py + y) / 2) * sag)} ${r(x)} ${r(y)}`;
-        }).join('');
-        return `<path class="cobweb__ring" pathLength="1" style="--i: ${i}" d="${d}"/>`;
-      });
-
-      host.style.setProperty('--w', w);
-      host.innerHTML = '<svg class="cobweb__web" viewBox="0 0 100 100">' +
-        '<path class="cobweb__hit" d="M0 0H100A100 100 0 0 1 0 100Z"/>' +
-        `<g class="cobweb__shake"><g class="cobweb__sway">${spokes.join('')}${rings.join('')}</g></g></svg>`;
-
-      if (host.dataset.cobweb === 'spider') {
-        // Hangs from the middle spoke, two thirds of the way out
-        const [x, y] = at(64, angles[2]);
-        const left = host.matches('.cobweb--tr, .cobweb--br') ? 100 - x : x;
-        host.insertAdjacentHTML('beforeend', `<div class="cobweb__drop" style="left: ${r(left)}%; top: ${r(y)}%">` +
-          `<span class="cobweb__silk"></span>${spider}</div>`);
-      }
-
-      // Brushing past a web makes it shiver
-      const shake = $('.cobweb__shake', host);
-      $('.cobweb__hit', host).addEventListener('pointerenter', () => {
-        if (reduceMotion.matches || !host.classList.contains('is-visible') || shake.getAnimations().length) return;
-        shake.animate([
-          { transform: 'scale(1)' },
-          { transform: 'scale(1.035, 0.97)' },
-          { transform: 'scale(0.98, 1.02)' },
-          { transform: 'scale(1.012, 0.99)' },
-          { transform: 'scale(1)' }
-        ], { duration: 1000, easing: 'ease-out' });
-      });
-    });
-
-    // Threads stay about a pixel wide whatever size each web is drawn at
-    const fit = () => webs.forEach((host) => host.style.setProperty('--sw', (100 / (host.offsetWidth || 100)).toFixed(3)));
-    fit();
-    window.addEventListener('resize', fit);
-
-    // The sway and the spider's bob stop while a web is off screen (style.css: .is-offscreen)
-    if ('IntersectionObserver' in window) {
-      const onScreen = new IntersectionObserver((entries) => entries.forEach((entry) => {
-        entry.target.classList.toggle('is-offscreen', !entry.isIntersecting);
-      }));
-      webs.forEach((host) => onScreen.observe(host));
     }
   }
 
@@ -1491,413 +1435,6 @@ const CUBE_CONFIG = {
       entries.forEach((entry) => entry.target.classList.toggle('is-inview', entry.isIntersecting));
     }, { threshold: 0.4 });
     frames.forEach((frame) => observer.observe(frame));
-  }
-
-  /* ---------- Particle ribbons (hero and the sections below it) ---------- */
-  // Each [data-particles] canvas draws the set of ribbons it names. A ribbon is a smooth
-  // curve through `path` (fractions of its section's width and height), filled with fine
-  // strands of dots that drift along it. `width` is its thickness at the start, middle and
-  // end, as a fraction of the section's shorter side; `colors` follow the same three stops.
-  // `edges` (px) fades a set out toward the top and bottom of its section, so no ribbon stops
-  // on a hard line where two sections meet (the hero's canvas has a CSS mask for that).
-  // `narrow` is an optional path for below 900px, where most sections stack into one column.
-  const GREY = ['#7c8089', '#a3a7ae', '#5f636b'];
-  const PALE = ['#9a9ea6', '#b4b7bd', '#c3c6cb'];
-  const RIBBONS = {
-    hero: {
-      ribbons: [
-        {
-          path: [[1.06, -0.04], [0.95, 0.36], [0.84, 0.66], [0.66, 0.9], [0.45, 0.98], [0.22, 0.97], [0.06, 0.86], [-0.06, 0.7]],
-          width: [0.3, 0.12, 0.24],
-          colors: GREY,
-          strands: 60,
-          alpha: 1
-        },
-        {
-          path: [[1.06, 0.18], [0.97, 0.52], [0.86, 0.8], [0.7, 1.04]],
-          width: [0.14, 0.08, 0.05],
-          colors: PALE,
-          strands: 28,
-          alpha: 0.7
-        }
-      ]
-    },
-    // Under the statement from the left, rising past the spider mark to the right
-    about: {
-      edges: 64,
-      ribbons: [{
-        path: [[-0.06, 0.84], [0.18, 0.89], [0.44, 0.9], [0.66, 0.85], [0.84, 0.76], [1.06, 0.62]],
-        width: [0.1, 0.08, 0.13],
-        colors: GREY,
-        strands: 44,
-        alpha: 0.9
-      }]
-    },
-    // Framing the stage like the hero's: down the right and under the panel, with a thin
-    // one up the left beside the web. The canvas sticks to the screen (.particles-pin)
-    services: {
-      edges: 64,
-      ribbons: [
-        {
-          path: [[1.06, 0.04], [0.97, 0.38], [0.9, 0.7], [0.76, 0.93], [0.56, 1.06]],
-          width: [0.2, 0.1, 0.14],
-          colors: GREY,
-          strands: 48,
-          alpha: 0.9
-        },
-        {
-          path: [[-0.06, 0.3], [0.04, 0.56], [0.08, 0.8], [0.22, 1.06]],
-          width: [0.06, 0.05, 0.08],
-          colors: PALE,
-          strands: 24,
-          alpha: 0.7
-        }
-      ]
-    },
-    // Behind the cards, from the left margin down to the bottom right
-    work: {
-      edges: 64,
-      ribbons: [{
-        path: [[-0.06, 0.3], [0.18, 0.4], [0.46, 0.6], [0.74, 0.78], [1.06, 0.86]],
-        width: [0.14, 0.12, 0.09],
-        colors: GREY,
-        strands: 44,
-        alpha: 0.9
-      }]
-    },
-    // A wave across the drifting rows
-    stack: {
-      edges: 64,
-      ribbons: [{
-        path: [[-0.06, 0.6], [0.2, 0.82], [0.46, 0.7], [0.72, 0.84], [1.06, 0.66]],
-        width: [0.12, 0.16, 0.1],
-        colors: GREY,
-        strands: 40,
-        alpha: 0.85
-      }]
-    },
-    // Behind the cards the other way, from the right margin down to the bottom left
-    pricing: {
-      edges: 64,
-      ribbons: [{
-        path: [[1.06, 0.2], [0.84, 0.36], [0.52, 0.6], [0.22, 0.8], [-0.06, 0.9]],
-        width: [0.12, 0.1, 0.13],
-        colors: GREY,
-        strands: 44,
-        alpha: 0.9
-      }]
-    },
-    // Either side of the form
-    contact: {
-      edges: 64,
-      ribbons: [
-        {
-          path: [[-0.06, 0.16], [0.08, 0.36], [0.13, 0.58], [0.07, 0.8], [-0.06, 0.96]],
-          width: [0.07, 0.1, 0.07],
-          colors: GREY,
-          strands: 36,
-          alpha: 0.85
-        },
-        {
-          path: [[1.06, 0.1], [0.92, 0.3], [0.87, 0.52], [0.93, 0.74], [1.06, 0.9]],
-          width: [0.07, 0.1, 0.07],
-          colors: PALE,
-          strands: 36,
-          alpha: 0.85
-        }
-      ]
-    },
-    // A silk line between the links and the copyright, dropping into the cobweb's corner;
-    // stacked, it comes down the right edge instead, clear of the text
-    footer: {
-      edges: 64,
-      ribbons: [{
-        path: [[-0.06, 0.55], [0.24, 0.53], [0.5, 0.565], [0.74, 0.545], [0.9, 0.64], [1.04, 0.84]],
-        narrow: [[1.06, -0.02], [0.93, 0.22], [0.9, 0.5], [0.93, 0.78], [1.06, 1.0]],
-        width: [0.07, 0.07, 0.1],
-        colors: GREY,
-        strands: 36,
-        alpha: 0.85
-      }]
-    }
-  };
-
-  function initParticles() {
-    const canvases = $$('[data-particles]');
-    if (!canvases.length) return;
-
-    const SAMPLES = 1024; // points along each ribbon's centre line
-    const SIN = new Float32Array(4096); // lookup table: tens of thousands of dots per frame
-    for (let i = 0; i < SIN.length; i++) SIN[i] = Math.sin((i / SIN.length) * Math.PI * 2);
-    const SIN_SCALE = SIN.length / (Math.PI * 2);
-    const wide = window.matchMedia('(min-width: 900px)'); // the sections' two-column breakpoint
-    const scenes = [];
-    const sceneOf = new Map(); // canvas or section → its scene
-    let time = 0;
-    let last = 0;
-    let scrollingUntil = 0;
-    let frame = 0;
-
-    const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-    // Piecewise-linear value through three stops (start, middle, end)
-    const stop3 = (stops, t) => (t < 0.5
-      ? stops[0] + (stops[1] - stops[0]) * t * 2
-      : stops[1] + (stops[2] - stops[1]) * (t - 0.5) * 2);
-
-    // Catmull-Rom spline through the control points, t in 0…1
-    function pointAt(pts, t) {
-      const n = pts.length - 1;
-      const f = Math.min(t * n, n - 1e-6);
-      const i = Math.floor(f);
-      const u = f - i;
-      const p0 = pts[Math.max(i - 1, 0)];
-      const p1 = pts[i];
-      const p2 = pts[i + 1];
-      const p3 = pts[Math.min(i + 2, n)];
-      const cr = (a, b, c, d) => 0.5 * (2 * b + (c - a) * u + (2 * a - 5 * b + 4 * c - d) * u * u + (3 * b - a - 3 * c + d) * u * u * u);
-      return [cr(p0[0], p1[0], p2[0], p3[0]), cr(p0[1], p1[1], p2[1], p3[1])];
-    }
-
-    function buildRibbon(spec, width, height) {
-      const path = spec.narrow && !wide.matches ? spec.narrow : spec.path;
-      const pts = path.map(([x, y]) => [x * width, y * height]);
-      const side = Math.min(width, height);
-      const colors = spec.colors.map(rgb);
-      const sx = new Float32Array(SAMPLES);
-      const sy = new Float32Array(SAMPLES);
-      const nx = new Float32Array(SAMPLES);
-      const ny = new Float32Array(SAMPLES);
-      const half = new Float32Array(SAMPLES);
-      const color = new Uint32Array(SAMPLES);
-      const fade = new Float32Array(SAMPLES);
-
-      for (let j = 0; j < SAMPLES; j++) [sx[j], sy[j]] = pointAt(pts, j / (SAMPLES - 1));
-
-      let length = 0;
-      for (let j = 0; j < SAMPLES; j++) {
-        const t = j / (SAMPLES - 1);
-        const a = Math.max(j - 1, 0);
-        const b = Math.min(j + 1, SAMPLES - 1);
-        const len = Math.hypot(sx[b] - sx[a], sy[b] - sy[a]) || 1;
-        nx[j] = -(sy[b] - sy[a]) / len;
-        ny[j] = (sx[b] - sx[a]) / len;
-        if (j) length += Math.hypot(sx[j] - sx[j - 1], sy[j] - sy[j - 1]);
-        half[j] = (stop3(spec.width, t) * side) / 2;
-        const [cr, cg, cb] = [0, 1, 2].map((c) => Math.round(stop3(colors.map((col) => col[c]), t)));
-        color[j] = (cb << 16) | (cg << 8) | cr; // RGBA bytes read as a little-endian uint32
-        fade[j] = Math.min(1, t / 0.08, (1 - t) / 0.08);
-      }
-
-      // Fewer, sparser dots on small screens keep the frame cost down
-      const spacing = width < 700 ? 5 : 4;
-      const strands = Math.max(24, Math.round(spec.strands * Math.min(1, side / 900)));
-      const perStrand = Math.max(40, Math.round(length / spacing));
-      const count = perStrand * strands;
-      const along = new Float32Array(count);  // 0…1 along the ribbon
-      const across = new Float32Array(count); // -1…1 across it
-      const alpha = new Float32Array(count);
-      const phase = new Float32Array(strands);
-      for (let s = 0; s < strands; s++) {
-        phase[s] = Math.random() * Math.PI * 2;
-        const lane = -1 + (2 * (s + 0.5)) / strands;
-        for (let i = 0; i < perStrand; i++) {
-          const k = s * perStrand + i;
-          along[k] = (i + Math.random()) / perStrand;
-          across[k] = lane + (Math.random() - 0.5) * (1.6 / strands);
-          alpha[k] = spec.alpha * (0.45 + Math.random() * 0.55) * (1 - 0.45 * lane * lane);
-        }
-      }
-      return { sx, sy, nx, ny, half, color, fade, along, across, alpha, phase, perStrand, strands };
-    }
-
-    // Dots near the pointer are pushed aside with a slight swirl, like a hand through smoke
-    const PUSH_RADIUS = 150;
-    const PUSH = 70;
-
-    function draw(scene) {
-      const { buf, width, height, edges, top, hostHeight } = scene;
-      const drift = time * 0.008;
-      const { x: px, y: py, power } = scene.pointer;
-      const r2 = PUSH_RADIUS * PUSH_RADIUS;
-      buf.fill(0);
-      for (const rb of scene.ribbons) {
-        const { sx, sy, nx, ny, half, color, fade, along, across, alpha, phase, perStrand } = rb;
-        for (let s = 0; s < rb.strands; s++) {
-          const ph = phase[s];
-          for (let k = s * perStrand, end = k + perStrand; k < end; k++) {
-            let t = along[k] + drift;
-            t -= Math.floor(t);
-            const f = t * (SAMPLES - 1);
-            const j = f | 0;
-            const u = f - j;
-            const j2 = j < SAMPLES - 1 ? j + 1 : j;
-            const wobble = SIN[((t * 16 + time * 0.5 + ph) * SIN_SCALE | 0) & 4095];
-            const off = (across[k] + wobble * 0.07) * half[j];
-            let x = sx[j] + (sx[j2] - sx[j]) * u + nx[j] * off;
-            let y = sy[j] + (sy[j2] - sy[j]) * u + ny[j] * off;
-            if (power > 0.01) {
-              const dx = x - px;
-              const dy = y - py;
-              const d2 = dx * dx + dy * dy;
-              if (d2 < r2 && d2 > 1) {
-                const d = Math.sqrt(d2);
-                const fall = 1 - d / PUSH_RADIUS;
-                const k = (fall * fall * PUSH * power) / d;
-                x += (dx - dy * 0.4) * k;
-                y += (dy + dx * 0.4) * k;
-              }
-            }
-            if (x < 0 || y < 0 || x >= width || y >= height) continue;
-            let a = alpha[k] * fade[j];
-            if (edges) {
-              const hy = y + top; // in the section
-              const m = (hy < hostHeight - hy ? hy : hostHeight - hy) / edges;
-              if (m < 1) a *= m;
-            }
-            a = (a * 255) | 0;
-            const idx = (y | 0) * width + (x | 0);
-            if (a > buf[idx] >>> 24) buf[idx] = (a << 24) | color[j];
-          }
-        }
-      }
-      scene.ctx.putImageData(scene.image, 0, 0);
-    }
-
-    // The canvas covers just its ribbons (and the room the pointer can push them), not the
-    // whole section: one canvas pixel per CSS pixel, so the dots read as fine grain
-    function fit(scene) {
-      const { canvas, host } = scene;
-      const W = host.clientWidth;
-      const H = host.clientHeight;
-      if (!W || !H || (scene.ribbons && W === scene.hostWidth && H === scene.hostHeight)) return;
-      const ribbons = scene.set.ribbons.map((spec) => buildRibbon(spec, W, H));
-      let x0 = W, y0 = H, x1 = 0, y1 = 0;
-      ribbons.forEach(({ sx, sy, half }) => {
-        for (let j = 0; j < SAMPLES; j++) {
-          const r = (half[j] + PUSH) * 1.1;
-          x0 = Math.min(x0, sx[j] - r);
-          x1 = Math.max(x1, sx[j] + r);
-          y0 = Math.min(y0, sy[j] - r);
-          y1 = Math.max(y1, sy[j] + r);
-        }
-      });
-      x0 = Math.max(0, Math.floor(x0));
-      y0 = Math.max(0, Math.floor(y0));
-      x1 = Math.min(W, Math.ceil(x1));
-      y1 = Math.min(H, Math.ceil(y1));
-      if (x1 <= x0 || y1 <= y0) { release(scene); return; }
-      ribbons.forEach(({ sx, sy }) => {
-        for (let j = 0; j < SAMPLES; j++) {
-          sx[j] -= x0;
-          sy[j] -= y0;
-        }
-      });
-      const width = x1 - x0;
-      const height = y1 - y0;
-      // Placed with a transform, not left/top: the box's corner never moves, so resizing or
-      // re-placing a canvas that's already on screen never counts as a layout shift
-      Object.assign(canvas.style, { left: '0px', top: '0px', width: `${width}px`, height: `${height}px`, transform: `translate(${x0}px, ${y0}px)` });
-      canvas.width = width;
-      canvas.height = height;
-      scene.image = scene.ctx.createImageData(width, height);
-      scene.buf = new Uint32Array(scene.image.data.buffer);
-      Object.assign(scene, { ribbons, width, height, top: y0, hostWidth: W, hostHeight: H });
-      draw(scene); // with reduced motion, this static frame is all that's drawn
-    }
-    // Far from the screen, a scene gives its pixels back; fit() makes them again
-    function release(scene) {
-      scene.ribbons = scene.image = scene.buf = null;
-      scene.hostWidth = scene.hostHeight = 0;
-      scene.canvas.width = scene.canvas.height = 0;
-    }
-
-    function tick(now) {
-      frame = 0;
-      const active = scenes.filter((sc) => sc.visible && sc.ribbons);
-      if (!active.length || reduceMotion.matches) return;
-      frame = requestAnimationFrame(tick);
-      const dt = Math.min(now - (last || now), 100);
-      last = now;
-      // Hold still while the page scrolls, so scrolling never competes with drawing
-      if (now < scrollingUntil) return;
-      time += dt / 1000;
-      active.forEach((sc) => {
-        // The drift moves about a pixel per frame at ~15fps, so that's enough at rest;
-        // full rate just after the pointer moves over it
-        const stirring = now - sc.pointer.movedAt < 600;
-        if (now - sc.drawnAt < (stirring ? 15 : 66)) return;
-        sc.drawnAt = now;
-        const p = sc.pointer;
-        p.x += (p.tx - p.x) * 0.3;
-        p.y += (p.ty - p.y) * 0.3;
-        p.power += ((p.inside ? 1 : 0) - p.power) * 0.08;
-        draw(sc);
-      });
-    }
-    function start() {
-      if (frame || reduceMotion.matches) return;
-      last = 0;
-      frame = requestAnimationFrame(tick);
-    }
-
-    // A scene has pixels while its section is within a screen of the viewport, and is
-    // drawn while its canvas is on screen
-    const nearby = new IntersectionObserver((entries) => entries.forEach((entry) => {
-      const scene = sceneOf.get(entry.target);
-      scene.near = entry.isIntersecting;
-      if (!scene.near) { release(scene); return; }
-      fit(scene);
-      start();
-    }), { rootMargin: '100% 0px' });
-    const onScreen = new IntersectionObserver((entries) => entries.forEach((entry) => {
-      const scene = sceneOf.get(entry.target);
-      scene.visible = entry.isIntersecting;
-      if (scene.visible) start();
-    }));
-    const resized = new ResizeObserver((entries) => entries.forEach((entry) => {
-      const scene = sceneOf.get(entry.target);
-      if (scene.near) fit(scene);
-    }));
-
-    canvases.forEach((canvas) => {
-      const set = RIBBONS[canvas.dataset.particles];
-      const ctx = canvas.getContext('2d');
-      if (!set || !ctx) return;
-      const host = canvas.parentElement; // what it's sized to: its section, or a pinned box in it
-      const area = canvas.closest('section, footer') || host; // where the pointer stirs it
-      const scene = {
-        canvas, host, set, ctx, edges: set.edges || 0, near: false, visible: false, drawnAt: 0,
-        ribbons: null, image: null, buf: null, width: 0, height: 0, top: 0, hostWidth: 0, hostHeight: 0,
-        pointer: { x: 0, y: 0, tx: 0, ty: 0, power: 0, inside: false, movedAt: 0 }
-      };
-      scenes.push(scene);
-      sceneOf.set(canvas, scene);
-      sceneOf.set(host, scene);
-
-      // The canvas ignores the pointer, so follow it over the canvas's section instead
-      area.addEventListener('pointermove', (e) => {
-        if (e.pointerType === 'touch') return;
-        const r = canvas.getBoundingClientRect();
-        const p = scene.pointer;
-        p.tx = e.clientX - r.left;
-        p.ty = e.clientY - r.top;
-        if (!p.inside && p.power < 0.01) { // start where the pointer is, not where it left
-          p.x = p.tx;
-          p.y = p.ty;
-        }
-        p.inside = true;
-        p.movedAt = performance.now();
-        start();
-      });
-      area.addEventListener('pointerleave', () => { scene.pointer.inside = false; });
-
-      nearby.observe(host);
-      onScreen.observe(canvas);
-      resized.observe(host);
-    });
-
-    window.addEventListener('scroll', () => { scrollingUntil = performance.now() + 150; }, { passive: true });
-    reduceMotion.addEventListener('change', start);
   }
 
   /* ---------- Enquiry selections: the plan dropdown ---------- */
@@ -2254,32 +1791,11 @@ const CUBE_CONFIG = {
     const { web3formsKey: w3fKey, formspreeEndpoint: fsEndpoint } = CUBE_CONFIG.form;
     const privacy = $('[data-privacy-note]', form);
     if (privacy && !waNumber) {
-      const link = $('a', privacy);
       const service = w3fKey.trim() ? 'Web3Forms' : fsEndpoint.trim() ? 'Formspree' : '';
       privacy.textContent = service
-        ? `We use your details only to reply to this enquiry. It is delivered to our inbox by ${service}, a form-delivery service; this website itself stores nothing. `
-        : 'We use your details only to reply to this enquiry. Pressing send opens your email app with your message filled in; nothing is sent until you press Send there. ';
-      if (link) privacy.append(link);
+        ? `We use your details only to reply to this enquiry. It is delivered to our inbox by ${service}, a form-delivery service; this website itself stores nothing.`
+        : 'We use your details only to reply to this enquiry. Pressing send opens your email app with your message filled in; nothing is sent until you press Send there.';
     }
-
-    // A template chosen on the Products page (?template=Vela%20One) rides along, shown as a chip
-    const chip = $('[data-template-chip]', form);
-    const templateInput = $('[data-template-input]', form);
-    const setTemplate = (name) => {
-      if (!chip || !templateInput) return;
-      templateInput.value = name;
-      $('[data-template-name]', chip).textContent = name;
-      chip.hidden = !name;
-    };
-    const chosen = clean(new URLSearchParams(window.location.search).get('template'), 60).replace(/[^\p{L}\p{N} .'&-]/gu, '');
-    if (chosen) setTemplate(chosen);
-    $('[data-template-clear]', form)?.addEventListener('click', () => {
-      setTemplate('');
-      const url = new URL(window.location.href);
-      url.searchParams.delete('template');
-      history.replaceState(null, '', url);
-      form.elements.name.focus();
-    });
 
     // Spam: a hidden field bots fill in (botcheck), and a time check. People take a few
     // seconds to fill in a form; a submit faster than that gets one polite "please check"
@@ -2311,9 +1827,9 @@ const CUBE_CONFIG = {
       return [`${prefix} `, link, '.'];
     }
 
-    // The form's fields (cleaned), the chosen template and the itemised estimate
+    // The form's fields (cleaned) and the itemised estimate
     function collect() {
-      const limits = { name: 100, email: 150, business: 120, message: 3000, template: 60 };
+      const limits = { name: 100, email: 150, business: 120, message: 3000 };
       const data = {};
       new FormData(form).forEach((value, key) => {
         if (key !== 'botcheck') data[key] = clean(value, limits[key] || 200);
@@ -2331,7 +1847,6 @@ const CUBE_CONFIG = {
         `Name: ${data.name}`,
         `Email: ${data.email}`,
         `Business: ${data.business || '—'}`,
-        ...(data.template ? [`Template: ${data.template}`] : []),
         `Plan: ${data.package || 'Not sure yet'}`,
         ...(data.estimate_items ? ['Estimate details:', ...data.estimate_items.split('\n').map((line) => `• ${line}`)] : []),
         ...(data.estimate ? [`Estimated total: ${data.estimate} (an estimate, not a quote)`] : []),
@@ -2371,7 +1886,6 @@ const CUBE_CONFIG = {
 
     function resetForm() {
       form.reset();
-      setTemplate('');
       resetEstimate();
       updateCount();
       startedAt = 0;
@@ -2454,454 +1968,217 @@ const CUBE_CONFIG = {
     });
   }
 
-  /* ---------- Why Choose Us: the web the pointer lights up, and the card demos ---------- */
-  // Draws one big web (viewBox -500…500, hub at 0 0) into both [data-why-web] layers; CSS
-  // shows the first faintly and the second only round the pointer (--mx / --my on the
-  // panel). Cards tilt toward the pointer (--rx / --ry) and light their edge nearest it
-  // (--mouse-x / --mouse-y). The live checks in the cards are further down (initLiveStats…).
-  function initWhyChooseUs() {
-    const root = $('[data-why]');
-    if (!root) return;
-    const cards = $$('[data-why-card]', root);
-    const f = (n) => n.toFixed(1);
-
-    // The web: 18 spokes, then 9 rings (inner to outer) that dip between the spokes
-    const SPOKES = 18;
-    const at = (r, deg) => [r * Math.cos((deg * Math.PI) / 180), r * Math.sin((deg * Math.PI) / 180)];
-    let web = '';
-    for (let k = 0; k < SPOKES; k++) {
-      const [x1, y1] = at(24, (k * 360) / SPOKES);
-      const [x2, y2] = at(500, (k * 360) / SPOKES);
-      web += `<path pathLength="1" style="--i: ${k % 6}" d="M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}"/>`;
-    }
-    [48, 84, 124, 168, 216, 268, 324, 384, 448].forEach((r, i) => {
-      let d = '';
-      for (let k = 0; k <= SPOKES; k++) {
-        const [x, y] = at(r, (k * 360) / SPOKES);
-        if (!k) { d += `M${f(x)} ${f(y)}`; continue; }
-        const [cx, cy] = at(r * 0.94, ((k - 0.5) * 360) / SPOKES);
-        d += `Q${f(cx)} ${f(cy)} ${f(x)} ${f(y)}`;
-      }
-      web += `<path pathLength="1" style="--i: ${i + 4}" d="${d}"/>`;
-    });
-    const webs = $$('[data-why-web]', root);
-    webs.forEach((svg) => { svg.innerHTML = web; });
-    // Threads stay about a pixel wide whatever size the web is drawn at
-    const fit = () => webs.forEach((svg) => svg.style.setProperty('--sw', (1000 / (svg.clientWidth || 1000)).toFixed(3)));
-    fit();
-    window.addEventListener('resize', fit);
-
-    // The pointer: light, edge glow and tilt, worked out once a frame. The cards' untilted
-    // boxes (so the tilt can't feed back into itself) are measured when the pointer comes in
-    // and after a resize; reading them between style writes would force a layout per card.
-    if (finePointer.matches) {
-      let ev = null;
-      let frame = 0;
-      let boxes = null;
-      const measure = () => {
-        boxes = cards.map((card) => {
-          let x = 0;
-          let y = 0;
-          for (let n = card; n && n !== root; n = n.offsetParent) {
-            x += n.offsetLeft;
-            y += n.offsetTop;
-          }
-          const max = card.classList.contains('why-card--wide') ? 3 : 6; // degrees
-          return { card, x, y, w: card.offsetWidth, h: card.offsetHeight, max };
-        });
-      };
-      const track = () => {
-        frame = 0;
-        const r = root.getBoundingClientRect();
-        if (!boxes) measure();
-        const mx = ev.clientX - r.left;
-        const my = ev.clientY - r.top;
-        root.style.setProperty('--mx', `${f(mx)}px`);
-        root.style.setProperty('--my', `${f(my)}px`);
-        boxes.forEach(({ card, x: left, y: top, w, h, max }) => {
-          const x = mx - left;
-          const y = my - top;
-          card.style.setProperty('--mouse-x', `${f(x)}px`);
-          card.style.setProperty('--mouse-y', `${f(y)}px`);
-          if (!reduceMotion.matches && x >= 0 && y >= 0 && x <= w && y <= h) {
-            card.style.setProperty('--rx', `${f((0.5 - y / h) * max * 2)}deg`);
-            card.style.setProperty('--ry', `${f((x / w - 0.5) * max * 2)}deg`);
-          } else {
-            card.style.removeProperty('--rx');
-            card.style.removeProperty('--ry');
-          }
-        });
-      };
-      root.addEventListener('pointerenter', () => { boxes = null; });
-      window.addEventListener('resize', () => { boxes = null; });
-      root.addEventListener('pointermove', (e) => {
-        ev = e;
-        root.classList.add('is-lit');
-        if (!frame) frame = requestAnimationFrame(track);
-      });
-      root.addEventListener('pointerleave', () => {
-        root.classList.remove('is-lit');
-        cards.forEach((card) => {
-          card.style.removeProperty('--rx');
-          card.style.removeProperty('--ry');
-        });
-      });
-    }
-
-    // 01 — the pen tool. The middle anchor's two handles mirror each other through it; the
-    // pointer pulls one, and left alone it drifts by itself. Runs only while on screen.
-    const pen = $('[data-why-pen]', root);
-    if (pen) {
-      const svg = $('svg', pen);
-      const curve = $('.pen__curve', pen);
-      const fill = $('.pen__fill', pen);
-      const handle = $('.pen__handle', pen);
-      const knobs = $$('[data-pen-knob]', pen);
-      const cursor = $('[data-pen-cursor]', pen);
-      const code = $('[data-pen-code]', pen);
-      const A = [300, 110];
-      const cur = [220, 60];
-      let goal = null; // where the pointer has the handle; null = drifting
-      let frame = 0;
-
-      const draw = ([hx, hy]) => {
-        const rx = 2 * A[0] - hx;
-        const ry = 2 * A[1] - hy;
-        const d = `M40 170C140 40 ${f(hx)} ${f(hy)} ${A[0]} ${A[1]}S470 210 560 50`;
-        curve.setAttribute('d', d);
-        fill.setAttribute('d', `${d}L560 220L40 220Z`);
-        handle.setAttribute('d', `M${f(hx)} ${f(hy)}L${f(rx)} ${f(ry)}`);
-        knobs[0]?.setAttribute('cx', f(hx));
-        knobs[0]?.setAttribute('cy', f(hy));
-        knobs[1]?.setAttribute('cx', f(rx));
-        knobs[1]?.setAttribute('cy', f(ry));
-        cursor?.setAttribute('transform', `translate(${f(hx + 4)} ${f(hy + 4)})`);
-        if (code) code.textContent = `M40 170 C140 40, ${Math.round(hx)} ${Math.round(hy)}, 300 110`;
-      };
-      const loop = (now) => {
-        const t = now / 1000;
-        const [gx, gy] = goal || [220 + Math.cos(t * 0.8) * 80, 60 + Math.sin(t * 1.25) * 48];
-        cur[0] += (gx - cur[0]) * (goal ? 0.25 : 0.08);
-        cur[1] += (gy - cur[1]) * (goal ? 0.25 : 0.08);
-        draw(cur);
-        frame = requestAnimationFrame(loop);
-      };
-      const start = () => { if (!frame && !reduceMotion.matches) frame = requestAnimationFrame(loop); };
-      const stop = () => { cancelAnimationFrame(frame); frame = 0; };
-      draw(cur);
-
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver((entries) => entries.forEach((entry) => {
-          if (entry.isIntersecting) start(); else stop();
-        })).observe(pen);
-      }
-      pen.addEventListener('pointermove', (e) => {
-        const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(svg.getScreenCTM().inverse());
-        goal = [Math.max(60, Math.min(540, p.x)), Math.max(8, Math.min(212, p.y))];
-        if (reduceMotion.matches) { cur[0] = goal[0]; cur[1] = goal[1]; draw(cur); }
-      });
-      pen.addEventListener('pointerleave', () => { goal = null; });
-    }
-
-    // Its looping animations (radar, status light) rest while it's off screen
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(([entry]) => root.classList.toggle('is-offscreen', !entry.isIntersecting)).observe(root);
-    }
-  }
-
-  /* ---------- Why us: everything on the panel is measured live ---------- */
-  const fmtMs = (ms) => (ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(2)} s`);
-  const isLocal = () => /^(localhost|127\.|\[?::1\]?$|0\.0\.0\.0)/.test(window.location.hostname);
-  const easeOut = (t) => 1 - (1 - t) ** 3;
-
-  // Counts a number up to its value (or shows it at once with reduced motion)
-  function countTo(el, value, format, ms = 1400) {
-    if (!el) return;
-    if (reduceMotion.matches) { el.textContent = format(value); return; }
-    const t0 = performance.now();
-    const tick = (now) => {
-      const t = Math.min(1, (now - t0) / ms);
-      el.textContent = format(value * easeOut(t));
-      if (t < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
-
-  // The four stats come from this visit's own performance records: how soon the largest
-  // thing on screen was drawn, how much was downloaded, how many requests, and how many of
-  // those went to anyone but us
-  function initLiveStats() {
-    const list = $('[data-live-stats]');
-    if (!list || !window.performance || !performance.getEntriesByType) return;
-    let lcp = 0;
-    const lcpSupported = (window.PerformanceObserver?.supportedEntryTypes || []).includes('largest-contentful-paint');
-    if (lcpSupported) {
-      try {
-        new PerformanceObserver((records) => {
-          const all = records.getEntries();
-          const last = all[all.length - 1];
-          if (last) lcp = last.renderTime || last.startTime;
-        }).observe({ type: 'largest-contentful-paint', buffered: true });
-      } catch (e) { /* not available */ }
-    }
-    const out = (key) => $(`[data-stat="${key}"]`, list);
-    whenSeen(list, () => {
-      const nav = performance.getEntriesByType('navigation')[0];
-      const resources = performance.getEntriesByType('resource');
-      const fcp = performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0;
-      const paint = lcp || fcp || (nav ? nav.domContentLoadedEventEnd : 0);
-      const label = $('[data-stat-label="paint"]', list);
-      if (label) label.textContent = lcp ? 'Largest paint' : fcp ? 'First paint' : 'Page ready';
-      const size = (entry) => (entry ? entry.encodedBodySize || entry.transferSize || 0 : 0);
-      const bytes = [nav, ...resources].reduce((total, entry) => total + size(entry), 0);
-      const thirdParty = resources.filter((entry) => {
-        try { return new URL(entry.name).origin !== window.location.origin; } catch (e) { return false; }
-      }).length;
-
-      countTo(out('paint'), paint / 1000, (v) => `${v.toFixed(v < 1 ? 2 : 1)}s`);
-      countTo(out('weight'), bytes / 1024, (v) => (v >= 1024 ? `${(v / 1024).toFixed(1)} MB` : `${Math.round(v)} KB`));
-      countTo(out('requests'), resources.length + 1, (v) => String(Math.round(v)));
-      countTo(out('third'), thirdParty, (v) => String(Math.round(v)));
-      const note = $('[data-stats-note]');
-      const conn = navigator.connection?.effectiveType;
-      if (note && conn) note.textContent = `Measured on this visit, in your browser, on a ${conn} connection. Results vary with your device and network.`;
-    }, 0.5);
-  }
-
-  // Cloudflare names its data centres by airport code; a few likely ones get a city
-  const EDGES = {
-    CMB: 'Colombo', MAA: 'Chennai', BOM: 'Mumbai', DEL: 'New Delhi', BLR: 'Bengaluru', HYD: 'Hyderabad',
-    CCU: 'Kolkata', MLE: 'Malé', DAC: 'Dhaka', KTM: 'Kathmandu', SIN: 'Singapore', KUL: 'Kuala Lumpur',
-    BKK: 'Bangkok', HKG: 'Hong Kong', NRT: 'Tokyo', KIX: 'Osaka', ICN: 'Seoul', SYD: 'Sydney', MEL: 'Melbourne',
-    DXB: 'Dubai', DOH: 'Doha', MCT: 'Muscat', LHR: 'London', MAN: 'Manchester', AMS: 'Amsterdam', FRA: 'Frankfurt',
-    CDG: 'Paris', MAD: 'Madrid', MXP: 'Milan', ZRH: 'Zurich', ARN: 'Stockholm', IAD: 'Ashburn', EWR: 'Newark',
-    JFK: 'New York', ORD: 'Chicago', DFW: 'Dallas', LAX: 'Los Angeles', SJC: 'San Jose', SEA: 'Seattle',
-    YYZ: 'Toronto', GRU: 'São Paulo', JNB: 'Johannesburg'
-  };
-  const PROTOCOLS = { h3: 'HTTP/3', h2: 'HTTP/2', 'http/1.1': 'HTTP/1.1', 'http/1.0': 'HTTP/1.0' };
-
-  // A fresh, uncached request for this page's headers, timed. Time to first byte comes from
-  // the browser's own resource timing; "served from" is the data centre that answered.
-  async function timedHead(tag) {
-    const url = new URL(window.location.pathname, window.location.origin);
-    url.searchParams.set(tag, Date.now().toString(36));
-    const t0 = performance.now();
-    const res = await fetch(url, { method: 'HEAD', cache: 'no-store', credentials: 'same-origin' });
-    await res.text();
-    const total = performance.now() - t0;
-    await new Promise((r) => setTimeout(r, 0)); // let the timing entry land
-    const entry = performance.getEntriesByName(url.href).pop();
-    const ttfb = entry && entry.responseStart > 0 && entry.requestStart > 0 ? entry.responseStart - entry.requestStart : total;
-    return { res, total, ttfb, protocol: entry?.nextHopProtocol || '' };
-  }
-
-  function initSpeedTest() {
-    const root = $('[data-speedtest]');
-    if (!root) return;
-    const ring = $('[data-gauge-ring]', root);
-    const value = $('[data-speed-value]', root);
-    const btn = $('[data-speed-run]', root);
-    const label = $('[data-speed-label]', root);
-    const status = $('[data-speed-status]', root);
-    const set = (key, text) => { const el = $(`[data-speed="${key}"]`, root); if (el) el.textContent = text; };
-    const GOOD = 800; // Google's "good" time to first byte, in ms
-    let running = false;
-
-    const fill = (to) => {
-      if (!ring) return;
-      if (reduceMotion.matches) { ring.style.strokeDashoffset = (100 - 100 * to).toFixed(1); return; }
-      const from = 100 - (parseFloat(ring.style.strokeDashoffset) || 100);
-      const t0 = performance.now();
-      const step = (now) => {
-        const t = Math.min(1, (now - t0) / 1100);
-        ring.style.strokeDashoffset = (100 - (from / 100 + (to - from / 100) * easeOut(t)) * 100).toFixed(2);
-        if (t < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    };
-    if (ring) ring.style.strokeDashoffset = '100';
-
-    async function run() {
-      if (running) return;
-      running = true;
-      btn.disabled = true;
-      label.textContent = 'Testing…';
-      root.classList.add('is-running');
-      try {
-        const { res, total, ttfb, protocol } = await timedHead('speedtest');
-        const ray = res.headers.get('cf-ray') || '';
-        const code = ray.includes('-') ? ray.split('-').pop().toUpperCase() : '';
-        const server = res.headers.get('server') || '';
-        const edge = code ? `${code}${EDGES[code] ? ` · ${EDGES[code]}` : ''}` : isLocal() ? 'Local preview' : server || 'Origin';
-        countTo(value, ttfb, (v) => String(Math.round(v)), 900);
-        fill(Math.max(0.04, 1 - Math.min(ttfb, GOOD) / GOOD));
-        set('rtt', fmtMs(total));
-        set('edge', edge);
-        set('proto', PROTOCOLS[protocol] || protocol.toUpperCase() || '—');
-        status.textContent = `Speed test finished: ${Math.round(ttfb)} milliseconds to first byte, served from ${edge}.`;
-        label.textContent = 'Run again';
-      } catch (err) {
-        set('edge', 'No response');
-        status.textContent = 'The speed test could not reach the server. Check your connection and try again.';
-        label.textContent = 'Try again';
-      } finally {
-        running = false;
-        btn.disabled = false;
-        root.classList.remove('is-running');
-      }
-    }
-    btn?.addEventListener('click', run);
-    whenSeen(root, run, 0.6);
-  }
-
-  // Reads this page's own markup the way a search engine would, and shows the result
-  // snippet its title and description make. It reports what it finds; it promises nothing.
-  function initSeoAudit() {
-    const root = $('[data-seo-audit]');
-    if (!root) return;
-    const cut = (text, max) => (text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text);
-    const title = document.title.trim();
-    const desc = ($('meta[name="description"]')?.content || '').trim();
-    const canonical = $('link[rel="canonical"]')?.href || '';
-    const h1s = $$('h1').length;
-    const imgs = $$('img');
-    const withAlt = imgs.filter((img) => img.hasAttribute('alt')).length;
-    const types = new Set();
-    $$('script[type="application/ld+json"]').forEach((script) => {
-      try {
-        const json = JSON.parse(script.textContent);
-        (json['@graph'] || [json]).forEach((node) => [].concat(node['@type'] || []).forEach((t) => types.add(t)));
-      } catch (e) { /* invalid JSON-LD counts as none */ }
-    });
-    const lang = document.documentElement.lang;
-    const viewport = Boolean($('meta[name="viewport"]'));
-    const social = Boolean($('meta[property="og:title"]') && $('meta[property="og:image"]'));
-
-    const site = $('[data-seo-url]', root);
-    if (site) {
-      const path = window.location.pathname.replace(/\.html$/, '').split('/').filter((part) => part && part !== 'index');
-      site.textContent = ['cobwebz.lk', ...path].join(' › ');
-    }
-    $('[data-seo-title]', root).textContent = cut(title, 60);
-    $('[data-seo-desc]', root).textContent = cut(desc, 158);
-
-    const checks = [
-      ['Page title', `${title.length} chars`, title.length >= 10 && title.length <= 60],
-      ['Meta description', `${desc.length} chars`, desc.length >= 50 && desc.length <= 160],
-      ['One H1 heading', `${h1s} found`, h1s === 1],
-      ['Canonical URL', canonical ? 'set' : 'missing', Boolean(canonical)],
-      ['Structured data', `${types.size} type${types.size === 1 ? '' : 's'}`, types.size > 0],
-      ['Image alt text', `${withAlt}/${imgs.length}`, withAlt === imgs.length],
-      ['Language & viewport', lang || 'missing', Boolean(lang) && viewport],
-      ['Social preview tags', social ? 'set' : 'missing', social]
-    ];
-    const list = $('[data-seo-checks]', root);
-    list.replaceChildren(...checks.map(([name, found, ok], i) => {
-      const li = document.createElement('li');
-      li.style.setProperty('--i', i);
-      li.classList.toggle('is-warn', !ok);
-      const b = document.createElement('b');
-      b.textContent = found;
-      li.append(`${name}${ok ? '' : ' (check)'}`, b);
-      return li;
-    }));
-    whenSeen(root, () => list.classList.add('is-done'), 0.5);
-  }
-
-  // Asks this site for this page's headers and checks the protections they switch on
-  function initSecurityCheck() {
-    const root = $('[data-sec-check]');
-    if (!root) return;
-    const list = $('[data-sec-list]', root);
-    const summary = $('[data-sec-summary]', root);
-    const score = $('[data-sec-score]', root);
-    const NAMES = ['HTTPS', 'HSTS (HTTPS only)', 'Content Security Policy', 'MIME sniffing blocked', 'Framing blocked',
-      'Referrer policy', 'Permissions policy', 'Third-party scripts'];
-    // The rows exist (invisibly) from the start, so the results arriving don't move anything
-    const row = (name, i, ok = true, found = '…') => {
-      const li = document.createElement('li');
-      li.style.setProperty('--i', i);
-      li.classList.toggle('is-warn', !ok);
-      const b = document.createElement('b');
-      b.textContent = found;
-      li.append(name, b);
-      return li;
-    };
-    list.replaceChildren(...NAMES.map((name, i) => row(name, i)));
-    const note = $('[data-sec-note]', root);
-    if (note && isLocal()) {
-      note.textContent = 'Local preview: HTTPS and some headers are only switched on by the live host.';
-      note.hidden = false;
-    }
-
-    async function run() {
-      let headers = null;
-      try { headers = (await timedHead('headers')).res.headers; } catch (e) { /* offline: header checks fail */ }
-      const h = (name) => (headers && headers.get(name)) || '';
-      const csp = `${h('content-security-policy')} ${$('meta[http-equiv="Content-Security-Policy"]')?.content || ''}`;
-      const foreignScripts = $$('script[src]').filter((s) => {
-        try { return new URL(s.src).origin !== window.location.origin; } catch (e) { return true; }
-      }).length;
-      const results = [
-        window.location.protocol === 'https:',
-        /max-age=\d+/i.test(h('strict-transport-security')),
-        /default-src/.test(csp),
-        /nosniff/i.test(h('x-content-type-options')),
-        /frame-ancestors/.test(csp) || Boolean(h('x-frame-options')),
-        Boolean(h('referrer-policy') || $('meta[name="referrer"]')),
-        Boolean(h('permissions-policy')),
-        foreignScripts === 0
-      ];
-      const passed = results.filter(Boolean).length;
-      list.replaceChildren(...NAMES.map((name, i) => {
-        const ok = results[i];
-        const found = i === 7 ? (foreignScripts ? String(foreignScripts) : 'none') : ok ? 'on' : 'off';
-        return row(name, i, ok, found);
-      }));
-      summary.textContent = headers ? `${passed} of ${NAMES.length} protections on` : 'Couldn\'t reach the server';
-      if (score) score.textContent = `${passed}/${NAMES.length}`;
-      root.classList.add('is-done');
-      requestAnimationFrame(() => list.classList.add('is-done'));
-    }
-    whenSeen(root, run, 0.4);
-  }
-
-  /* ---------- How we work: the rail fills as you scroll ---------- */
+  /* ---------- How we work: one line climbs through the five steps ---------- */
+  // Wide screens: the intro sits top left and the steps rise from bottom left to top right.
+  // One line runs through their markers: in from the left edge of the screen, dipping into
+  // step 1, then an S-curve up to each step after it (flat at every marker, like a stair),
+  // and out at the right edge. Narrow screens stack the steps and the line snakes down past
+  // them. The path is built from the markers' real positions, so it always runs through
+  // them. As you scroll it draws itself in, with a soft glow under it and a bright tip at its
+  // end, and each step lights up as the line reaches it. How the scroll drives it:
+  //  - pin (wide and tall enough): the section holds still (CSS sticky) while scrolling
+  //    draws the line, then lets go a little after it's done
+  //  - read (stacked): the tip follows a reading line 70% of the way down the screen
+  //  - play (wide but too short to hold still): it draws itself in once it's in view
+  //  - still (reduced motion): drawn in full from the start
+  // The drawn amount eases toward its goal, so the line glides instead of stepping with the
+  // wheel. --p (0…1, how much is drawn) on the section and each step's --at (where the line
+  // reaches its marker, on the same scale) drive the rest in style.css.
   function initProcess() {
-    const track = $('[data-process]');
-    if (!track) return;
-    const steps = $$('.process__step', track);
-    const wide = window.matchMedia('(min-width: 960px)');
-    let queued = false;
-    function update() {
-      queued = false;
-      const vh = window.innerHeight;
-      const r = track.getBoundingClientRect();
-      if (r.bottom < -vh || r.top > vh * 2) return;
-      let p = 1;
-      if (!reduceMotion.matches) {
-        // Across: fills as the row rises from the bottom of the screen to its upper half.
-        // Down: follows a reading line 62% of the way down the screen.
-        p = wide.matches ? (vh * 0.92 - r.top) / (vh * 0.5) : (vh * 0.62 - r.top - 16) / Math.max(1, r.height - 32);
-      }
-      p = Math.min(1, Math.max(0, p));
-      track.style.setProperty('--p', p.toFixed(4));
-      steps.forEach((step, i) => {
-        const reached = wide.matches
-          ? p >= i / (steps.length - 1) - 0.001
-          : 16 + p * (track.offsetHeight - 32) >= step.offsetTop + 17;
-        step.classList.toggle('is-reached', reached);
-      });
-    }
-    const queue = () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(update);
+    const stage = $('[data-process]');
+    const pin = stage?.closest('.process__pin');
+    const section = stage?.closest('.section');
+    if (!stage || !pin || !section) return;
+    const steps = $$('.process__step', stage);
+    const nodes = steps.map((s) => $('.process__node', s));
+    const ink = $('.process__ink', pin);
+    const glow = $('.process__glow', pin);
+    const guide = $('.process__guide', pin);
+    const tip = $('.process__tip', pin);
+    const grad = $('#process-grad', pin);
+    if (!steps.length || nodes.some((n) => !n) || !ink || !tip) return;
+    const svgs = $$('svg.process__line', pin);
+    const wide = window.matchMedia('(min-width: 1100px)');
+    const clamp01 = (v) => Math.min(1, Math.max(0, v));
+    // Where an element sits inside the pinned box, ignoring transforms
+    const offsetIn = (el) => {
+      let x = 0;
+      let y = 0;
+      for (let n = el; n && n !== pin; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; }
+      return { x, y };
     };
-    window.addEventListener('scroll', queue, { passive: true });
-    window.addEventListener('resize', queue);
-    wide.addEventListener('change', queue);
-    update();
+
+    let mode = 'read';
+    let line = null; // samples along the path: x, y and the length up to each
+    let at = []; // the length at which the line reaches each marker
+    let shown = 0;
+    let played = 0; // play mode's goal, which holds until the steps leave the screen
+    let drawn = -1;
+
+    // Finds where v falls in a rising list: the two samples either side and how far between
+    const search = (arr, v) => {
+      let lo = 0;
+      let hi = arr.length - 1;
+      if (v <= arr[lo]) return [lo, lo, 0];
+      if (v >= arr[hi]) return [hi, hi, 0];
+      while (hi - lo > 1) {
+        const mid = (lo + hi) >> 1;
+        if (arr[mid] < v) lo = mid; else hi = mid;
+      }
+      return [lo, hi, (v - arr[lo]) / (arr[hi] - arr[lo] || 1)];
+    };
+    const pointAt = (l) => {
+      const [i, j, f] = search(line.ls, l);
+      return [line.xs[i] + (line.xs[j] - line.xs[i]) * f, line.ys[i] + (line.ys[j] - line.ys[i]) * f];
+    };
+    const lengthAtY = (y) => {
+      const [i, j, f] = search(line.ys, y);
+      return line.ls[i] + (line.ls[j] - line.ls[i]) * f;
+    };
+
+    function measure() {
+      const W = pin.clientWidth;
+      const H = pin.clientHeight;
+      if (!W || !H) return;
+      mode = reduceMotion.matches ? 'still'
+        : getComputedStyle(pin).position === 'sticky' ? 'pin'
+          : wide.matches ? 'play' : 'read';
+      svgs.forEach((svg) => svg.setAttribute('viewBox', `0 0 ${W} ${H}`));
+      const pts = nodes.map((n) => {
+        const o = offsetIn(n);
+        return [o.x + n.offsetWidth / 2, o.y + n.offsetHeight / 2];
+      });
+
+      // Each stretch is a cubic Bézier, as [x0, y0, cx1, cy1, cx2, cy2, x1, y1]
+      const segs = [];
+      if (wide.matches) {
+        // flat at every marker, so each climb between them is an S
+        const route = [[0, pts[0][1] - 90], ...pts, [W, pts[pts.length - 1][1] - 36]];
+        for (let i = 1; i < route.length; i++) {
+          const [ax, ay] = route[i - 1];
+          const [bx, by] = route[i];
+          const k = (bx - ax) / 2;
+          segs.push([ax, ay, ax + k, ay, bx - k, by, bx, by]);
+        }
+      } else {
+        // down past the markers, each stretch bowing out to the other side from the last
+        const x = pts[0][0];
+        const lastStep = steps[steps.length - 1];
+        const end = offsetIn(lastStep).y + lastStep.offsetHeight;
+        const route = [[x, pts[0][1] - 64], ...pts, [x, Math.max(end, pts[pts.length - 1][1] + 64)]];
+        for (let i = 1; i < route.length; i++) {
+          const [ax, ay] = route[i - 1];
+          const [bx, by] = route[i];
+          const bow = i % 2 ? 15 : -15;
+          const k = (by - ay) * 0.36;
+          segs.push([ax, ay, ax + bow, ay + k, bx + bow, by - k, bx, by]);
+        }
+      }
+
+      // The path, plus samples along it to place the tip and find where each marker falls
+      const r = (n) => Math.round(n * 10) / 10;
+      let d = `M${r(segs[0][0])} ${r(segs[0][1])}`;
+      const xs = [];
+      const ys = [];
+      const ls = [];
+      let len = 0;
+      at = [];
+      segs.forEach((s, si) => {
+        d += `C${s.slice(2).map(r).join(' ')}`;
+        for (let j = si ? 1 : 0; j <= 40; j++) {
+          const t = j / 40;
+          const u = 1 - t;
+          const a = u * u * u;
+          const b = 3 * u * u * t;
+          const c = 3 * u * t * t;
+          const e = t * t * t;
+          const x = a * s[0] + b * s[2] + c * s[4] + e * s[6];
+          const y = a * s[1] + b * s[3] + c * s[5] + e * s[7];
+          if (xs.length) len += Math.hypot(x - xs[xs.length - 1], y - ys[ys.length - 1]);
+          xs.push(x);
+          ys.push(y);
+          ls.push(len);
+        }
+        if (si < nodes.length) at.push(len); // stretch si ends at marker si
+      });
+      line = { xs, ys, ls, len: len || 1 };
+      [ink, glow, guide].forEach((p) => p?.setAttribute('d', d));
+      if (grad) {
+        // the colour runs along the line: left to right, or top to bottom when stacked
+        const [x1, y1, x2, y2] = wide.matches ? [0, 0, W, 0] : [0, ys[0], 0, ys[ys.length - 1]];
+        grad.setAttribute('x1', x1);
+        grad.setAttribute('y1', y1);
+        grad.setAttribute('x2', x2);
+        grad.setAttribute('y2', y2);
+      }
+      steps.forEach((step, i) => step.style.setProperty('--at', (at[i] / line.len).toFixed(4)));
+      drawn = -1;
+      wake();
+    }
+
+    // How much of the line the scroll position asks for
+    function goal() {
+      if (mode === 'still') return 1;
+      const vh = window.innerHeight;
+      if (mode === 'pin') {
+        // from just before the section sticks to most of the way through its hold
+        const box = section.getBoundingClientRect();
+        const run = Math.max(1, box.height - vh);
+        return clamp01((vh * 0.2 - box.top) / (vh * 0.2 + run * 0.85));
+      }
+      if (mode === 'play') {
+        const box = stage.getBoundingClientRect();
+        if (box.top > vh) played = 0; // back below the screen: ready to play again
+        else if (box.top < vh * 0.5) played = 1;
+        return played;
+      }
+      // read: the tip sits where the line crosses 70% of the way down the screen
+      return lengthAtY(vh * 0.7 - pin.getBoundingClientRect().top) / line.len;
+    }
+
+    function render() {
+      const v = Math.round(shown * 10000) / 10000;
+      if (v === drawn) return;
+      drawn = v;
+      const off = (1 - v).toFixed(4);
+      ink.style.strokeDashoffset = off;
+      if (glow) glow.style.strokeDashoffset = off;
+      section.style.setProperty('--p', v.toFixed(4));
+      const l = v * line.len;
+      const [x, y] = pointAt(l);
+      tip.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+      tip.classList.toggle('is-on', v > 0.002 && v < 0.998);
+      steps.forEach((step, i) => step.classList.toggle('is-reached', l >= at[i] - 1));
+    }
+
+    let frame = 0;
+    let last = 0;
+    function tick(now) {
+      frame = 0;
+      if (!line) return;
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+      last = now;
+      const target = goal();
+      if (mode === 'play') {
+        // drawn at an even pace, about two and a half seconds end to end
+        const step = dt / 2.4;
+        shown = Math.abs(target - shown) <= step ? target : shown + Math.sign(target - shown) * step;
+      } else {
+        shown += (target - shown) * (1 - Math.exp(-dt * 7));
+        if (mode === 'still' || Math.abs(target - shown) < 0.0005) shown = target;
+      }
+      render();
+      if (shown !== target) frame = requestAnimationFrame(tick);
+      else last = 0;
+    }
+    function wake() { if (!frame) frame = requestAnimationFrame(tick); }
+
+    measure();
+    window.addEventListener('scroll', wake, { passive: true });
+    new ResizeObserver(measure).observe(pin);
+    wide.addEventListener('change', measure);
+    reduceMotion.addEventListener('change', measure);
+    document.fonts?.ready.then(measure);
   }
 
   /* ---------- The studio: the founder card, from CUBE_CONFIG.founder ---------- */
@@ -2934,6 +2211,94 @@ const CUBE_CONFIG = {
       link.hidden = false;
     }
     card.hidden = false;
+  }
+
+  /* ---------- The studio: the story lights up as it scrolls past ---------- */
+  // On wide screens the heading and chapter index stay put (CSS sticky) while the story
+  // scrolls beside them. On each scroll frame, while the section is near the screen:
+  //  - the active chapter is the last one whose top has risen past 45% of the way down the
+  //    screen (is-active, and aria-current on its index link); a chapter gets is-seen once
+  //    its top comes up past 85%, which draws its icon
+  //  - --sp: how far that 45% line is through the chapters, for the index rail
+  //  - --m: each marked phrase of the opening statement, 0 at 85% down the screen to 1 at 55%
+  //  - --pp: where the principle row's middle is, -1 (a screen below the middle) to 1 (above)
+  // The numbers ease toward those goals, so they glide instead of stepping with the wheel.
+  // With reduced motion they're set straight to their goals, and the phrases show done.
+  function initStudio() {
+    const root = $('[data-studio]');
+    if (!root) return;
+    const chapters = $$('[data-chapter]', root);
+    const links = $$('[data-chapter-link]', root);
+    const index = $('[data-studio-index]', root);
+    const marks = $$('[data-mark]', root);
+    const row = $('[data-principles]', root);
+    const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+    const now = { sp: 0, pp: 0, m: marks.map(() => 0) };
+    let active = -2;
+    let near = false;
+    let frame = 0;
+    let last = 0;
+
+    function setActive(i) {
+      if (i === active) return;
+      active = i;
+      chapters.forEach((c, j) => c.classList.toggle('is-active', j === i));
+      links.forEach((a, j) => {
+        if (j === i) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }
+
+    function tick(t) {
+      frame = 0;
+      const dt = last ? Math.min(0.05, (t - last) / 1000) : 1 / 60;
+      last = t;
+      const vh = window.innerHeight;
+      const focus = vh * 0.45;
+      const still = reduceMotion.matches;
+      // Read everything first, then write, so the browser lays the page out once per frame
+      const boxes = chapters.map((c) => c.getBoundingClientRect());
+      const tops = marks.map((m) => m.getBoundingClientRect().top);
+      const band = row?.getBoundingClientRect();
+      let i = -1;
+      boxes.forEach((b, j) => { if (b.top <= focus) i = j; });
+      const goal = {
+        sp: boxes.length ? clamp((focus - boxes[0].top) / Math.max(1, boxes[boxes.length - 1].bottom - boxes[0].top), 0, 1) : 0,
+        pp: band ? clamp((vh / 2 - (band.top + band.height / 2)) / vh, -1, 1) : 0,
+        m: tops.map((top) => (still ? 1 : clamp((vh * 0.85 - top) / (vh * 0.3), 0, 1)))
+      };
+      const k = still ? 1 : 1 - Math.exp(-dt * 8);
+      let moving = false;
+      const ease = (from, to) => {
+        const v = from + (to - from) * k;
+        if (Math.abs(to - v) < 0.0005) return to;
+        moving = true;
+        return v;
+      };
+      now.sp = ease(now.sp, goal.sp);
+      now.pp = ease(now.pp, goal.pp);
+      now.m = now.m.map((v, j) => ease(v, goal.m[j]));
+
+      setActive(i);
+      boxes.forEach((b, j) => { if (b.top < vh * 0.85) chapters[j].classList.add('is-seen'); });
+      index?.style.setProperty('--sp', now.sp.toFixed(4));
+      row?.style.setProperty('--pp', now.pp.toFixed(4));
+      marks.forEach((m, j) => m.style.setProperty('--m', now.m[j].toFixed(3)));
+      if (moving) frame = requestAnimationFrame(tick);
+      else last = 0;
+    }
+    const wake = () => { if (near && !frame) frame = requestAnimationFrame(tick); };
+
+    // Only works while the section is within half a screen of being visible
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => { near = entry.isIntersecting; wake(); }, { rootMargin: '50% 0px' }).observe(root);
+    } else {
+      near = true;
+    }
+    window.addEventListener('scroll', wake, { passive: true });
+    window.addEventListener('resize', wake);
+    reduceMotion.addEventListener('change', wake);
+    wake();
   }
 
   /* ---------- Testimonials: real ones only, from CUBE_CONFIG.testimonials ---------- */
@@ -2981,75 +2346,6 @@ const CUBE_CONFIG = {
     section.hidden = false;
   }
 
-  /* ---------- Products: filter the catalogue by category ---------- */
-  function initCatalogue() {
-    const root = $('[data-catalogue]');
-    if (!root) return;
-    const items = $$('[data-product]', root);
-    const buttons = $$('[data-filter]');
-    const status = $('[data-catalogue-status]');
-    buttons.forEach((btn) => {
-      const cat = btn.dataset.filter;
-      const n = cat === 'all' ? items.length : items.filter((p) => p.dataset.category === cat).length;
-      const count = $('[data-filter-count]', btn);
-      if (count) count.textContent = n;
-    });
-    function apply(cat, { focus = false } = {}) {
-      if (!buttons.some((b) => b.dataset.filter === cat)) cat = 'all';
-      let shown = 0;
-      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === cat)));
-      items.forEach((item) => {
-        const on = cat === 'all' || item.dataset.category === cat;
-        if (on && item.hidden && !reduceMotion.matches) {
-          item.classList.remove('is-entering');
-          void item.offsetWidth;
-          item.classList.add('is-entering');
-        }
-        item.hidden = !on;
-        if (on) shown++;
-      });
-      const label = buttons.find((b) => b.dataset.filter === cat);
-      const name = label ? flatText($('[data-filter-name]', label) || label) : '';
-      if (status) status.textContent = cat === 'all' ? `Showing all ${shown} templates.` : `Showing ${shown} ${name.toLowerCase()} template${shown === 1 ? '' : 's'}.`;
-      const url = new URL(window.location.href);
-      if (cat === 'all') url.searchParams.delete('category'); else url.searchParams.set('category', cat);
-      history.replaceState(null, '', url);
-      if (focus) root.focus?.({ preventScroll: true });
-    }
-    buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn.dataset.filter)));
-    apply(new URLSearchParams(window.location.search).get('category') || 'all');
-  }
-
-  /* ---------- Tabs (client portal preview): click or arrow keys ---------- */
-  function initTabs() {
-    $$('[data-tabs]').forEach((root) => {
-      const tabs = $$('[role="tab"]', root);
-      const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
-      const select = (i, focus) => {
-        tabs.forEach((tab, j) => {
-          const on = i === j;
-          tab.setAttribute('aria-selected', String(on));
-          tab.tabIndex = on ? 0 : -1;
-          if (panels[j]) panels[j].hidden = !on;
-        });
-        if (focus) tabs[i].focus();
-      };
-      tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i)));
-      root.addEventListener('keydown', (e) => {
-        const i = tabs.indexOf(document.activeElement);
-        if (i < 0) return;
-        const keys = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
-        let next = null;
-        if (e.key in keys) next = (i + keys[e.key] + tabs.length) % tabs.length;
-        else if (e.key === 'Home') next = 0;
-        else if (e.key === 'End') next = tabs.length - 1;
-        if (next === null) return;
-        e.preventDefault();
-        select(next, true);
-      });
-    });
-  }
-
   // First, only what the first screen needs, so the hero starts animating (and paints) as
   // soon as possible.
   applyConfig();
@@ -3061,17 +2357,13 @@ const CUBE_CONFIG = {
   initActiveNav();
   initHeaderScroll();
   initMenu();
-  initCobwebs(); // before initMotion, so the webs exist before they're marked is-visible
   initMotion();
-  initParticles(); // its canvases only draw once they're near the screen
 
   // Then everything further down the page, a few at a time in short separate tasks, so the
   // browser can paint and respond in between (one long start-up task would block both).
   const later = [
     initScrollEffects, initSpiderMark, initServices, initWorkPreviews, initMarquees,
-    initCursorBadge, initMagnetic, initProcess, initSelections, initForm, initCopy,
-    initWhyChooseUs, initLiveStats, initSpeedTest, initSeoAudit, initSecurityCheck,
-    initCatalogue, initTabs
+    initCursorBadge, initMagnetic, initProcess, initStudio, initSelections, initForm, initCopy
   ];
   const nextTask = (fn) => (window.scheduler?.postTask ? scheduler.postTask(fn, { priority: 'user-visible' }) : setTimeout(fn, 0));
   const runLater = () => {
