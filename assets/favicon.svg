@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -150 775 775">
+  <!-- The CobWebZ mark (the W's threads and the spider), drawn heavier than the logo so it
+       still reads at 16px. Browser tabs in dark mode get the light version. -->
+  <style>
+    path { fill: none; stroke: #0a0a0a; stroke-linecap: round; }
+    .t { stroke-width: 42; }
+    .l { stroke-width: 28; }
+    .b { fill: #0a0a0a; stroke: none; }
+    @media (prefers-color-scheme: dark) {
+      path { stroke: #f0f2f5; }
+      .b { fill: #f0f2f5; }
+    }
+  </style>
+  <path class="t" d="M30 25C55 30 84 60 95 100L172 380C182 416 200 462 236 462C254 462 268 420 282 362C288 338 312 306 346 290"/>
+  <path class="t" d="M745 25C720 30 691 60 680 100L603 380C593 416 575 462 539 462C521 462 507 420 493 362C487 338 463 306 429 290"/>
+  <path class="l" d="M352 254C322 240 308 205 316 170C320 155 326 145 332 138M423 254C453 240 467 205 459 170C455 155 449 145 443 138M346 280C315 272 285 255 278 228C274 212 271 200 270 188M429 280C460 272 490 255 497 228C501 212 504 200 505 188M352 318C335 328 326 345 327 368C328 388 334 400 342 410M423 318C440 328 449 345 448 368C447 388 441 400 433 410"/>
+  <path class="b" fill-rule="evenodd" d="M347 244A40 40 0 0 1 427 244L427 318A40 40 0 0 1 347 318ZM373 249A14 20 0 1 0 401 249A14 20 0 1 0 373 249ZM374 318A13 15 0 1 0 400 318A13 15 0 1 0 374 318Z"/>
+</svg>

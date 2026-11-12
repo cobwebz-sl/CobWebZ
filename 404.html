@@ -4,42 +4,53 @@
 <head>
   <meta charset="utf-8">
   <!-- Same policy as the other pages; the inline theme script is allowed by its hash. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xTpUMg0MuPhQ5EP+in6S98erupmmXU1YGA784+uUY90='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found — CobWebZ</title>
-  <meta name="description" content="That page doesn't exist on the CobWebZ site. Head back to the homepage or browse our work.">
+  <meta name="description" content="That page doesn't exist on the CobWebZ site. Head back to the homepage, browse our work or see our templates.">
   <!-- Shown for missing URLs. On Cloudflare Workers that needs not_found_handling: "404-page" in
        the Worker's assets settings; without it, visitors get a blank 404. Search engines must not list it. -->
   <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#f0f1f3">
-  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='dark'){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
 
   <!-- Absolute paths: a missing URL can be at any depth, e.g. /pizza/menu -->
   <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/variables.css">
   <link rel="stylesheet" href="/style.css">
   <style>
-    .notfound { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 48px 16px; }
-    .notfound__code { font-family: 'Geist Mono', monospace; font-size: 14px; color: var(--color-muted); letter-spacing: 0.08em; }
+    .notfound { position: relative; isolation: isolate; overflow: hidden; min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 48px 16px; }
+    .notfound__code { font-family: var(--font-mono); font-size: 14px; color: var(--color-muted); letter-spacing: 0.08em; }
+    .notfound .hero__lead { margin-inline: auto; }
     .notfound .hero__actions { justify-content: center; }
+    .notfound__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin-top: 28px; font-size: 14px; }
   </style>
 </head>
 
 <body>
   <main id="main" class="notfound">
+    <!-- The corner cobweb with its spider, drawn by /script.js like on the other pages -->
+    <div class="cobweb cobweb--tr" data-cobweb="spider" data-reveal aria-hidden="true"></div>
     <div class="container-cube">
       <p class="notfound__code">404</p>
       <h1 class="hero__title">Nothing here <span class="accent">but cobwebs.</span></h1>
       <p class="hero__lead">The page you asked for doesn't exist or has moved.</p>
       <div class="hero__actions">
         <a href="/" class="btn btn--primary btn--lg">Back to the homepage</a>
-        <a href="/work" class="hero__note">See our work <span aria-hidden="true">→</span></a>
+        <a href="/#contact" class="btn btn--ghost btn--lg">Contact us</a>
       </div>
+      <p class="notfound__links">
+        <a href="/work" class="link-arrow">See our work <span aria-hidden="true">→</span></a>
+        <a href="/products" class="link-arrow">Browse templates <span aria-hidden="true">→</span></a>
+        <a href="/#pricing" class="link-arrow">Pricing <span aria-hidden="true">→</span></a>
+      </p>
     </div>
   </main>
+  <script src="/script.js"></script>
 </body>
 
 </html>

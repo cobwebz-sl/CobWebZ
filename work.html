@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <!-- Only this site's own files may load. The inline theme script below is allowed by its
        sha256 hash: if you change it, Chrome's console prints the new hash to paste here. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xTpUMg0MuPhQ5EP+in6S98erupmmXU1YGA784+uUY90='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Web Design Portfolio: Our Work | CobWebZ, Sri Lanka</title>
-  <meta name="description" content="Nine live sites by CobWebZ, Sri Lanka: product launches, restaurants with online ordering, an online store, portfolios, a seaside stay and a fitness studio.">
+  <meta name="description" content="Nine concept websites designed and built by CobWebZ, Sri Lanka: product launches, restaurants, an online store, portfolios, a seaside stay and a fitness studio.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#f0f1f3">
   <!-- SEO: the site's public address. Search for "www.cobwebz.lk" across the project and replace it when the domain changes. -->
@@ -18,20 +18,22 @@
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://www.cobwebz.lk/work">
   <meta property="og:title" content="Our Work — Website Examples by CobWebZ">
-  <meta property="og:description" content="Nine live websites built by CobWebZ: product launches, restaurants, an online store, a photography collective, a designer's portfolio, a seaside stay and a fitness studio.">
+  <meta property="og:description" content="Nine concept websites designed and built by CobWebZ: product launches, restaurants, an online store, portfolios, a seaside stay and a fitness studio.">
   <meta property="og:image" content="https://www.cobwebz.lk/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="CobWebZ — We build the web and keep it running.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Our Work — Website Examples by CobWebZ">
-  <meta name="twitter:description" content="Nine live websites built by CobWebZ: product launches, restaurants, an online store, a photography collective, a designer's portfolio, a seaside stay and a fitness studio.">
+  <meta name="twitter:description" content="Nine concept websites designed and built by CobWebZ: product launches, restaurants, an online store, portfolios, a seaside stay and a fitness studio.">
   <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="twitter:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <!-- Sets the theme before the first paint, so dark-mode visitors never see the light page
-       flash. Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='dark'){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+  <!-- Sets the theme before the first paint (saved choice, else the device setting).
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
 
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="variables.css">
@@ -47,7 +49,7 @@
         "@id": "https://www.cobwebz.lk/work#webpage",
         "url": "https://www.cobwebz.lk/work",
         "name": "Web Design Portfolio: Our Work | CobWebZ, Sri Lanka",
-        "description": "Nine live websites designed and built by CobWebZ.",
+        "description": "Nine concept websites designed and built by CobWebZ, with case studies for three of them.",
         "isPartOf": { "@id": "https://www.cobwebz.lk/#website" },
         "about": { "@id": "https://www.cobwebz.lk/#organization" },
         "inLanguage": "en",
@@ -79,6 +81,7 @@
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
 
   <!-- ============ HEADER / NAVIGATION ============ -->
   <header class="site-header" data-header>
@@ -90,10 +93,11 @@
 
       <nav class="site-nav" aria-label="Main navigation">
         <ul class="site-nav__list">
-          <li><a href="./#overview" class="site-nav__link">Home</a></li>
           <li><a href="./#about" class="site-nav__link">About</a></li>
           <li><a href="./#services" class="site-nav__link">Services</a></li>
-          <li><a href="work.html" class="site-nav__link is-active" aria-current="page">Products</a></li>
+          <li><a href="work.html" class="site-nav__link is-active" aria-current="page">Work</a></li>
+          <li><a href="./#lab" class="site-nav__link">Lab</a></li>
+          <li><a href="products.html" class="site-nav__link">Products</a></li>
           <li><a href="./#pricing" class="site-nav__link">Pricing</a></li>
           <li><a href="./#contact" class="site-nav__link">Contact</a></li>
         </ul>
@@ -111,10 +115,11 @@
           </button>
           <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
             <ul>
-              <li><a href="./#overview">Home</a></li>
               <li><a href="./#about">About</a></li>
               <li><a href="./#services">Services</a></li>
-              <li><a href="work.html" class="is-active" aria-current="page">Products</a></li>
+              <li><a href="work.html" class="is-active" aria-current="page">Work</a></li>
+              <li><a href="./#lab">Lab</a></li>
+              <li><a href="products.html">Products</a></li>
               <li><a href="./#pricing">Pricing</a></li>
               <li><a href="./#contact">Contact</a></li>
             </ul>
@@ -124,8 +129,8 @@
                 <span>Dark mode</span>
                 <span class="menu__switch" aria-hidden="true"></span>
               </button>
-              <a href="work.html" class="menu__cta">
-                <span>Explore More</span>
+              <a href="./#contact" class="menu__cta">
+                <span>Start a project</span>
                 <span class="site-header__cta-arrow" aria-hidden="true">
                   <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/>
@@ -146,8 +151,8 @@
           </svg>
         </button>
 
-        <a href="work.html" class="site-header__cta-btn" data-magnetic>
-          <span>Explore More</span>
+        <a href="./#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
           <span class="site-header__cta-arrow" aria-hidden="true">
             <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/>
@@ -166,17 +171,19 @@
       <div class="cobweb cobweb--tr" data-cobweb="spider" data-reveal aria-hidden="true"></div>
 
       <div class="container-cube hero__inner">
-        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>9 live demos</p>
+        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>9 concept projects</p>
         <h1 id="page-title" class="hero__title" data-split-words>Our work. <span class="accent">Open one and click around.</span></h1>
-        <p class="hero__lead" data-hero-step>Nine sites we designed and built: product launches, restaurants, an online store, a photography collective, a designer's portfolio, a seaside stay and a fitness studio. Each one is live, so try the menus, carts and booking forms for yourself.</p>
+        <p class="hero__lead" data-hero-step>Nine concept sites we designed and built ourselves: product launches, restaurants, an online store, a photography collective, a designer's portfolio, a seaside stay and a fitness studio. Each one is live, so try the menus, carts and booking forms for yourself.</p>
+        <p class="hero__note work__disclaimer" data-hero-step>Concept projects are fictional brands, made in-house to show what's possible. None of them is a client commission.</p>
       </div>
     </section>
 
     <!-- ============ PROJECTS ============ -->
     <!-- To add a site: copy an <article>, point both links at its folder, and put a full-page screenshot
          760px wide in assets/work/ (name-scroll.webp). Set --frames on the image to its height ÷ 427.5
-         (one 16:9 frame), which paces the hover scroll. "Start a similar project" opens the enquiry
-         form on the homepage with that plan preselected. -->
+         (one 16:9 frame), which paces the hover scroll. Label it "Concept" (tag--concept) or, for
+         real client work, "Client project" (tag--client). "Use it as a template" opens its card on
+         products.html. -->
     <section class="section showcase" aria-label="Projects">
       <div class="container-cube showcase__list">
         <article class="project reveal" aria-labelledby="project-vela">
@@ -185,7 +192,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/vela-one-scroll.webp" alt="Full-page screenshot of the Vela One headphones launch site" width="760" height="4497" loading="lazy" decoding="async" style="--frames: 10.52"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Portfolio</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Product launch</p>
             <h2 id="project-vela" class="project__title">Vela One</h2>
             <p class="project__text">A launch page for a pair of titanium headphones. The story unfolds as you scroll: the ear cups swivel, the driver separates into its layers and the frequency curve draws itself.</p>
             <ul class="project__list">
@@ -196,7 +203,8 @@
             <p class="project__tags">HTML · CSS · JavaScript · GSAP</p>
             <div class="project__actions">
               <a href="veloa%20one/Vela%20One.html" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Static%20Deployments#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="work/vela-one.html" class="link-arrow">Read the case study <span aria-hidden="true">→</span></a>
+              <a href="products.html#vela-one" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -207,7 +215,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/forno-nero-scroll.webp" alt="Full-page screenshot of the Forno Nero pizzeria website with menu and booking" width="760" height="5090" loading="lazy" decoding="async" style="--frames: 11.91"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Restaurant</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Restaurant</p>
             <h2 id="project-pizza" class="project__title">Forno Nero</h2>
             <p class="project__text">A wood-fired pizzeria with an online menu, a build-your-own pizza tool and table booking. The opening hours drive the open and closed badges, so the site always knows whether the kitchen is open.</p>
             <ul class="project__list">
@@ -219,7 +227,7 @@
             <p class="project__tags">HTML · CSS · JavaScript · WebP images</p>
             <div class="project__actions">
               <a href="pizza/" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Dynamic%20Applications#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="products.html#forno-nero" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -230,7 +238,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/mute-scroll.webp" alt="Full-page screenshot of the MUTE online clothing store" width="760" height="4696" loading="lazy" decoding="async" style="--frames: 10.98"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Small Business</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Online store</p>
             <h2 id="project-mute" class="project__title">MUTE</h2>
             <p class="project__text">An online store for a small clothing label. Shoppers pick a tone in the hero, quick-add from the range and open a full product page with a size guide.</p>
             <ul class="project__list">
@@ -238,10 +246,11 @@
               <li>Product page with gallery, size guide and reviews</li>
               <li>Lookbook, brand story and newsletter signup</li>
             </ul>
-            <p class="project__tags">HTML · Tailwind CSS · JavaScript</p>
+            <p class="project__tags">HTML · Tailwind CSS · no JavaScript</p>
             <div class="project__actions">
               <a href="hoodie/" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Static%20Deployments#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="work/mute.html" class="link-arrow">Read the case study <span aria-hidden="true">→</span></a>
+              <a href="products.html#mute" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -252,7 +261,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/black-scroll.webp" alt="Full-page screenshot of the Black. photography collective showcase" width="760" height="4502" loading="lazy" decoding="async" style="--frames: 10.53"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Photography</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Photography</p>
             <h2 id="project-black" class="project__title">Black.</h2>
             <p class="project__text">A dark, editorial showcase for a photography and sound collective. Visitors can scroll through it as a cinematic story or flip through the same work as a slide deck.</p>
             <ul class="project__list">
@@ -264,7 +273,8 @@
             <p class="project__tags">HTML · Tailwind CSS · JavaScript · Web Audio</p>
             <div class="project__actions">
               <a href="photography/" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Static%20Deployments#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="work/black.html" class="link-arrow">Read the case study <span aria-hidden="true">→</span></a>
+              <a href="products.html#black" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -275,7 +285,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/portfolio-scroll.webp" alt="Full-page screenshot of the Mariana Napolitani designer portfolio" width="760" height="1324" loading="lazy" decoding="async" style="--frames: 3.10"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Portfolio</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Portfolio</p>
             <h2 id="project-mariana" class="project__title">Mariana Napolitani</h2>
             <p class="project__text">A personal portfolio for a UI/UX and web designer, in deep burgundy with editorial type and roses in the margins. Every project opens as a case study, and visitors can step from one to the next without leaving the page.</p>
             <ul class="project__list">
@@ -287,7 +297,7 @@
             <p class="project__tags">HTML · Tailwind CSS · JavaScript · Lenis</p>
             <div class="project__actions">
               <a href="portfolio/" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Static%20Deployments#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="products.html#mariana" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -299,7 +309,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/mise-scroll.webp" alt="Full-page screenshot of the Mise table-side ordering site" width="760" height="3618" loading="lazy" decoding="async" style="--frames: 8.46"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Restaurant</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Restaurant</p>
             <h2 id="project-mise" class="project__title">Mise</h2>
             <p class="project__text">A neighbourhood kitchen where guests scan the QR code on their table and order and pay from their phone. No app, no login and no waiting to catch someone's eye.</p>
             <ul class="project__list">
@@ -311,7 +321,7 @@
             <p class="project__tags">Next.js · React · Tailwind CSS · Vercel</p>
             <div class="project__actions">
               <a href="https://supercub-mise.vercel.app" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Dynamic%20Applications#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="products.html#mise" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -322,7 +332,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/tidehouse-scroll.webp" alt="Full-page screenshot of the Tidehouse seaside stay booking site" width="760" height="3078" loading="lazy" decoding="async" style="--frames: 7.20"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Hospitality</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Hospitality</p>
             <h2 id="project-tidehouse" class="project__title">Tidehouse</h2>
             <p class="project__text">A small seaside stay in Tangalle with four residences. The hero follows the local time from dawn to night, and guests can check dates and book direct.</p>
             <ul class="project__list">
@@ -334,7 +344,7 @@
             <p class="project__tags">Next.js · React · Tailwind CSS · Vercel</p>
             <div class="project__actions">
               <a href="https://supercub-tidehouse.vercel.app" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Dynamic%20Applications#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="products.html#tidehouse" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -345,7 +355,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/tempo-scroll.webp" alt="Full-page screenshot of the Tempo movement studio site" width="760" height="2649" loading="lazy" decoding="async" style="--frames: 6.20"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Fitness</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Fitness</p>
             <h2 id="project-tempo" class="project__title">Tempo</h2>
             <p class="project__text">A bold site for a movement studio with four disciplines. Members pick a class from the weekly schedule, choose their exact spot in the room and just show up.</p>
             <ul class="project__list">
@@ -357,7 +367,7 @@
             <p class="project__tags">Next.js · React · Tailwind CSS · Vercel</p>
             <div class="project__actions">
               <a href="https://supercub-tempo.vercel.app" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Dynamic%20Applications#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="products.html#tempo" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -368,7 +378,7 @@
             <span class="project__screen" data-preview><img class="project__scroll" src="assets/work/wren-scroll.webp" alt="Full-page screenshot of the Wren synthesizer launch site" width="760" height="4762" loading="lazy" decoding="async" style="--frames: 11.14"></span>
           </a>
           <div class="project__body">
-            <p class="project__label">Product Launch</p>
+            <p class="project__label"><span class="tag tag--concept">Concept</span> Product launch</p>
             <h2 id="project-wren" class="project__title">Wren</h2>
             <p class="project__text">A launch page for a 25-key portable synthesizer that you can actually play in the browser. Tap the keys, turn the knobs and patch cables, then build your own finish.</p>
             <ul class="project__list">
@@ -380,7 +390,7 @@
             <p class="project__tags">Next.js · React · Tailwind CSS · Web Audio</p>
             <div class="project__actions">
               <a href="https://supercub-wren.vercel.app" target="_blank" rel="noopener" class="btn btn--primary btn--lg">View live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-              <a href="./?package=Static%20Deployments#contact" class="link-arrow">Start a similar project <span aria-hidden="true">→</span></a>
+              <a href="products.html#wren" class="link-arrow">Use it as a template <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>
@@ -394,7 +404,7 @@
           <h2 id="cta-title" class="h-section" data-split-words>Want a site <span class="accent">like these?</span></h2>
           <p class="section-lead">Tell us about your business and we'll reply with questions or a fixed, written quote. No obligation.</p>
           <div class="hero__actions">
-            <a href="./#contact" class="btn btn--primary btn--lg" data-magnetic>Start a Project</a>
+            <a href="./#contact" class="btn btn--primary btn--lg" data-magnetic>Start a project</a>
             <a href="./#pricing" class="hero__note">See pricing <span aria-hidden="true">→</span></a>
           </div>
         </header>
@@ -410,21 +420,28 @@
         <a href="./" class="footer__logo" aria-label="CobWebZ — home">
           <img src="assets/logo.png" alt="" width="104" height="83">
         </a>
-        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka.</p>
-        <a href="./#contact" class="btn btn--primary">Start a Project</a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
+        <a href="./#contact" class="btn btn--primary">Start a project</a>
       </div>
 
       <nav class="footer__nav" aria-label="Footer">
         <div class="footer__col">
-          <h2 class="footer__h">Navigate</h2>
+          <h2 class="footer__h">Studio</h2>
           <ul>
-            <li><a href="./#overview">Overview</a></li>
             <li><a href="./#about">About</a></li>
-            <li><a href="work.html" aria-current="page">Our Work</a></li>
-            <li><a href="./#stack">Tech Stack</a></li>
-            <li><a href="./#pricing">Pricing</a></li>
+            <li><a href="./#services">Services</a></li>
+            <li><a href="./#process">Process</a></li>
+            <li><a href="./#lab">Live Lab</a></li>
             <li><a href="./#faq">FAQ</a></li>
-            <li><a href="./#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="work.html" aria-current="page">Case studies</a></li>
+            <li><a href="products.html">Templates</a></li>
+            <li><a href="./#pricing">Pricing</a></li>
+            <li><a href="portal.html">Client portal</a></li>
           </ul>
         </div>
         <!-- Contact and Social columns show only when their values are set in script.js -->
@@ -433,6 +450,7 @@
           <ul>
             <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
             <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">WhatsApp</a></li>
           </ul>
         </div>
         <div class="footer__col" data-config-block>
@@ -446,7 +464,11 @@
         </div>
       </nav>
 
-      <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="privacy.html" class="footer__legal">Privacy</a>
+        <a href="#main" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
     </div>
     <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
   </footer>

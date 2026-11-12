@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Only this site's own files may load. The inline theme script below is allowed by its
+       sha256 hash: if you change it, Chrome's console prints the new hash to paste here. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Notice | CobWebZ</title>
+  <meta name="description" content="How the CobWebZ website handles your data: no cookies, no trackers, no third-party scripts, and enquiries used only to reply to you.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f0f1f3">
+  <link rel="canonical" href="https://www.cobwebz.lk/privacy">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <!-- Sets the theme before the first paint (saved choice, else the device setting).
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+
+  <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="variables.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- ============ HEADER / NAVIGATION ============ -->
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a href="./" class="site-header__brand" aria-label="CobWebZ — home">
+        <img src="assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__brand-name">CobWebZ</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="./#about" class="site-nav__link">About</a></li>
+          <li><a href="./#services" class="site-nav__link">Services</a></li>
+          <li><a href="work.html" class="site-nav__link">Work</a></li>
+          <li><a href="./#lab" class="site-nav__link">Lab</a></li>
+          <li><a href="products.html" class="site-nav__link">Products</a></li>
+          <li><a href="./#pricing" class="site-nav__link">Pricing</a></li>
+          <li><a href="./#contact" class="site-nav__link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <div class="menu">
+          <button type="button" class="site-header__icon-btn menu-btn-circle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle navigation menu" data-menu-toggle>
+            <span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
+            <ul>
+              <li><a href="./#about">About</a></li>
+              <li><a href="./#services">Services</a></li>
+              <li><a href="work.html">Work</a></li>
+              <li><a href="./#lab">Lab</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="./#pricing">Pricing</a></li>
+              <li><a href="./#contact">Contact</a></li>
+            </ul>
+            <div class="menu__extras">
+              <button type="button" class="menu__theme" role="switch" aria-checked="false" data-theme-toggle>
+                <span>Dark mode</span>
+                <span class="menu__switch" aria-hidden="true"></span>
+              </button>
+              <a href="./#contact" class="menu__cta">
+                <span>Start a project</span>
+                <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <button type="button" class="site-header__icon-btn theme-btn" aria-label="Toggle color theme" data-theme-toggle>
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a href="./#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
+          <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero hero--page" aria-labelledby="page-title">
+      <div class="container-cube hero__inner">
+        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>Privacy</p>
+        <h1 id="page-title" class="hero__title" data-split-words>Privacy notice, <span class="accent">in plain words.</span></h1>
+        <p class="hero__lead" data-hero-step>What this website does with your data (very little), and what we do with the details you send us.</p>
+      </div>
+    </section>
+
+    <!-- Keep every statement here true to how the site actually works. If you add analytics,
+         cookies, a form service or a new embed, update the matching section and the date. -->
+    <section class="section showcase" aria-label="Privacy notice">
+      <div class="container-cube">
+        <div class="prose reveal">
+          <h2>Who we are</h2>
+          <p>CobWebZ is a web design and development studio based in Colombo, Sri Lanka. For anything about your data, email <a href="mailto:cobwebzsl@gmail.com">cobwebzsl@gmail.com</a> or call <a href="tel:+94719070320">+94 71 907 0320</a>.</p>
+
+          <h2>What this website collects</h2>
+          <ul class="tick-list">
+            <li><strong>No cookies, no analytics, no ad trackers.</strong> The site doesn't set cookies or run any tracking or analytics code.</li>
+            <li><strong>No third-party scripts.</strong> Every file, including the fonts, comes from our own server, and the browser enforces that with a content security policy.</li>
+            <li><strong>One setting, kept on your device.</strong> If you switch between light and dark mode, your browser remembers the choice locally. It's never sent to us.</li>
+            <li><strong>The live checks stay in your browser.</strong> The speed and security checks on the homepage ask our own server for this page and measure the answer in your browser. The results aren't sent anywhere.</li>
+            <li><strong>Our host.</strong> The site is served by Cloudflare, which handles basic request data (such as your IP address) to deliver the pages and protect them from attacks, under its own privacy policy.</li>
+          </ul>
+
+          <h2>When you send an enquiry</h2>
+          <p>The enquiry form doesn't send anything by itself. Pressing its button opens WhatsApp with your message written out, and it's only sent if you press Send there, after which WhatsApp's own privacy terms apply. If you email or call us instead, we receive what you send.</p>
+          <p>We use your details only to reply to you and, if we work together, to run your project. We don't sell them, share them for marketing or add you to a mailing list.</p>
+
+          <h2>How long we keep it</h2>
+          <p>We keep enquiry messages only as long as we need them to reply, and to run and support any project that follows.</p>
+
+          <h2>Your choices</h2>
+          <p>You can ask us what we hold about you, and ask us to correct or delete it, at any time. Email <a href="mailto:cobwebzsl@gmail.com">cobwebzsl@gmail.com</a> and we'll take care of it.</p>
+
+          <h2>Changes</h2>
+          <p>If this notice changes, the date below changes with it.</p>
+          <p class="prose__updated">Last updated: 12 November 2026</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="cobweb cobweb--br" data-cobweb data-reveal aria-hidden="true"></div>
+    <div class="container-cube footer__inner">
+      <div class="footer__brand">
+        <a href="./" class="footer__logo" aria-label="CobWebZ — home"><img src="assets/logo.png" alt="" width="104" height="83"></a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
+        <a href="./#contact" class="btn btn--primary">Start a project</a>
+      </div>
+      <nav class="footer__nav" aria-label="Footer">
+        <div class="footer__col">
+          <h2 class="footer__h">Studio</h2>
+          <ul>
+            <li><a href="./#about">About</a></li>
+            <li><a href="./#services">Services</a></li>
+            <li><a href="./#process">Process</a></li>
+            <li><a href="./#lab">Live Lab</a></li>
+            <li><a href="./#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="work.html">Case studies</a></li>
+            <li><a href="products.html">Templates</a></li>
+            <li><a href="./#pricing">Pricing</a></li>
+            <li><a href="portal.html">Client portal</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Contact</h2>
+          <ul>
+            <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
+            <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Social</h2>
+          <ul>
+            <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank" rel="noopener">GitHub</a></li>
+            <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank" rel="noopener">Instagram</a></li>
+            <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="privacy.html" class="footer__legal" aria-current="page">Privacy</a>
+        <a href="#main" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+    <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

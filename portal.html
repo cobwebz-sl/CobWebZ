@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Only this site's own files may load. The inline theme script below is allowed by its
+       sha256 hash: if you change it, Chrome's console prints the new hash to paste here. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client Portal (Coming Later) | CobWebZ</title>
+  <meta name="description" content="A design concept for the CobWebZ client portal: project status, milestones, design approvals, feedback, files and invoices in one place. Planned, not yet live.">
+  <!-- A concept for a future feature: kept out of search results until it exists -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#f0f1f3">
+  <link rel="canonical" href="https://www.cobwebz.lk/portal">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <!-- Sets the theme before the first paint (saved choice, else the device setting).
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+
+  <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="variables.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- ============ HEADER / NAVIGATION ============ -->
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a href="./" class="site-header__brand" aria-label="CobWebZ — home">
+        <img src="assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__brand-name">CobWebZ</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="./#about" class="site-nav__link">About</a></li>
+          <li><a href="./#services" class="site-nav__link">Services</a></li>
+          <li><a href="work.html" class="site-nav__link">Work</a></li>
+          <li><a href="./#lab" class="site-nav__link">Lab</a></li>
+          <li><a href="products.html" class="site-nav__link">Products</a></li>
+          <li><a href="./#pricing" class="site-nav__link">Pricing</a></li>
+          <li><a href="./#contact" class="site-nav__link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <div class="menu">
+          <button type="button" class="site-header__icon-btn menu-btn-circle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle navigation menu" data-menu-toggle>
+            <span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
+            <ul>
+              <li><a href="./#about">About</a></li>
+              <li><a href="./#services">Services</a></li>
+              <li><a href="work.html">Work</a></li>
+              <li><a href="./#lab">Lab</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="./#pricing">Pricing</a></li>
+              <li><a href="./#contact">Contact</a></li>
+            </ul>
+            <div class="menu__extras">
+              <button type="button" class="menu__theme" role="switch" aria-checked="false" data-theme-toggle>
+                <span>Dark mode</span>
+                <span class="menu__switch" aria-hidden="true"></span>
+              </button>
+              <a href="./#contact" class="menu__cta">
+                <span>Start a project</span>
+                <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <button type="button" class="site-header__icon-btn theme-btn" aria-label="Toggle color theme" data-theme-toggle>
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a href="./#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
+          <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero hero--page" aria-labelledby="page-title">
+      <canvas class="particles" data-particles="hero" aria-hidden="true"></canvas>
+      <div class="container-cube hero__inner">
+        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>Coming later · Design concept</p>
+        <h1 id="page-title" class="hero__title" data-split-words>Your project, <span class="accent">in one place.</span></h1>
+        <p class="hero__lead" data-hero-step>We're planning a client portal where you can follow your project from discovery to launch: progress, milestones, design approvals, feedback, files and invoices, behind one login. It isn't live yet. This page shows the design concept.</p>
+      </div>
+    </section>
+
+    <!-- ============ CONCEPT PREVIEW ============ -->
+    <!-- The tabs work; everything inside each panel is a picture of a planned screen
+         (.mock: not clickable, hidden from screen readers), with made-up example content.
+         Nothing here pretends to be live. -->
+    <section class="section showcase" aria-labelledby="preview-title">
+      <div class="container-cube">
+        <h2 id="preview-title" class="sr-only">Concept preview of the client portal</h2>
+        <p class="case-note reveal">Planned, not built. Until the portal launches, project updates, files and invoices come to you directly by email and WhatsApp.</p>
+
+        <div class="portal-demo reveal" data-tabs style="margin-top: 24px">
+          <div class="portal-demo__layout">
+            <div class="portal-tabs" role="tablist" aria-label="Portal screens">
+              <button type="button" class="portal-tab" role="tab" id="tab-status" aria-controls="panel-status" aria-selected="true"><i aria-hidden="true"></i>Project status</button>
+              <button type="button" class="portal-tab" role="tab" id="tab-milestones" aria-controls="panel-milestones" aria-selected="false" tabindex="-1"><i aria-hidden="true"></i>Milestones</button>
+              <button type="button" class="portal-tab" role="tab" id="tab-approvals" aria-controls="panel-approvals" aria-selected="false" tabindex="-1"><i aria-hidden="true"></i>Design approval</button>
+              <button type="button" class="portal-tab" role="tab" id="tab-feedback" aria-controls="panel-feedback" aria-selected="false" tabindex="-1"><i aria-hidden="true"></i>Feedback</button>
+              <button type="button" class="portal-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="false" tabindex="-1"><i aria-hidden="true"></i>Files</button>
+              <button type="button" class="portal-tab" role="tab" id="tab-invoices" aria-controls="panel-invoices" aria-selected="false" tabindex="-1"><i aria-hidden="true"></i>Invoices</button>
+            </div>
+
+            <div class="portal-panel" role="tabpanel" id="panel-status" aria-labelledby="tab-status">
+              <span class="tag tag--soon portal-stamp">Concept</span>
+              <h3>See where things stand</h3>
+              <p>Which of the five steps your project is on, how far along it is and what happens next.</p>
+              <div class="mock" aria-hidden="true">
+                <div class="mock-row"><b>Example project</b><small>Step 3 of 5 · Development</small></div>
+                <div style="margin-top: 16px" class="mock-bar"><i style="--v: 58%"></i></div>
+                <div class="mock-grid" style="margin-top: 16px">
+                  <div class="mock-row"><span class="mock-dot mock-dot--now"></span>Next: staging review<small>Up next</small></div>
+                  <div class="mock-row"><span class="mock-dot mock-dot--done"></span>Homepage design approved<small>Done</small></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="portal-panel" role="tabpanel" id="panel-milestones" aria-labelledby="tab-milestones" hidden>
+              <span class="tag tag--soon portal-stamp">Concept</span>
+              <h3>Every milestone, ticked off</h3>
+              <p>The same five steps as our process, each marked as it's completed.</p>
+              <div class="mock" aria-hidden="true">
+                <div class="mock-row"><span class="mock-dot mock-dot--done"></span>01 Discovery<small>Completed</small></div>
+                <div class="mock-row"><span class="mock-dot mock-dot--done"></span>02 Design<small>Completed</small></div>
+                <div class="mock-row"><span class="mock-dot mock-dot--now"></span>03 Development<small>In progress</small></div>
+                <div class="mock-row"><span class="mock-dot"></span>04 Testing &amp; Launch<small>Up next</small></div>
+                <div class="mock-row"><span class="mock-dot"></span>05 Support<small>Later</small></div>
+              </div>
+            </div>
+
+            <div class="portal-panel" role="tabpanel" id="panel-approvals" aria-labelledby="tab-approvals" hidden>
+              <span class="tag tag--soon portal-stamp">Concept</span>
+              <h3>Approve designs in one click</h3>
+              <p>Review each design, approve it or ask for changes, with a record of what was agreed.</p>
+              <div class="mock" aria-hidden="true">
+                <div class="mock-grid">
+                  <div>
+                    <div class="mock-art"></div>
+                    <div class="mock-row" style="margin-top: 10px">Homepage, version 2<small>Awaiting you</small></div>
+                  </div>
+                  <div>
+                    <div class="mock-art" style="filter: saturate(0.4)"></div>
+                    <div class="mock-row" style="margin-top: 10px">Homepage, version 1<small>Changes asked</small></div>
+                  </div>
+                </div>
+                <p style="display: flex; gap: 8px; margin-top: 14px"><span class="mock-btn mock-btn--ink">Approve</span><span class="mock-btn">Request changes</span></p>
+              </div>
+            </div>
+
+            <div class="portal-panel" role="tabpanel" id="panel-feedback" aria-labelledby="tab-feedback" hidden>
+              <span class="tag tag--soon portal-stamp">Concept</span>
+              <h3>Feedback where the work is</h3>
+              <p>Comments attached to the page or design they're about, instead of scattered across messages.</p>
+              <div class="mock" aria-hidden="true">
+                <div class="mock-bubble">Could the menu button be a little bigger on phones?</div>
+                <div class="mock-bubble mock-bubble--me">Done. It's updated on staging; have a look when you're free.</div>
+                <div class="mock-bubble">Perfect, thank you.</div>
+              </div>
+            </div>
+
+            <div class="portal-panel" role="tabpanel" id="panel-files" aria-labelledby="tab-files" hidden>
+              <span class="tag tag--soon portal-stamp">Concept</span>
+              <h3>Files, shared both ways</h3>
+              <p>Send us your logo, photos and copy, and find every design and document we share with you.</p>
+              <div class="mock" aria-hidden="true">
+                <div class="mock-row">logo-files.zip<small>From you</small></div>
+                <div class="mock-row">brand-guidelines.pdf<small>From you</small></div>
+                <div class="mock-row">homepage-v2.png<small>From us</small></div>
+                <div class="mock-row">launch-checklist.pdf<small>From us</small></div>
+              </div>
+            </div>
+
+            <div class="portal-panel" role="tabpanel" id="panel-invoices" aria-labelledby="tab-invoices" hidden>
+              <span class="tag tag--soon portal-stamp">Concept</span>
+              <h3>Invoices, always at hand</h3>
+              <p>Every quote and invoice for your project, with what's paid and what's due.</p>
+              <div class="mock" aria-hidden="true">
+                <div class="mock-row">Written quote<small>Accepted</small></div>
+                <div class="mock-row">Invoice: deposit<small>Paid</small></div>
+                <div class="mock-row">Invoice: balance<small>Due at launch</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHAT IT WILL DO ============ -->
+    <section class="section" aria-labelledby="plan-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>The plan</p>
+          <h2 id="plan-title" class="h-section" data-split-words>What it <span class="accent">will do.</span></h2>
+          <p class="section-lead">Built the way we build client web apps: secure logins, your data kept private, and backups we run ourselves.</p>
+        </header>
+        <ol class="principles reveal" data-stagger>
+          <li class="principle"><span class="principle__num"><span class="tag tag--soon">Planned</span></span><h3 class="principle__name">Project status</h3><p class="principle__text">The current step, progress and what's next, at a glance.</p></li>
+          <li class="principle"><span class="principle__num"><span class="tag tag--soon">Planned</span></span><h3 class="principle__name">Milestones</h3><p class="principle__text">Discovery to support, each one ticked off as it's done.</p></li>
+          <li class="principle"><span class="principle__num"><span class="tag tag--soon">Planned</span></span><h3 class="principle__name">Design approval</h3><p class="principle__text">Approve a design or ask for changes, with a clear record.</p></li>
+          <li class="principle"><span class="principle__num"><span class="tag tag--soon">Planned</span></span><h3 class="principle__name">Feedback &amp; files</h3><p class="principle__text">Comments on the work itself, and files shared both ways.</p></li>
+          <li class="principle"><span class="principle__num"><span class="tag tag--soon">Planned</span></span><h3 class="principle__name">Invoices</h3><p class="principle__text">Quotes and invoices in one place, paid and due.</p></li>
+        </ol>
+        <div class="case-actions reveal">
+          <a href="./#contact" class="btn btn--primary btn--lg" data-magnetic>Start a project</a>
+          <a href="./#process" class="link-arrow">See how we work today <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="cobweb cobweb--br" data-cobweb data-reveal aria-hidden="true"></div>
+    <div class="container-cube footer__inner">
+      <div class="footer__brand">
+        <a href="./" class="footer__logo" aria-label="CobWebZ — home"><img src="assets/logo.png" alt="" width="104" height="83"></a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
+        <a href="./#contact" class="btn btn--primary">Start a project</a>
+      </div>
+      <nav class="footer__nav" aria-label="Footer">
+        <div class="footer__col">
+          <h2 class="footer__h">Studio</h2>
+          <ul>
+            <li><a href="./#about">About</a></li>
+            <li><a href="./#services">Services</a></li>
+            <li><a href="./#process">Process</a></li>
+            <li><a href="./#lab">Live Lab</a></li>
+            <li><a href="./#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="work.html">Case studies</a></li>
+            <li><a href="products.html">Templates</a></li>
+            <li><a href="./#pricing">Pricing</a></li>
+            <li><a href="portal.html" aria-current="page">Client portal</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Contact</h2>
+          <ul>
+            <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
+            <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Social</h2>
+          <ul>
+            <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank" rel="noopener">GitHub</a></li>
+            <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank" rel="noopener">Instagram</a></li>
+            <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="privacy.html" class="footer__legal">Privacy</a>
+        <a href="#main" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+    <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

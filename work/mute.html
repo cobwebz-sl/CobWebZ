@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Only this site's own files may load. The inline theme script below is allowed by its
+       sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
+       This page lives in /work/, so every link and file path starts from the site root (/). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MUTE: Online Store Website Case Study | CobWebZ</title>
+  <meta name="description" content="How CobWebZ designed and built MUTE, a concept clothing store with a tone picker, quick add, product pages and a size guide, using HTML and CSS alone.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#f0f1f3">
+  <link rel="canonical" href="https://www.cobwebz.lk/work/mute">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CobWebZ">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:url" content="https://www.cobwebz.lk/work/mute">
+  <meta property="og:title" content="MUTE — a CobWebZ case study">
+  <meta property="og:description" content="How CobWebZ designed and built MUTE, a concept clothing store with a tone picker, quick add, product pages and a size guide, using HTML and CSS alone.">
+  <meta property="og:image" content="https://www.cobwebz.lk/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MUTE — a CobWebZ case study">
+  <meta name="twitter:description" content="How CobWebZ designed and built MUTE, a concept clothing store with a tone picker, quick add, product pages and a size guide, using HTML and CSS alone.">
+  <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
+  <meta name="twitter:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <!-- Sets the theme before the first paint (saved choice, else the device setting).
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+
+  <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/variables.css">
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.cobwebz.lk/work/mute#webpage",
+        "url": "https://www.cobwebz.lk/work/mute",
+        "name": "MUTE: Online Store Website Case Study | CobWebZ",
+        "description": "How CobWebZ designed and built MUTE, a concept clothing store with a tone picker, quick add, product pages and a size guide, using HTML and CSS alone.",
+        "isPartOf": {
+          "@id": "https://www.cobwebz.lk/#website"
+        },
+        "about": {
+          "@id": "https://www.cobwebz.lk/work/mute#project"
+        },
+        "inLanguage": "en",
+        "primaryImageOfPage": "https://www.cobwebz.lk/assets/work/mute-scroll.webp"
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": "https://www.cobwebz.lk/work/mute#project",
+        "name": "MUTE",
+        "description": "An online store for a small clothing label, built without a single line of JavaScript. Shoppers pick a tone, quick-add from the range and open a full product page with a size guide.",
+        "genre": "Online store",
+        "creator": {
+          "@id": "https://www.cobwebz.lk/#organization"
+        },
+        "url": "https://www.cobwebz.lk/hoodie/",
+        "image": "https://www.cobwebz.lk/assets/work/mute-scroll.webp",
+        "keywords": "HTML and CSS only"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.cobwebz.lk/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Our Work",
+            "item": "https://www.cobwebz.lk/work"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "MUTE",
+            "item": "https://www.cobwebz.lk/work/mute"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- ============ HEADER / NAVIGATION ============ -->
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a href="/" class="site-header__brand" aria-label="CobWebZ — home">
+        <img src="/assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__brand-name">CobWebZ</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="/#about" class="site-nav__link">About</a></li>
+          <li><a href="/#services" class="site-nav__link">Services</a></li>
+          <li><a href="/work.html" class="site-nav__link is-active">Work</a></li>
+          <li><a href="/#lab" class="site-nav__link">Lab</a></li>
+          <li><a href="/products.html" class="site-nav__link">Products</a></li>
+          <li><a href="/#pricing" class="site-nav__link">Pricing</a></li>
+          <li><a href="/#contact" class="site-nav__link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <div class="menu">
+          <button type="button" class="site-header__icon-btn menu-btn-circle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle navigation menu" data-menu-toggle>
+            <span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
+            <ul>
+              <li><a href="/#about">About</a></li>
+              <li><a href="/#services">Services</a></li>
+              <li><a href="/work.html" class="is-active">Work</a></li>
+              <li><a href="/#lab">Lab</a></li>
+              <li><a href="/products.html">Products</a></li>
+              <li><a href="/#pricing">Pricing</a></li>
+              <li><a href="/#contact">Contact</a></li>
+            </ul>
+            <div class="menu__extras">
+              <button type="button" class="menu__theme" role="switch" aria-checked="false" data-theme-toggle>
+                <span>Dark mode</span>
+                <span class="menu__switch" aria-hidden="true"></span>
+              </button>
+              <a href="/#contact" class="menu__cta">
+                <span>Start a project</span>
+                <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <button type="button" class="site-header__icon-btn theme-btn" aria-label="Toggle color theme" data-theme-toggle>
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a href="/#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
+          <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ CASE STUDY HEADER ============ -->
+    <section class="hero hero--page" aria-labelledby="page-title">
+      <canvas class="particles" data-particles="hero" aria-hidden="true"></canvas>
+      <div class="container-cube hero__inner">
+        <nav aria-label="Breadcrumb" data-hero-step>
+          <ol class="crumbs">
+            <li><a href="/">Home</a></li>
+            <li><a href="/work.html">Work</a></li>
+            <li><span aria-current="page">MUTE</span></li>
+          </ol>
+        </nav>
+        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>Concept project · Online store</p>
+        <h1 id="page-title" class="hero__title" data-split-words>MUTE <span class="accent">No JavaScript required.</span></h1>
+        <p class="hero__lead" data-hero-step>An online store for a small clothing label, built without a single line of JavaScript. Shoppers pick a tone, quick-add from the range and open a full product page with a size guide.</p>
+        <div class="hero__actions" data-hero-step>
+          <a href="/hoodie/" target="_blank" rel="noopener" class="btn btn--primary btn--lg btn--sheen">View the live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+          <a href="/products.html#mute" class="btn btn--ghost btn--lg">Use it as a template</a>
+        </div>
+        <dl class="case-facts" data-hero-step>
+          <div><dt>Type</dt><dd>Online store</dd></div>
+          <div><dt>Status</dt><dd>Concept, self-initiated</dd></div>
+          <div><dt>Our role</dt><dd>Design, development and imagery</dd></div>
+          <div><dt>Built with</dt><dd>HTML and CSS only</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ PREVIEWS ============ -->
+    <!-- Full-page screenshots: the desktop one scrolls on hover (or by itself on touch
+         screens), the phone one by itself while it's on screen. -->
+    <section class="section showcase" aria-label="Desktop and mobile previews">
+      <div class="container-cube">
+        <div class="case-previews reveal">
+          <figure>
+            <a href="/hoodie/" target="_blank" rel="noopener" class="project__media" tabindex="-1" aria-hidden="true" data-cursor="View">
+              <span class="project__bar"><span class="win__dots"><i></i><i></i><i></i></span><span class="project__tab">MUTE</span></span>
+              <span class="project__screen" data-preview><img class="project__scroll" src="/assets/work/mute-scroll.webp" alt="" width="760" height="4696" decoding="async" style="--frames: 10.98"></span>
+            </a>
+            <figcaption>Desktop. Full-page screenshot of the MUTE online clothing store; hover to scroll it.</figcaption>
+          </figure>
+          <figure>
+            <div class="phone">
+              <span class="phone__screen" data-preview><img class="phone__scroll" src="/assets/work/mute-mobile.webp" alt="" width="480" height="11077" loading="lazy" decoding="async" style="--frames: 10.93"></span>
+            </div>
+            <figcaption>Mobile, 390px wide.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE STORY ============ -->
+    <section class="section" aria-label="Case study">
+      <div class="container-cube">
+        <div class="case-section reveal">
+          <p class="case-section__label">Overview</p>
+          <div class="case-section__body">
+            <h2>A store without a single script.</h2>
+              <p>MUTE is a fictional label making heavyweight hoodies in muted tones. We designed the shop around its one big idea, colour, and built every interaction in HTML and CSS alone. There is no JavaScript on the page at all.</p>
+          </div>
+        </div>
+        <div class="case-section reveal">
+          <p class="case-section__label">Objective</p>
+          <div class="case-section__body">
+            <h2>Rich, fast and hard to break.</h2>
+              <p>Online stores often load a lot of code before you see a single product. MUTE set out to show that a store can still feel rich (colour picking, quick add, a bag, product pages) with nothing to download and run first, and nothing to break if scripts are blocked.</p>
+          </div>
+        </div>
+        <div class="case-section reveal">
+          <p class="case-section__label">Design approach</p>
+          <div class="case-section__body">
+            <h2>Let the colour talk.</h2>
+              <p>A calm, warm palette and generous white space keep the attention on the product. Archivo, a variable typeface, stretches wide for headlines and narrows for labels. Every hoodie is shown in its actual tone, so the colour picker shows what you&#x27;d receive.</p>
+              <ul class="case-swatches" aria-label="Palette">
+                <li><i style="background: #D6CBBB"></i>#D6CBBB · Sand</li>
+                <li><i style="background: #F5F2ED"></i>#F5F2ED · Bone</li>
+                <li><i style="background: #62766F"></i>#62766F · Sage</li>
+                <li><i style="background: #2F3135"></i>#2F3135 · Charcoal</li>
+                <li><i style="background: #141414"></i>#141414 · Ink</li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="case-section reveal">
+          <p class="case-section__label">Technologies</p>
+          <div class="case-section__body">
+            <h2>What it's built with.</h2>
+            <ul class="case-tech">
+                <li><b>HTML forms</b><span>Radio buttons hold the state: the chosen tone, size, filter and gallery view</span></li>
+                <li><b>CSS :has()</b><span>Restyles the page from that state: the hero recolours and the range filters itself</span></li>
+                <li><b>Popover API</b><span>The bag, search, size guide and image zoom open as popovers, with no script</span></li>
+                <li><b>View transitions</b><span>A smooth hand-over between the store and the product page</span></li>
+                <li><b>Tailwind CSS</b><span>Utility styles, compiled to one small stylesheet per page</span></li>
+                <li><b>Python</b><span>An image script cut out the product photos and recoloured them into every tone</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="case-section reveal">
+          <p class="case-section__label">Main features</p>
+          <div class="case-section__body">
+            <h2>What it does.</h2>
+            <div class="case-features">
+                <article class="case-feature">
+                  <h3>Pick your tone</h3>
+                  <p>Choose a colour in the hero, and the product and its background follow, using radio buttons and :has().</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Shop by fit</h3>
+                  <p>Filter the range by style with plain radio buttons; the grid updates instantly.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Quick add and the bag</h3>
+                  <p>Add a hoodie straight from the grid; the bag slides in as a native popover.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>A full product page</h3>
+                  <p>Gallery views, colours and sizes, zoom, reviews and detail tabs.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>A size guide in cm or inches</h3>
+                  <p>Opens in a popover, with a unit switch that converts the whole table.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Entrances and page transitions</h3>
+                  <p>Panels animate in with @starting-style, and view transitions carry you between pages.</p>
+                </article>
+            </div>
+            <p class="case-note">MUTE is a concept project: a fictional label we designed and built ourselves. As a demo, its bag doesn&#x27;t take payments. A live store adds a back end for products and orders, and a payment gateway (see Dynamic Applications under Pricing).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEXT ============ -->
+    <section class="section" aria-labelledby="next-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <h2 id="next-title" class="h-section" data-split-words>Want a site <span class="accent">like this?</span></h2>
+          <p class="section-lead">Start from this design as a template, or tell us what you need and we'll reply with questions or a fixed, written quote.</p>
+          <div class="case-actions">
+            <a href="/?template=MUTE&amp;package=Dynamic%20Applications#contact" class="btn btn--primary btn--lg" data-magnetic>Start a project</a>
+            <a href="/#estimate" class="link-arrow">Estimate your price <span aria-hidden="true">→</span></a>
+          </div>
+        </header>
+        <nav class="case-next reveal" aria-label="More case studies">
+          <a href="/work/black.html"><span>Previous case study</span><b>Black.</b></a>
+          <a href="/work/vela-one.html"><span>Next case study</span><b>Vela One</b></a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="cobweb cobweb--br" data-cobweb data-reveal aria-hidden="true"></div>
+    <div class="container-cube footer__inner">
+      <div class="footer__brand">
+        <a href="/" class="footer__logo" aria-label="CobWebZ — home"><img src="/assets/logo.png" alt="" width="104" height="83"></a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
+        <a href="/#contact" class="btn btn--primary">Start a project</a>
+      </div>
+      <nav class="footer__nav" aria-label="Footer">
+        <div class="footer__col">
+          <h2 class="footer__h">Studio</h2>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/#services">Services</a></li>
+            <li><a href="/#process">Process</a></li>
+            <li><a href="/#lab">Live Lab</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="/work.html">Case studies</a></li>
+            <li><a href="/products.html">Templates</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/portal.html">Client portal</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Contact</h2>
+          <ul>
+            <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
+            <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Social</h2>
+          <ul>
+            <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank" rel="noopener">GitHub</a></li>
+            <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank" rel="noopener">Instagram</a></li>
+            <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="/privacy.html" class="footer__legal">Privacy</a>
+        <a href="#main" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+    <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>

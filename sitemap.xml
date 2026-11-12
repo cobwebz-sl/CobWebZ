@@ -1,19 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The two pages search engines should list. The demo sites are left out on purpose: they are
-     noindex. Update <lastmod> (YYYY-MM-DD) when a page's content changes.
-     /work, not /work.html: Cloudflare redirects .html addresses to the short form, and the
-     sitemap and canonical tags must name the address that answers without a redirect. -->
+<!-- The pages search engines should list. Left out on purpose: the demo sites (noindex),
+     portal.html (a concept for a future feature, noindex) and 404.html. Update <lastmod>
+     (YYYY-MM-DD) when a page's content changes.
+     Clean addresses (/work, not /work.html): Cloudflare redirects .html addresses to the
+     short form, and the sitemap and canonical tags must name the address that answers
+     without a redirect. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.cobwebz.lk/</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.cobwebz.lk/work</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cobwebz.lk/products</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cobwebz.lk/work/vela-one</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.cobwebz.lk/work/black</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.cobwebz.lk/work/mute</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.cobwebz.lk/privacy</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

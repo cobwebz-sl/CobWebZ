@@ -5,8 +5,9 @@
   <meta charset="utf-8">
   <!-- Only this site's own files may load. The inline theme script below is allowed by its
        sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
-       connect-src lists the two form services script.js can send enquiries to. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xTpUMg0MuPhQ5EP+in6S98erupmmXU1YGA784+uUY90='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
+       connect-src lists the two form services script.js can send enquiries to ('self' also
+       covers the live speed and security checks, which only ever ask this site). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- SEO: the title and description are what Google shows in its results. Keep the title
@@ -17,7 +18,7 @@
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#f0f1f3">
   <!-- SEO: the site's public address. Search for "www.cobwebz.lk" across the project
-       (this file, work.html, 404.html, robots.txt, sitemap.xml) and replace it when the domain changes. -->
+       (every page, robots.txt, sitemap.xml) and replace it when the domain changes. -->
   <link rel="canonical" href="https://www.cobwebz.lk/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CobWebZ">
@@ -35,11 +36,14 @@
   <meta name="twitter:description"
     content="We build the web and keep it running. Websites, web apps, hosting, security and server management from Colombo, Sri Lanka.">
   <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="twitter:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <!-- Sets the theme before the first paint, so dark-mode visitors never see the light page
-       flash. Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='dark'){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+       flash: a saved choice wins, otherwise it follows the device's light/dark setting.
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
 
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="variables.css">
@@ -84,7 +88,8 @@
           "contactType": "sales",
           "telephone": "+94 71 907 0320",
           "email": "cobwebzsl@gmail.com",
-          "areaServed": "LK"
+          "areaServed": "LK",
+          "availableLanguage": "English"
         },
         "priceRange": "LKR 40,000+",
         "currenciesAccepted": "LKR",
@@ -92,7 +97,7 @@
           "https://www.facebook.com/profile.php?id=61596432720722",
           "https://www.instagram.com/cobwebz_sl/"
         ],
-        "knowsAbout": ["Web design", "Web development", "Django", "Python", "PHP", "Docker", "Cloudflare", "Technical SEO", "Web security", "Server management"],
+        "knowsAbout": ["Web design", "Web development", "UI/UX design", "Django", "Python", "PHP", "Docker", "Cloudflare", "Technical SEO", "Web performance", "Web security", "Server management"],
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Web development packages",
@@ -143,7 +148,7 @@
           {
             "@type": "Question",
             "name": "How much does a website cost in Sri Lanka?",
-            "acceptedAnswer": { "@type": "Answer", "text": "At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application with a database, user accounts and an admin dashboard starts at LKR 100,000. Both are one-time prices. Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts with a discovery call and a fixed, written quote. See Pricing for what each package includes." }
+            "acceptedAnswer": { "@type": "Answer", "text": "At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application with a database, user accounts and an admin dashboard starts at LKR 100,000. Both are one-time prices. Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts with a discovery call and a fixed, written quote. Use the estimator under Pricing for an itemised starting price." }
           },
           {
             "@type": "Question",
@@ -153,12 +158,12 @@
           {
             "@type": "Question",
             "name": "Do you use templates or page builders?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. Every CobWebZ site is designed and coded for your business, with no generic themes, no page builders and no bloat. Static sites are written in HTML, CSS and JavaScript, and web applications in Python/Django or PHP, so pages stay light and load fast." }
+            "acceptedAnswer": { "@type": "Answer", "text": "We don't use page builders or third-party themes. Custom sites are designed and coded for your business from scratch. If you'd like to launch sooner, you can start from one of our own hand-coded templates, which we adapt to your brand, content and photos. Either way, static sites are written in HTML, CSS and JavaScript, and web applications in Python/Django or PHP, so pages stay light and load fast." }
           },
           {
             "@type": "Question",
             "name": "Will my website work on mobile phones?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every site we build is responsive, so the same pages fit phones, tablets and desktops. We aim for a Lighthouse score of 100 (Google's speed and quality check) and a load time under a second, so pages stay quick on mobile data." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every site we build is responsive, so the same pages fit phones, tablets and desktops. We test on all three and build to Google's Core Web Vitals thresholds, so pages stay quick on mobile data." }
           },
           {
             "@type": "Question",
@@ -173,12 +178,12 @@
           {
             "@type": "Question",
             "name": "Can you build an online store?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or PHP with a MySQL database and an admin dashboard for your products. Online payments are added with Payment Gateway Setup, from LKR 25,000. For an example, see the MUTE clothing store under Our Work." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or PHP with a MySQL database and an admin dashboard for your products. Online payments are added with Payment Gateway Setup, from LKR 25,000. For an example, see the MUTE store concept under Our Work." }
           },
           {
             "@type": "Question",
             "name": "Can you add online payments, WhatsApp or more than one language?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, as add-ons to any package: payment gateway setup from LKR 25,000, WhatsApp and CRM integrations from LKR 10,000, and multilingual support (for example English, Sinhala and Tamil) from LKR 20,000. Tick the ones you want under Optional Enhancements and the estimate updates as you go." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, as add-ons to any package: payment gateway setup from LKR 25,000, WhatsApp and CRM integrations from LKR 10,000, and multilingual support (for example English, Sinhala and Tamil) from LKR 20,000. Pick the ones you want in the estimator under Pricing and the total updates as you go." }
           },
           {
             "@type": "Question",
@@ -193,7 +198,7 @@
           {
             "@type": "Question",
             "name": "Do you work with businesses outside Colombo?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. CobWebZ is based in Colombo and works with businesses across Sri Lanka. Send an enquiry from the form below, or message us on WhatsApp, wherever you are." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. CobWebZ is based in Colombo and works with businesses across Sri Lanka and abroad. Send an enquiry from the form below, or message us on WhatsApp, wherever you are." }
           }
         ]
       }
@@ -204,6 +209,8 @@
 
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
+  <!-- A hairline across the top that fills as the page scrolls (script.js) -->
+  <div class="progress" aria-hidden="true"><span data-progress></span></div>
 
   <!-- ============ HEADER / NAVIGATION ============ -->
   <header class="site-header" data-header>
@@ -213,15 +220,19 @@
         <span class="site-header__brand-name">CobWebZ</span>
       </a>
 
+      <!-- The dot under the links slides to the section on screen ([data-nav-dot], script.js).
+           Products is its own page, so it never lights up here. -->
       <nav class="site-nav" aria-label="Main navigation">
         <ul class="site-nav__list">
-          <li><a href="#overview" class="site-nav__link is-active" data-nav>Home</a></li>
           <li><a href="#about" class="site-nav__link" data-nav>About</a></li>
           <li><a href="#services" class="site-nav__link" data-nav>Services</a></li>
-          <li><a href="#work" class="site-nav__link" data-nav>Products</a></li>
+          <li><a href="#work" class="site-nav__link" data-nav>Work</a></li>
+          <li><a href="#lab" class="site-nav__link" data-nav>Lab</a></li>
+          <li><a href="products.html" class="site-nav__link">Products</a></li>
           <li><a href="#pricing" class="site-nav__link" data-nav>Pricing</a></li>
           <li><a href="#contact" class="site-nav__link" data-nav>Contact</a></li>
         </ul>
+        <span class="site-nav__dot" aria-hidden="true" data-nav-dot></span>
       </nav>
 
       <div class="site-header__actions">
@@ -237,10 +248,11 @@
           </button>
           <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
             <ul>
-              <li><a href="#overview" data-nav>Home</a></li>
               <li><a href="#about" data-nav>About</a></li>
               <li><a href="#services" data-nav>Services</a></li>
-              <li><a href="#work" data-nav>Products</a></li>
+              <li><a href="#work" data-nav>Work</a></li>
+              <li><a href="#lab" data-nav>Lab</a></li>
+              <li><a href="products.html">Products</a></li>
               <li><a href="#pricing" data-nav>Pricing</a></li>
               <li><a href="#contact" data-nav>Contact</a></li>
             </ul>
@@ -250,8 +262,8 @@
                 <span>Dark mode</span>
                 <span class="menu__switch" aria-hidden="true"></span>
               </button>
-              <a href="work.html" class="menu__cta">
-                <span>Explore More</span>
+              <a href="#contact" class="menu__cta">
+                <span>Start a project</span>
                 <span class="site-header__cta-arrow" aria-hidden="true">
                   <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -276,8 +288,8 @@
           </svg>
         </button>
 
-        <a href="work.html" class="site-header__cta-btn" data-magnetic>
-          <span>Explore More</span>
+        <a href="#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
           <span class="site-header__cta-arrow" aria-hidden="true">
             <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
@@ -291,25 +303,29 @@
 
   <main id="main">
     <!-- ============ HERO ============ -->
+    <!-- The name appears once in the heading's text. initHeroBrand() (script.js) draws the
+         big rising letters as decoration over it, so screen readers, search engines and
+         copy-paste all get "CobWebZ" a single time. The letters lean toward the pointer. -->
     <section class="hero" id="overview" aria-labelledby="hero-title">
       <canvas class="particles" data-particles="hero" aria-hidden="true"></canvas>
       <!-- Corner cobweb, built by initCobwebs() in script.js -->
       <div class="cobweb cobweb--tr" data-cobweb="spider" data-reveal aria-hidden="true"></div>
 
       <div class="container-cube hero__inner">
-        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span><span
+        <p class="badge" data-hero-step data-glow-border><span class="badge__dot" aria-hidden="true"></span><span
             data-config-text="availability">Available for new projects</span></p>
         <h1 id="hero-title" class="hero__title">
-          <span class="sr-only">CobWebZ — </span>
-          <span class="hero__brand" aria-hidden="true" data-split-letters>CobWebZ</span>
+          <span class="hero__brand" data-hero-brand>CobWebZ</span>
           <span class="hero__tagline" data-split-words>We build the web <span class="accent">and keep it
               running.</span></span>
         </h1>
-        <p class="hero__lead" data-hero-step>CobWebZ is a web design, development and infrastructure studio in Colombo,
-          Sri Lanka. We write the code, deploy it on containers and the edge, and keep your servers patched, monitored
-          and secure.</p>
+        <p class="hero__lead" data-hero-step>A web design, development and infrastructure studio in Colombo, Sri
+          Lanka, working with clients at home and abroad. We write the code, deploy it on containers and the edge, and
+          keep your servers patched, monitored and secure.</p>
         <div class="hero__actions" data-hero-step>
-          <a href="#contact" class="btn btn--primary btn--lg" data-magnetic>Start a Project</a>
+          <a href="#contact" class="btn btn--primary btn--lg btn--sheen" data-magnetic data-spider-button>Start a project <span
+              aria-hidden="true">→</span></a>
+          <a href="#estimate" class="btn btn--ghost btn--lg">Estimate your price</a>
         </div>
       </div>
 
@@ -327,9 +343,9 @@
         <h2 id="about-title" class="sr-only">About CobWebZ</h2>
 
         <div class="about__body" data-scrub>
-          <p class="about__statement" data-scrub-words>At CobWebZ, we craft high-performance, secure, and SEO-optimized
-            websites for businesses across Sri Lanka. We pair clean, custom design with flawless frontend architecture
-            to deliver websites that are fast, scalable, and engineered to capture your audience's attention.</p>
+          <p class="about__statement" data-scrub-words>At CobWebZ, we design and build fast, secure, search-ready
+            websites for businesses in Sri Lanka and beyond. We pair clean, custom design with careful front-end
+            engineering, so every site loads quickly, grows with you and holds your audience's attention.</p>
           <div class="about__mark" data-spider>
             <svg class="spider" viewBox="0 0 775 490" aria-hidden="true">
               <path class="spider__thread" pathLength="1"
@@ -409,101 +425,105 @@
           </div>
 
           <div class="services__panels">
-            <article class="services__item is-active" id="service-0" role="tabpanel" aria-labelledby="service-tab-0">
+            <div class="services__item is-active" id="service-0" role="tabpanel" aria-labelledby="service-tab-0">
               <svg class="services__icon" viewBox="0 0 48 48" aria-hidden="true">
                 <path pathLength="1" d="M17 14 7 24l10 10" />
                 <path pathLength="1" d="m31 14 10 10-10 10" />
                 <path pathLength="1" d="M27 9 21 39" />
               </svg>
-              <p class="services__meta">Engineering</p>
+              <p class="services__meta">Web development</p>
               <h3 class="services__title">Build</h3>
               <p class="services__lead">Full-stack &amp; static sites</p>
-              <p class="services__text">We engineer high-performance static websites and dynamic web applications
-                tailored precisely to your business needs.</p>
+              <p class="services__text">We build fast static websites and full-stack web applications around how your
+                business actually works.</p>
               <ul class="services__list">
                 <li>Static sites &amp; landing pages</li>
                 <li>Full-stack apps in Python, Django or PHP</li>
                 <li>REST APIs &amp; admin dashboards</li>
               </ul>
-            </article>
-            <article class="services__item" id="service-1" role="tabpanel" aria-labelledby="service-tab-1">
+            </div>
+            <div class="services__item" id="service-1" role="tabpanel" aria-labelledby="service-tab-1">
               <svg class="services__icon" viewBox="0 0 48 48" aria-hidden="true">
                 <path pathLength="1" d="M24 6 35 26 24 42 13 26Z" />
                 <path pathLength="1" d="M24 6v17" />
                 <circle pathLength="1" cx="24" cy="27" r="3.5" />
               </svg>
-              <p class="services__meta">UI / UX</p>
+              <p class="services__meta">UI / UX design</p>
               <h3 class="services__title">Design</h3>
               <p class="services__lead">High-contrast, minimal interfaces</p>
-              <p class="services__text">We craft minimalist, high-contrast, and intuitive user interfaces that look
-                stunning on any screen and drive user engagement.</p>
+              <p class="services__text">We design clear, minimal interfaces that work on every screen and make the next
+                step obvious for your visitors.</p>
               <ul class="services__list">
                 <li>Interface design for web &amp; mobile</li>
                 <li>Design systems &amp; clickable prototypes</li>
                 <li>Responsive, accessible layouts</li>
               </ul>
-            </article>
-            <article class="services__item" id="service-2" role="tabpanel" aria-labelledby="service-tab-2">
+            </div>
+            <div class="services__item" id="service-2" role="tabpanel" aria-labelledby="service-tab-2">
               <svg class="services__icon" viewBox="0 0 48 48" aria-hidden="true">
                 <path pathLength="1" d="M9 34a16 16 0 1 1 30 0" />
                 <path pathLength="1" d="m24 30 9-11" />
                 <path pathLength="1" d="M24 14v3M13.4 18.4l2.1 2.1M34.6 18.4l-2.1 2.1" />
               </svg>
-              <p class="services__meta">Velocity</p>
+              <p class="services__meta">Web optimization</p>
               <h3 class="services__title">Optimize</h3>
-              <p class="services__lead">Maximum Lighthouse scores</p>
-              <p class="services__text">We fine-tune every line of code for maximum speed, seamless user experience, and
-                top-tier search engine visibility.</p>
+              <p class="services__lead">Speed you can measure</p>
+              <p class="services__text">We tune code, images and delivery for quick loads and good Core Web Vitals, and
+                set every page up to be found in search.</p>
               <ul class="services__list">
                 <li>Core Web Vitals &amp; Lighthouse tuning</li>
                 <li>Technical SEO</li>
                 <li>Image &amp; asset optimisation</li>
               </ul>
-            </article>
-            <article class="services__item" id="service-3" role="tabpanel" aria-labelledby="service-tab-3">
+            </div>
+            <div class="services__item" id="service-3" role="tabpanel" aria-labelledby="service-tab-3">
               <svg class="services__icon" viewBox="0 0 48 48" aria-hidden="true">
                 <path pathLength="1" d="M24 6 38 12v12c0 9-7 15-14 18-7-3-14-9-14-18V12Z" />
                 <path pathLength="1" d="m18 24 4 4 8-8" />
               </svg>
-              <p class="services__meta">Security</p>
+              <p class="services__meta">Web security</p>
               <h3 class="services__title">Protect</h3>
-              <p class="services__lead">Zero-breach architecture</p>
-              <p class="services__text">We deploy your digital assets using modern, secure architecture so you never
-                have to worry about downtime or data breaches.</p>
+              <p class="services__lead">Security-first architecture</p>
+              <p class="services__text">We deploy on hardened, modern infrastructure and keep it patched, monitored and
+                backed up, so problems are caught early.</p>
               <ul class="services__list">
                 <li>Docker &amp; Cloudflare deployment</li>
                 <li>Security &amp; vulnerability scanning</li>
                 <li>Monitoring, backups &amp; patching</li>
               </ul>
-            </article>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============ OUR WORK ============ -->
-    <!-- Each card shows a tall screenshot of the whole site (assets/work/*-scroll.webp); hovering scrolls it top to bottom.
-         --frames on each image is its height in 16:9 card frames, which sets the scroll speed. -->
+    <!-- Each card shows a tall screenshot of the whole site (assets/work/*-scroll.webp) that
+         scrolls by itself while on screen. --frames on each image is its height in 16:9 card
+         frames, which sets the scroll speed. All three are concept projects (fictional brands we
+         designed and built ourselves); the badge says so. When real client work is added, give
+         it the label "Client project" instead. -->
     <section class="section work" id="work" aria-labelledby="work-title">
       <canvas class="particles" data-particles="work" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Selected work</p>
           <h2 id="work-title" class="h-section" data-split-words>Our <span class="accent">work.</span></h2>
-          <p class="section-lead">Websites we design, build and deploy for creatives, restaurants and local businesses.
-            Fast, responsive and live on your own domain.</p>
+          <p class="section-lead">Concept sites we designed and built end to end, to show what a launch page, a
+            portfolio and an online store can do. Read the case studies, or click through the live demos.</p>
         </header>
 
-        <!-- Each card opens its live demo site in a new tab. work.html lists the same sites in more detail. -->
+        <!-- Each card opens its case study. work.html lists all nine concept sites. -->
         <div class="card-container reveal" data-stagger>
-          <a href="veloa%20one/Vela%20One.html" target="_blank" rel="noopener" class="work-card" data-cursor="View">
+          <a href="work/vela-one.html" class="work-card" data-cursor="Read" data-tilt>
             <span class="work-card__media" data-preview>
               <img class="work-card__scroll" src="assets/work/vela-one-scroll.webp" alt="Full-page screenshot of the Vela One headphones launch site" width="760" height="4497"
                 loading="lazy" decoding="async" style="--frames: 10.52">
             </span>
             <span class="work-card__body">
+              <span class="work-card__meta"><span class="tag tag--concept">Concept</span> Product launch</span>
               <span class="work-card__head">
-                <span class="work-card__title">Vela One<span class="sr-only"> — view the live demo (opens in a new
-                    tab)</span></span>
+                <span class="work-card__title">Vela One<span class="sr-only"> — read the case study</span></span>
                 <span class="work-card__arrow" aria-hidden="true">→</span>
               </span>
               <span class="work-card__text">A launch page for titanium headphones, told through scroll-driven scenes
@@ -511,15 +531,15 @@
             </span>
           </a>
 
-          <a href="photography/" target="_blank" rel="noopener" class="work-card" data-cursor="View">
+          <a href="work/black.html" class="work-card" data-cursor="Read" data-tilt>
             <span class="work-card__media" data-preview>
               <img class="work-card__scroll" src="assets/work/black-scroll.webp" alt="Full-page screenshot of the Black. photography collective showcase" width="760" height="4502"
                 loading="lazy" decoding="async" style="--frames: 10.53">
             </span>
             <span class="work-card__body">
+              <span class="work-card__meta"><span class="tag tag--concept">Concept</span> Portfolio</span>
               <span class="work-card__head">
-                <span class="work-card__title">Black.<span class="sr-only"> — view the live demo (opens in a new
-                    tab)</span></span>
+                <span class="work-card__title">Black.<span class="sr-only"> — read the case study</span></span>
                 <span class="work-card__arrow" aria-hidden="true">→</span>
               </span>
               <span class="work-card__text">A dark editorial showcase for a photography collective that works as a
@@ -527,25 +547,524 @@
             </span>
           </a>
 
-          <a href="hoodie/" target="_blank" rel="noopener" class="work-card" data-cursor="View">
+          <a href="work/mute.html" class="work-card" data-cursor="Read" data-tilt>
             <span class="work-card__media" data-preview>
               <img class="work-card__scroll" src="assets/work/mute-scroll.webp" alt="Full-page screenshot of the MUTE online clothing store" width="760" height="4696"
                 loading="lazy" decoding="async" style="--frames: 10.98">
             </span>
             <span class="work-card__body">
+              <span class="work-card__meta"><span class="tag tag--concept">Concept</span> Online store</span>
               <span class="work-card__head">
-                <span class="work-card__title">MUTE<span class="sr-only"> — view the live demo (opens in a new
-                    tab)</span></span>
+                <span class="work-card__title">MUTE<span class="sr-only"> — read the case study</span></span>
                 <span class="work-card__arrow" aria-hidden="true">→</span>
               </span>
-              <span class="work-card__text">A clothing store with a colour picker, quick add to bag and a product page
-                with a size guide.</span>
+              <span class="work-card__text">A clothing store with a colour picker, quick add to bag and a size guide,
+                built without any JavaScript.</span>
             </span>
           </a>
         </div>
 
-        <p class="work__more reveal"><a href="work.html" class="link-arrow">See all our work <span
+        <p class="work__more reveal"><a href="work.html" class="link-arrow">See all nine concept sites <span
               aria-hidden="true">→</span></a></p>
+      </div>
+    </section>
+
+    <!-- ============ HOW WE WORK ============ -->
+    <!-- Five steps on a rail: across the page on wide screens, down the left on narrow ones.
+         The rail fills and each step lights up as the section scrolls past (initProcess sets
+         --p on the list and is-reached on the steps). Without script, every step shows. -->
+    <section class="section process" id="process" aria-labelledby="process-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Process</p>
+          <h2 id="process-title" class="h-section" data-split-words>How we <span class="accent">work.</span></h2>
+          <p class="section-lead">Five steps from your first message to a site that keeps running. You always know
+            which one we're on, and what comes next.</p>
+        </header>
+
+        <ol class="process__track reveal" data-process>
+          <li class="process__step">
+            <span class="process__marker" aria-hidden="true">01</span>
+            <h3 class="process__title">Discovery</h3>
+            <p class="process__text">We learn how your business works, who the site is for and what it has to do.</p>
+            <ul class="process__out" aria-label="What you get">
+              <li>Discovery call</li>
+              <li>Scope &amp; sitemap</li>
+              <li>A fixed, written quote</li>
+            </ul>
+          </li>
+          <li class="process__step">
+            <span class="process__marker" aria-hidden="true">02</span>
+            <h3 class="process__title">Design</h3>
+            <p class="process__text">We set the visual direction and map the experience, page by page, on mobile and
+              desktop.</p>
+            <ul class="process__out" aria-label="What you get">
+              <li>Visual direction</li>
+              <li>Page layouts &amp; user flows</li>
+              <li>Your sign-off before we build</li>
+            </ul>
+          </li>
+          <li class="process__step">
+            <span class="process__marker" aria-hidden="true">03</span>
+            <h3 class="process__title">Development</h3>
+            <p class="process__text">We hand-code the site and build its features: HTML, CSS and JavaScript, plus
+              Django or PHP where it needs a back end.</p>
+            <ul class="process__out" aria-label="What you get">
+              <li>Responsive front end</li>
+              <li>Back end &amp; admin (web apps)</li>
+              <li>Staging to review on</li>
+            </ul>
+          </li>
+          <li class="process__step">
+            <span class="process__marker" aria-hidden="true">04</span>
+            <h3 class="process__title">Testing &amp; Launch</h3>
+            <p class="process__text">We test on phones, tablets and desktops, tune speed and accessibility, then go
+              live on your domain.</p>
+            <ul class="process__out" aria-label="What you get">
+              <li>Cross-device testing</li>
+              <li>Speed &amp; SEO checks</li>
+              <li>Domain, SSL &amp; go-live</li>
+            </ul>
+          </li>
+          <li class="process__step">
+            <span class="process__marker" aria-hidden="true">05</span>
+            <h3 class="process__title">Support</h3>
+            <p class="process__text">After launch we keep it running: updates, backups, content changes or full
+              infrastructure care.</p>
+            <ul class="process__out" aria-label="What you get">
+              <li>Maintenance from LKR&nbsp;5,000/mo</li>
+              <li>Content updates on request</li>
+              <li><a href="portal.html">Client portal <span class="tag tag--soon">Planned</span></a></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ THE STUDIO ============ -->
+    <!-- Philosophy, approach and principles. The founder card is filled from CUBE_CONFIG.founder
+         in script.js and stays hidden until a name is set there, so no one is invented. -->
+    <section class="section studio" id="studio" aria-labelledby="studio-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>The studio</p>
+          <h2 id="studio-title" class="h-section" data-split-words>The minds behind <span class="accent">the
+              web.</span></h2>
+          <p class="section-lead">CobWebZ is a design and engineering studio in Colombo. We believe a website should
+            be fast, honest and easy to look after, long after launch day.</p>
+        </header>
+
+        <div class="studio__grid" data-studio>
+          <figure class="founder card reveal" data-founder hidden>
+            <div class="founder__photo" data-founder-photo aria-hidden="true"></div>
+            <figcaption class="founder__body">
+              <p class="founder__role" data-founder-role></p>
+              <p class="founder__name" data-founder-name></p>
+              <p class="founder__bio" data-founder-bio></p>
+              <a class="link-arrow founder__link" data-founder-link href="#" target="_blank" rel="noopener" hidden>
+                <span data-founder-link-label>Profile</span> <span aria-hidden="true">↗</span></a>
+            </figcaption>
+          </figure>
+
+          <div class="studio__copy reveal">
+            <p class="studio__lede">Most websites are built once and then left alone. We'd rather build yours properly
+              and keep it running: designed around the people who use it, engineered to stay fast and secure, and
+              looked after once it's live.</p>
+            <dl class="studio__approach" aria-label="Our technical approach">
+              <div>
+                <dt>Front end</dt>
+                <dd>Semantic HTML, modern CSS and plain JavaScript first. Frameworks only when a project needs them.
+                </dd>
+              </div>
+              <div>
+                <dt>Back end</dt>
+                <dd>Python/Django or PHP with MySQL, for accounts, data and admin dashboards.</dd>
+              </div>
+              <div>
+                <dt>Infrastructure</dt>
+                <dd>Cloudflare's edge for static sites; Docker, Nginx and Apache on Linux servers for applications.</dd>
+              </div>
+              <div>
+                <dt>Quality</dt>
+                <dd>Tested across phones, tablets and desktops, checked with Lighthouse, shipped with security headers
+                  on.</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <h3 class="principles__title reveal">How we build</h3>
+        <ol class="principles reveal" data-stagger>
+          <li class="principle">
+            <span class="principle__num" aria-hidden="true">01</span>
+            <h4 class="principle__name">Hand-coded, not assembled</h4>
+            <p class="principle__text">No page builders, no bloated themes. Every line is written for your site, so it
+              does what you need and nothing else.</p>
+          </li>
+          <li class="principle">
+            <span class="principle__num" aria-hidden="true">02</span>
+            <h4 class="principle__name">Fast is a feature</h4>
+            <p class="principle__text">Light pages, optimised images and self-hosted fonts. Speed is designed in from
+              the first commit, not patched on at the end.</p>
+          </li>
+          <li class="principle">
+            <span class="principle__num" aria-hidden="true">03</span>
+            <h4 class="principle__name">Secure by default</h4>
+            <p class="principle__text">HTTPS, strict security headers and protection against common attacks are where
+              we start, not optional extras.</p>
+          </li>
+          <li class="principle">
+            <span class="principle__num" aria-hidden="true">04</span>
+            <h4 class="principle__name">Usable by everyone</h4>
+            <p class="principle__text">Readable contrast, keyboard-friendly controls and reduced-motion support, so
+              more people can use what we build.</p>
+          </li>
+          <li class="principle">
+            <span class="principle__num" aria-hidden="true">05</span>
+            <h4 class="principle__name">Plain, honest numbers</h4>
+            <p class="principle__text">Fixed, written quotes and estimates labelled as estimates. No ranking promises
+              and no invented statistics.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ WHY CHOOSE US: PROOF ============ -->
+    <!-- A dark panel that opens out as it scrolls in. initWhyChooseUs() draws a big web into
+         both [data-why-web] layers: the faint one is always there, the lit one only shows
+         around the pointer. Each card tilts toward the pointer and its edge catches the light.
+         Every number in this panel is measured live in the visitor's browser (initLiveChecks):
+         nothing here is typed in by hand, so nothing here can be out of date or made up. -->
+    <section class="section why-us" id="why-us" aria-labelledby="why-us-title">
+      <div class="container-cube">
+        <div class="why-us__panel" data-why data-dark data-reveal>
+          <div class="why-us__web" aria-hidden="true"><svg viewBox="-500 -500 1000 1000" data-why-web></svg></div>
+          <div class="why-us__web why-us__web--lit" aria-hidden="true"><svg viewBox="-500 -500 1000 1000"
+              data-why-web></svg></div>
+          <span class="why-us__glow" aria-hidden="true"></span>
+
+          <header class="why-us__head reveal">
+            <div>
+              <p class="why-us__eyebrow"><span class="badge__dot" aria-hidden="true"></span>Why CobWebZ</p>
+              <h2 id="why-us-title" class="why-us__title" data-split-words>Proof, <span class="accent">not
+                  promises.</span></h2>
+            </div>
+            <p class="why-us__lead">Every site is hand-coded for speed, security and search. Don't take our word for
+              it: everything on this panel is measured live, on the page you're reading, in your own browser.</p>
+          </header>
+
+          <!-- Filled in by initLiveChecks() from the browser's own performance records -->
+          <ul class="why-us__stats reveal" data-live-stats>
+            <li><b data-stat="paint">—</b> <span data-stat-label="paint">Largest paint</span></li>
+            <li><b data-stat="weight">—</b> <span>Transferred</span></li>
+            <li><b data-stat="requests">—</b> <span>Requests</span></li>
+            <li><b data-stat="third">—</b> <span>Third-party requests</span></li>
+          </ul>
+          <p class="why-us__note reveal" data-stats-note>Measured on this visit, in your browser. Results vary with your
+            device and connection.</p>
+
+          <div class="why-us__grid reveal" data-stagger>
+            <!-- 01 Custom Crafted: a pen-tool curve. The pointer pulls the middle handle;
+                 left alone, it moves itself. The path data below the curve updates live. -->
+            <article class="why-card why-card--wide" data-why-card>
+              <span class="why-card__num" aria-hidden="true">01</span>
+              <div class="why-card__inner">
+                <div class="why-card__content">
+                  <span class="why-card__tag">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 2l2 2-9 9-3 1 1-3 9-9z" />
+                    </svg>
+                    Bespoke code
+                  </span>
+                  <h3 class="why-card__title">Custom crafted</h3>
+                  <p class="why-card__text">Designed and coded by hand for each project. No third-party themes, no
+                    page builders, no bloat.</p>
+                  <ul class="why-card__pills" aria-label="Highlights">
+                    <li>Hand-written code</li>
+                    <li>No page builders</li>
+                  </ul>
+                </div>
+
+                <div class="why-card__stage pen" aria-hidden="true" data-why-pen>
+                  <svg class="pen__svg" viewBox="0 0 600 220">
+                    <defs>
+                      <linearGradient id="why-pen-stroke" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0" stop-color="#8fa5c6" />
+                        <stop offset="1" stop-color="#d9a796" />
+                      </linearGradient>
+                      <linearGradient id="why-pen-fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#8fa5c6" stop-opacity="0.22" />
+                        <stop offset="1" stop-color="#d9a796" stop-opacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <path class="pen__fill" d="" />
+                    <path class="pen__curve" pathLength="1" d="" />
+                    <path class="pen__handle" d="" />
+                    <circle class="pen__knob" r="8" data-pen-knob />
+                    <circle class="pen__knob" r="8" data-pen-knob />
+                    <rect class="pen__anchor" x="32" y="162" width="16" height="16" />
+                    <rect class="pen__anchor pen__anchor--on" x="292" y="102" width="16" height="16" />
+                    <rect class="pen__anchor" x="552" y="42" width="16" height="16" />
+                    <g class="pen__cursor" data-pen-cursor>
+                      <path d="M0 0l8 24 5-10 10-5z" />
+                      <rect x="22" y="22" width="150" height="32" rx="16" />
+                      <text x="97" y="43">Hand-drawn</text>
+                    </g>
+                  </svg>
+                  <code class="pen__code" data-pen-code>M40 170 C140 40, 220 60, 300 110</code>
+                </div>
+              </div>
+            </article>
+
+            <!-- 02 High Performance: a real request to this site, timed when the card comes into
+                 view and again from the button. The ring fills by how far under Google's "good"
+                 time to first byte (800 ms) it came in. -->
+            <article class="why-card" data-why-card>
+              <span class="why-card__num" aria-hidden="true">02</span>
+              <div class="why-card__inner">
+                <div class="why-card__stage gauge" data-speedtest>
+                  <div class="gauge__dial" aria-hidden="true">
+                    <svg viewBox="0 0 120 120">
+                      <defs>
+                        <linearGradient id="why-gauge-grad" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0" stop-color="#8fa5c6" />
+                          <stop offset="1" stop-color="#d9a796" />
+                        </linearGradient>
+                      </defs>
+                      <circle class="gauge__track" cx="60" cy="60" r="50" pathLength="100" />
+                      <circle class="gauge__ring" cx="60" cy="60" r="50" pathLength="100" data-gauge-ring />
+                    </svg>
+                    <span class="gauge__score"><b data-speed-value>—</b><small>ms TTFB</small></span>
+                  </div>
+                  <dl class="gauge__metrics">
+                    <div><dt>Round trip</dt><dd data-speed="rtt">—</dd></div>
+                    <div><dt>Served from</dt><dd data-speed="edge">—</dd></div>
+                    <div><dt>Protocol</dt><dd data-speed="proto">—</dd></div>
+                  </dl>
+                  <button type="button" class="gauge__btn" data-speed-run>
+                    <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" aria-hidden="true">
+                      <path d="M9 1L2 9h6l-1 6 7-8H8l1-6z" />
+                    </svg>
+                    <span data-speed-label>Run speed test</span>
+                  </button>
+                  <p class="sr-only" role="status" data-speed-status></p>
+                </div>
+                <div class="why-card__content">
+                  <span class="why-card__tag">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M9 1L2 9h6l-1 6 7-8H8l1-6z" />
+                    </svg>
+                    Live test
+                  </span>
+                  <h3 class="why-card__title">High performance</h3>
+                  <p class="why-card__text">Lean pages on a global edge network. The test times a fresh request to our
+                    server, from wherever you are.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- 03 SEO Optimized: a real audit of this page's own HTML, and the search snippet
+                 its title and description make. No rankings are claimed or shown. -->
+            <article class="why-card" data-why-card>
+              <span class="why-card__num" aria-hidden="true">03</span>
+              <div class="why-card__inner">
+                <div class="why-card__stage seo" data-seo-audit>
+                  <div class="seo__snippet">
+                    <p class="seo__site"><i aria-hidden="true"></i><span data-seo-url>cobwebz.lk</span></p>
+                    <p class="seo__title" data-seo-title>&nbsp;</p>
+                    <p class="seo__desc" data-seo-desc>&nbsp;</p>
+                  </div>
+                  <ul class="seo__checks" data-seo-checks aria-label="SEO checks on this page"></ul>
+                </div>
+                <div class="why-card__content">
+                  <span class="why-card__tag">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="7" cy="7" r="5" />
+                      <path d="M11 11l4 4" />
+                    </svg>
+                    Live audit
+                  </span>
+                  <h3 class="why-card__title">SEO optimized</h3>
+                  <p class="why-card__text">Clean structure that search engines can read. This checklist inspects this
+                    page's own code, right now.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- 04 Secure & Reliable: reads the security headers this page was actually served
+                 with (a same-site HEAD request), while the radar sweeps -->
+            <article class="why-card why-card--wide" data-why-card>
+              <span class="why-card__num" aria-hidden="true">04</span>
+              <div class="why-card__inner">
+                <div class="why-card__content">
+                  <span class="why-card__tag">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="3" y="7" width="10" height="8" rx="1.5" />
+                      <path d="M5 7V4a3 3 0 0 1 6 0v3" />
+                    </svg>
+                    Live check
+                  </span>
+                  <h3 class="why-card__title">Secure &amp; reliable</h3>
+                  <p class="why-card__text">HTTPS everywhere, strict security headers and a content security policy
+                    that blocks third-party scripts. This reads the headers this page was served with.</p>
+                  <ul class="why-card__pills" aria-label="Highlights">
+                    <li>SSL / TLS</li>
+                    <li>Security headers</li>
+                    <li>Backups</li>
+                  </ul>
+                </div>
+
+                <div class="why-card__stage status" data-sec-check>
+                  <div class="status__radar" aria-hidden="true">
+                    <span class="status__sweep"></span>
+                    <svg viewBox="0 0 48 48" class="status__shield">
+                      <path d="M24 6 38 12v12c0 9-7 15-14 18-7-3-14-9-14-18V12Z" />
+                      <path d="m18 24 4 4 8-8" />
+                    </svg>
+                    <i class="status__blip" style="--x: 22%; --y: 30%; --d: 0.4s"></i>
+                    <i class="status__blip" style="--x: 74%; --y: 62%; --d: 1.6s"></i>
+                    <i class="status__blip" style="--x: 38%; --y: 78%; --d: 2.5s"></i>
+                  </div>
+                  <div class="status__board">
+                    <p class="status__head"><span class="status__dot" aria-hidden="true"></span><span
+                        data-sec-summary>Checking this page's security headers…</span> <span class="status__pct"
+                        data-sec-score></span></p>
+                    <ul class="sec__list" data-sec-list aria-label="Security checks on this page"></ul>
+                    <p class="sec__note" data-sec-note hidden></p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIVE LAB ============ -->
+    <!-- Four small, working experiments (lab.js). Each pauses while off screen, works with
+         touch, mouse and keyboard, and settles into a still version with reduced motion. -->
+    <section class="section lab" id="lab" aria-labelledby="lab-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>CobWebZ Live Lab</p>
+          <h2 id="lab-title" class="h-section" data-split-words>Explore what the web <span class="accent">can
+              become.</span></h2>
+          <p class="section-lead">Small, working experiments built with the same tools we use on client sites. No
+            plugins and no libraries: just the web platform.</p>
+        </header>
+
+        <div class="lab__grid">
+          <!-- EXP 01: a mini site in a frame you can resize; container queries reflow it -->
+          <article class="lab-card lab-card--full reveal" aria-labelledby="lab-fluid-title" data-lab="fluid">
+            <div class="lab-card__stage lab-fluid">
+              <div class="lab-fluid__frame" data-fluid-frame>
+                <div class="lab-fluid__viewport" aria-hidden="true">
+                  <div class="mini">
+                    <div class="mini__nav"><span class="mini__logo"></span><span class="mini__links"><i></i><i></i><i></i><i></i></span><span class="mini__burger"><i></i><i></i><i></i></span></div>
+                    <div class="mini__hero">
+                      <div class="mini__copy">
+                        <b class="mini__title">Your site, on every screen.</b>
+                        <span class="mini__line"></span><span class="mini__line mini__line--short"></span>
+                        <span class="mini__btn">Get started</span>
+                      </div>
+                      <span class="mini__media"></span>
+                    </div>
+                    <div class="mini__grid"><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+                <span class="lab-fluid__handle" aria-hidden="true" data-fluid-handle><i></i></span>
+              </div>
+            </div>
+            <div class="lab-card__body">
+              <p class="lab-card__id">EXP 01 · Responsive</p>
+              <h3 id="lab-fluid-title" class="lab-card__title">Layouts that adapt</h3>
+              <p class="lab-card__text">Drag the frame's edge, or use the slider. The layout reflows to fit its own
+                width: the menu folds away, columns stack and type scales, just as your site will on a phone, a tablet
+                or a wide screen.</p>
+              <div class="lab-control">
+                <label for="lab-fluid-range">Frame width</label>
+                <input type="range" id="lab-fluid-range" min="0" max="100" value="100" data-fluid-range>
+                <output for="lab-fluid-range" data-fluid-out>Full width</output>
+              </div>
+              <p class="lab-card__tech">CSS container queries · clamp() · Pointer Events</p>
+            </div>
+          </article>
+
+          <!-- EXP 02: a web wrapped round a sphere, projected from 3D on a 2D canvas -->
+          <article class="lab-card reveal" aria-labelledby="lab-globe-title" data-lab="globe">
+            <div class="lab-card__stage lab-globe" tabindex="0" role="img" data-globe-stage
+              aria-label="A 3D web wrapped round a sphere. Drag it, or press the arrow keys while it has focus, to turn it.">
+              <canvas data-globe></canvas>
+            </div>
+            <div class="lab-card__body">
+              <p class="lab-card__id">EXP 02 · 3D</p>
+              <h3 id="lab-globe-title" class="lab-card__title">A web in three dimensions</h3>
+              <p class="lab-card__text">Drag to spin it. Every thread is projected from 3D onto your screen, frame by
+                frame, without a 3D library.</p>
+              <p class="lab-card__tech">Canvas 2D · perspective maths · 0 dependencies</p>
+            </div>
+          </article>
+
+          <!-- EXP 03: one variable font file; each letter's weight follows the pointer -->
+          <article class="lab-card reveal" aria-labelledby="lab-type-title" data-lab="type">
+            <div class="lab-card__stage lab-type" data-type-stage>
+              <p class="lab-type__word" aria-hidden="true" data-type-word>Explore</p>
+              <p class="lab-type__axis" aria-hidden="true">wght <b data-type-readout>400</b></p>
+            </div>
+            <div class="lab-card__body">
+              <p class="lab-card__id">EXP 03 · Typography</p>
+              <h3 id="lab-type-title" class="lab-card__title">Type that responds</h3>
+              <p class="lab-card__text">Move across the word, or drag a finger over it. Each letter's weight follows
+                you, from 300 to 700, from a single variable font file.</p>
+              <div class="lab-control">
+                <label for="lab-type-range">Weight</label>
+                <input type="range" id="lab-type-range" min="300" max="700" step="10" value="400" data-type-range>
+                <output for="lab-type-range" data-type-out>400</output>
+              </div>
+              <p class="lab-card__tech">Variable fonts · font-variation-settings</p>
+            </div>
+          </article>
+
+          <!-- EXP 04: a node on a spring; pull it and the graph traces how it settles -->
+          <article class="lab-card lab-card--wide reveal" aria-labelledby="lab-spring-title" data-lab="spring">
+            <div class="lab-card__stage lab-spring">
+              <svg class="lab-spring__svg" viewBox="0 0 600 260" aria-hidden="true" data-spring-svg>
+                <path class="lab-spring__thread" data-spring-thread d="" />
+                <circle class="lab-spring__anchor" cx="300" cy="20" r="6" />
+                <g class="lab-spring__node" data-spring-node>
+                  <circle r="34" class="lab-spring__hit" />
+                  <circle r="20" class="lab-spring__ball" />
+                </g>
+              </svg>
+              <canvas class="lab-spring__plot" data-spring-plot aria-hidden="true"></canvas>
+            </div>
+            <div class="lab-card__body">
+              <p class="lab-card__id">EXP 04 · Motion</p>
+              <h3 id="lab-spring-title" class="lab-card__title">Motion with real physics</h3>
+              <p class="lab-card__text">Pull the node and let go. It springs back the way real objects do, and the
+                graph traces its path. Tune the spring and feel the difference.</p>
+              <div class="lab-control">
+                <label for="lab-stiff">Stiffness</label>
+                <input type="range" id="lab-stiff" min="40" max="400" value="170" data-spring-k>
+                <output for="lab-stiff" data-spring-k-out>170</output>
+              </div>
+              <div class="lab-control">
+                <label for="lab-damp">Damping</label>
+                <input type="range" id="lab-damp" min="2" max="40" value="9" data-spring-c>
+                <output for="lab-damp" data-spring-c-out>9</output>
+              </div>
+              <div class="lab-spring__foot">
+                <button type="button" class="btn btn--light" data-spring-flick>Flick it</button>
+                <p class="lab-spring__readout" data-spring-readout aria-live="polite">Settles in — s</p>
+              </div>
+              <p class="lab-card__tech">requestAnimationFrame · spring physics</p>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -592,12 +1111,14 @@
     </section>
 
     <!-- ============ PRICING ============ -->
-    <!-- To edit plans: change the name in data-package (and the matching data-select-package),
-         the price and the list items. The enquiry form's plan dropdown is built from these cards. -->
-    <section class="section" id="pricing" aria-labelledby="pricing-title">
+    <!-- To edit plans: change the name in data-package (and the matching data-select-package
+         and estimator value), the price and the list items. The enquiry form's plan dropdown is
+         built from these cards. -->
+    <section class="section pricing" id="pricing" aria-labelledby="pricing-title">
       <canvas class="particles" data-particles="pricing" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Pricing</p>
           <h2 id="pricing-title" class="h-section" data-split-words>Simple, <span class="accent">transparent</span>
             pricing.</h2>
           <p class="section-lead">Every project starts with a discovery call and a fixed, written quote. Prices below
@@ -619,11 +1140,11 @@
               <li>Functional contact form forwarding to email</li>
               <li>Basic SEO setup (meta titles, descriptions, alt tags)</li>
             </ul>
-            <a href="#addons" class="btn btn--light btn--lg btn--block" data-select-package="Static Deployments">Get
-              Started</a>
+            <a href="#estimate" class="btn btn--light btn--lg btn--block" data-select-package="Static Deployments">Get
+              started</a>
           </article>
 
-          <article class="card price reveal" data-package="Dynamic Applications">
+          <article class="card price price--featured reveal" data-package="Dynamic Applications">
             <h3 class="price__name">Dynamic Applications</h3>
             <p class="price__desc">Full-stack apps with a database, user accounts and an API.</p>
             <p class="price__price"><span class="price__currency">LKR</span> <span class="price__amount">100,000+</span>
@@ -637,8 +1158,8 @@
               <li>Docker-based staging &amp; production deployments</li>
               <li>Built-in security against SQL injection &amp; CSRF</li>
             </ul>
-            <a href="#addons" class="btn btn--primary btn--lg btn--block"
-              data-select-package="Dynamic Applications">Get Started</a>
+            <a href="#estimate" class="btn btn--primary btn--lg btn--block"
+              data-select-package="Dynamic Applications">Get started</a>
           </article>
 
           <article class="card price reveal" data-package="Enterprise Retainer">
@@ -652,331 +1173,169 @@
               <li>Monitoring, backups &amp; patch management</li>
               <li>Priority support</li>
             </ul>
-            <a href="#addons" class="btn btn--light btn--lg btn--block" data-select-package="Enterprise Retainer">Get
-              Started</a>
+            <a href="#estimate" class="btn btn--light btn--lg btn--block" data-select-package="Enterprise Retainer">Get
+              started</a>
           </article>
         </div>
 
-        <!-- Optional Enhancements: add-ons quoted on top of any package. Each group is a card;
-             each item is a name with its price underneath. script.js turns every item into a
-             tick box and reads the name and price straight from this text (a price ending in
-             "/ mo" counts as monthly), so edit them here and the estimate follows. An item with
-             data-addon-qty gets a number picker instead (price × quantity, up to data-addon-max).
-             No data-package here, so these stay out of the enquiry form's plan dropdown. -->
-        <div class="addons" id="addons" aria-labelledby="addons-title">
-          <header class="addons__head reveal">
-            <p class="addons__eyebrow">Add-ons</p>
-            <h3 id="addons-title" class="addons__title">Optional Enhancements</h3>
-            <p class="addons__lead" data-addons-lead>Bolt any of these onto a package. They're added to the same
-              written quote.</p>
+        <!-- ESTIMATOR. Every price is read from the text on this page by script.js (initEstimator),
+             so edit a price here and the totals follow:
+             - "LKR 25,000" is a one-time price; add "/ mo" for monthly; "Starting at" or "+" marks
+               a starting price, which makes the total a starting price too.
+             - Prices with no number ("Included", "Quoted", "Billed by …") add nothing to the total
+               but are listed in the breakdown and sent with the enquiry.
+             - data-pages on a website type is how many pages that package includes; each page
+               beyond that costs the price in [data-est-page-price].
+             - data-only on a hosting choice limits it to one website type. -->
+        <div class="estimator" id="estimate" aria-labelledby="estimator-title" data-estimator>
+          <header class="estimator__head reveal">
+            <p class="eyebrow">Estimator</p>
+            <h3 id="estimator-title" class="estimator__title">Build your estimate</h3>
+            <p class="estimator__lead">Choose what your project needs and see an itemised starting price in LKR. It's
+              an estimate, not a quote: your fixed, written quote follows a short discovery call.</p>
           </header>
 
-          <div class="addons__grid" data-stagger>
-            <section class="card addons__group reveal" aria-labelledby="addons-visual">
-              <h4 id="addons-visual" class="addons__name">Interactive &amp; Visual</h4>
-              <ul class="addons__list">
-                <li data-addon-qty data-addon-max="20">
-                  <span class="addons__item">Additional Pages</span>
-                  <span class="addons__price">LKR 5,000 / page</span>
-                </li>
-                <li>
-                  <span class="addons__item">Interactive 3D Models</span>
-                  <span class="addons__price">Starting at LKR 15,000</span>
-                </li>
-                <li>
-                  <span class="addons__item">Advanced Scroll Animations (GSAP)</span>
-                  <span class="addons__price">Starting at LKR 10,000</span>
-                </li>
-                <li>
-                  <span class="addons__item">High-Fidelity UI/UX Prototyping </span>
-                  <span class="addons__price">Starting at LKR 20,000</span>
-                </li>
-                <li>
-                  <span class="addons__item">System-Synced Dark Mode Toggle</span>
-                  <span class="addons__price">LKR 8,000</span>
-                </li>
-              </ul>
-            </section>
+          <div class="estimator__layout">
+            <div class="estimator__steps">
+              <fieldset class="est-step reveal">
+                <legend class="est-step__legend"><span class="est-step__num" aria-hidden="true">01</span>Website type
+                </legend>
+                <div class="est-choices est-choices--3">
+                  <label class="est-choice">
+                    <input type="radio" name="est-type" value="Static Deployments" data-est-type data-pages="5">
+                    <span class="est-choice__body">
+                      <span class="est-choice__name">Static website</span>
+                      <span class="est-choice__desc">Business sites, portfolios and landing pages. No server to look
+                        after.</span>
+                      <span class="est-choice__price">LKR 40,000+</span>
+                    </span>
+                  </label>
+                  <label class="est-choice">
+                    <input type="radio" name="est-type" value="Dynamic Applications" data-est-type data-pages="7">
+                    <span class="est-choice__body">
+                      <span class="est-choice__name">Web application</span>
+                      <span class="est-choice__desc">Stores, bookings, accounts and dashboards, with a database.</span>
+                      <span class="est-choice__price">LKR 100,000+</span>
+                    </span>
+                  </label>
+                  <label class="est-choice">
+                    <input type="radio" name="est-type" value="Enterprise Retainer" data-est-type>
+                    <span class="est-choice__body">
+                      <span class="est-choice__name">Enterprise retainer</span>
+                      <span class="est-choice__desc">Your infrastructure, security and support, handled monthly.</span>
+                      <span class="est-choice__price">Custom</span>
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
 
-            <section class="card addons__group reveal" aria-labelledby="addons-function">
-              <h4 id="addons-function" class="addons__name">Functionality &amp; Integrations</h4>
-              <ul class="addons__list">
-                <li>
-                  <span class="addons__item">Payment Gateway Setup </span>
-                  <span class="addons__price">Starting at LKR 25,000</span>
-                </li>
-                <li>
-                  <span class="addons__item">Multilingual Support </span>
-                  <span class="addons__price">Starting at LKR 20,000</span>
-                </li>
-                <li>
-                  <span class="addons__item">Third-Party API Hooks (CRM, WhatsApp)</span>
-                  <span class="addons__price">Starting at LKR 10,000</span>
-                </li>
-                <li>
-                  <span class="addons__item">Legacy Data Migration</span>
-                  <span class="addons__price">Starting at LKR 15,000</span>
-                </li>
-              </ul>
-            </section>
+              <fieldset class="est-step reveal" data-est-pages-step>
+                <legend class="est-step__legend"><span class="est-step__num" aria-hidden="true">02</span>Number of pages
+                </legend>
+                <div class="est-pages">
+                  <div class="qty qty--lg">
+                    <button type="button" class="qty__btn" data-est-pages-step="-1"
+                      aria-label="One page fewer">−</button>
+                    <input type="number" class="qty__input" id="est-pages" min="1" max="40" value="5" inputmode="numeric"
+                      aria-label="Number of pages" data-est-pages>
+                    <button type="button" class="qty__btn" data-est-pages-step="1" aria-label="One page more">+</button>
+                  </div>
+                  <p class="est-pages__note" data-est-pages-note>Static sites include up to 5 pages and web apps 5 to 7
+                    core layouts. Each extra page is <span data-est-page-price>LKR 5,000 / page</span>.</p>
+                </div>
+              </fieldset>
 
-            <section class="card addons__group reveal" aria-labelledby="addons-retainers">
-              <h4 id="addons-retainers" class="addons__name">Monthly Retainers &amp; Marketing</h4>
-              <ul class="addons__list">
-                <li>
-                  <span class="addons__item">Advanced Technical SEO &amp; Analytics Dashboard</span>
-                  <span class="addons__price">Starting at LKR 10,000 · one-time</span>
-                </li>
-                <li>
-                  <span class="addons__item">Basic Maintenance Plan (Updates, Backups, Uptime)</span>
-                  <span class="addons__price">LKR 5,000 / mo</span>
-                </li>
-                <li>
-                  <span class="addons__item">Content Management Retainer (4 updates/posts)</span>
-                  <span class="addons__price">LKR 5,000 / mo</span>
-                </li>
-              </ul>
-            </section>
-          </div>
+              <fieldset class="est-step reveal">
+                <legend class="est-step__legend"><span class="est-step__num" aria-hidden="true">03</span>Features
+                </legend>
+                <div class="est-options">
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Interactive 3D models</span><span class="est-option__price">Starting at LKR 15,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Advanced scroll animations (GSAP)</span><span class="est-option__price">Starting at LKR 10,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">High-fidelity UI/UX prototyping</span><span class="est-option__price">Starting at LKR 20,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">System-synced dark mode toggle</span><span class="est-option__price">LKR 8,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Advanced technical SEO &amp; analytics dashboard</span><span class="est-option__price">Starting at LKR 10,000</span></label>
+                </div>
+              </fieldset>
 
-          <!-- Running estimate for the chosen plan plus the ticked add-ons. script.js shows and
-               fills it; it stays pinned to the bottom of the screen while the add-ons scroll past. -->
-          <div class="card estimate" data-estimate hidden>
-            <div class="estimate__body" aria-live="polite">
-              <p class="addons__eyebrow">Your estimate</p>
-              <p class="estimate__figure"><b data-estimate-total>—</b> <span data-estimate-note></span></p>
-              <p class="estimate__plan" data-estimate-plan></p>
+              <fieldset class="est-step reveal">
+                <legend class="est-step__legend"><span class="est-step__num" aria-hidden="true">04</span>Integrations
+                </legend>
+                <div class="est-options">
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Payment gateway setup</span><span class="est-option__price">Starting at LKR 25,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Multilingual support (e.g. English, Sinhala, Tamil)</span><span class="est-option__price">Starting at LKR 20,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Third-party API hooks (CRM, WhatsApp)</span><span class="est-option__price">Starting at LKR 10,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Legacy data migration</span><span class="est-option__price">Starting at LKR 15,000</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="est-step reveal">
+                <legend class="est-step__legend"><span class="est-step__num" aria-hidden="true">05</span>Hosting
+                </legend>
+                <div class="est-options">
+                  <label class="est-option est-option--radio"><input type="radio" name="est-hosting" data-est-hosting data-only="Static Deployments"><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Free-tier hosting on Cloudflare or GitHub Pages</span><span class="est-option__price">Included with static sites</span></label>
+                  <label class="est-option est-option--radio"><input type="radio" name="est-hosting" data-est-hosting><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">A cloud server set up for you (VPS with Docker)</span><span class="est-option__price">Setup quoted · server billed by provider</span></label>
+                  <label class="est-option est-option--radio"><input type="radio" name="est-hosting" data-est-hosting><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">I already have hosting</span><span class="est-option__price">Included · we deploy to it</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-domain><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">I need a domain name (.lk, .com …)</span><span class="est-option__price">Billed by the registrar</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="est-step reveal">
+                <legend class="est-step__legend"><span class="est-step__num" aria-hidden="true">06</span>Maintenance
+                </legend>
+                <div class="est-options">
+                  <label class="est-option"><input type="checkbox" data-est-option data-est-care><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Basic maintenance plan (updates, backups, uptime)</span><span class="est-option__price">LKR 5,000 / mo</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Content management retainer (4 updates or posts)</span><span class="est-option__price">LKR 5,000 / mo</span></label>
+                </div>
+                <p class="est-step__hint" data-est-care-hint hidden>Monitoring, backups and patching are part of the
+                  Enterprise retainer.</p>
+              </fieldset>
             </div>
-            <a href="#contact" class="btn btn--primary estimate__btn" data-estimate-add>Add to enquiry <span
-                aria-hidden="true">→</span></a>
+
+            <!-- The running estimate: beside the steps on wide screens, a bar along the bottom of
+                 the screen on narrow ones (its breakdown opens from the Details button) -->
+            <aside class="estimator__summary" aria-labelledby="est-summary-title" data-estimate>
+              <div class="est-sum__top">
+                <div>
+                  <p id="est-summary-title" class="eyebrow">Your estimate</p>
+                  <p class="est-sum__total"><b data-estimate-total>—</b> <span data-estimate-note>Choose a website type
+                      to start</span></p>
+                  <p class="est-sum__monthly" data-estimate-monthly hidden></p>
+                </div>
+                <button type="button" class="est-sum__toggle" aria-expanded="false" aria-controls="est-details"
+                  data-estimate-toggle>Details</button>
+              </div>
+              <div class="est-sum__details" id="est-details" data-estimate-details>
+                <ul class="est-sum__lines" data-estimate-lines></ul>
+                <p class="est-sum__fine">A starting estimate, not a quote. Prices in LKR. Domain, hosting and
+                  third-party fees are billed by their providers.</p>
+              </div>
+              <div class="est-sum__actions">
+                <a href="#contact" class="btn btn--primary" data-estimate-add>Send with my enquiry <span
+                    aria-hidden="true">→</span></a>
+                <button type="button" class="btn btn--light" data-estimate-reset>Reset</button>
+              </div>
+              <p class="sr-only" role="status" data-estimate-status></p>
+            </aside>
           </div>
         </div>
 
         <p class="fine-print reveal">Prices in Sri Lankan rupees. Domain, hosting and third-party fees are billed by
-          their providers.</p>
+          their providers. Want a head start? <a href="products.html">Browse our templates</a>.</p>
       </div>
     </section>
 
-    <!-- ============ WHY CHOOSE US ============ -->
-    <!-- A dark panel that opens out as it scrolls in. initWhyChooseUs() draws a big web into
-         both [data-why-web] layers: the faint one is always there, the lit one only shows
-         around the pointer. Each card tilts toward the pointer and its edge catches the light. -->
-    <section class="section why-us" id="why-us" aria-labelledby="why-us-title">
+    <!-- ============ TESTIMONIALS ============ -->
+    <!-- Shows only real reviews: it stays hidden until CUBE_CONFIG.testimonials in script.js has
+         at least one entry. Never add a review a client didn't write and agree to share. -->
+    <section class="section testimonials" id="testimonials" aria-labelledby="testimonials-title" data-testimonials
+      hidden>
       <div class="container-cube">
-        <div class="why-us__panel" data-why data-dark data-reveal>
-          <div class="why-us__web" aria-hidden="true"><svg viewBox="-500 -500 1000 1000" data-why-web></svg></div>
-          <div class="why-us__web why-us__web--lit" aria-hidden="true"><svg viewBox="-500 -500 1000 1000"
-              data-why-web></svg></div>
-          <span class="why-us__glow" aria-hidden="true"></span>
-
-          <header class="why-us__head reveal">
-            <div>
-              <p class="why-us__eyebrow"><span class="badge__dot" aria-hidden="true"></span>Why CobWebZ</p>
-              <h2 id="why-us-title" class="why-us__title" data-split-words>The standard for modern <span
-                  class="accent">web excellence.</span></h2>
-            </div>
-            <p class="why-us__lead">We don't do shortcuts or generic templates. Every system is purpose-built for speed,
-              security, and measurable business growth.</p>
-          </header>
-
-          <!-- Numbers count from data-from to their written value when they come into view -->
-          <ul class="why-us__stats reveal" data-why-stats>
-            <li><b data-from="0">100</b><span>Lighthouse target</span></li>
-            <li><b data-from="5" data-decimals="1" data-suffix="s">0.8s</b><span>Load time target</span></li>
-            <li><b data-from="90" data-decimals="2" data-suffix="%">99.99%</b><span>Uptime target</span></li>
-            <li><b>24/7</b><span>Monitoring</span></li>
-          </ul>
-
-          <div class="why-us__grid reveal" data-stagger>
-            <!-- 01 Custom Crafted: a pen-tool curve. The pointer pulls the middle handle;
-                 left alone, it moves itself. The path data below the curve updates live. -->
-            <article class="why-card why-card--wide" data-why-card>
-              <span class="why-card__num" aria-hidden="true">01</span>
-              <div class="why-card__inner">
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M12 2l2 2-9 9-3 1 1-3 9-9z" />
-                    </svg>
-                    Bespoke Code
-                  </span>
-                  <h3 class="why-card__title">Custom Crafted</h3>
-                  <p class="why-card__text">100% tailored designs and development. No generic themes, no page builders,
-                    no bloat.</p>
-                  <ul class="why-card__pills" aria-label="Highlights">
-                    <li>Handcrafted architecture</li>
-                    <li>Zero bloat</li>
-                  </ul>
-                </div>
-
-                <div class="why-card__stage pen" aria-hidden="true" data-why-pen>
-                  <svg class="pen__svg" viewBox="0 0 600 220">
-                    <defs>
-                      <linearGradient id="why-pen-stroke" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0" stop-color="#8fa5c6" />
-                        <stop offset="1" stop-color="#d9a796" />
-                      </linearGradient>
-                      <linearGradient id="why-pen-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#8fa5c6" stop-opacity="0.22" />
-                        <stop offset="1" stop-color="#d9a796" stop-opacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <path class="pen__fill" d="" />
-                    <path class="pen__curve" pathLength="1" d="" />
-                    <path class="pen__handle" d="" />
-                    <circle class="pen__knob" r="8" data-pen-knob />
-                    <circle class="pen__knob" r="8" data-pen-knob />
-                    <rect class="pen__anchor" x="32" y="162" width="16" height="16" />
-                    <rect class="pen__anchor pen__anchor--on" x="292" y="102" width="16" height="16" />
-                    <rect class="pen__anchor" x="552" y="42" width="16" height="16" />
-                    <g class="pen__cursor" data-pen-cursor>
-                      <path d="M0 0l8 24 5-10 10-5z" />
-                      <rect x="22" y="22" width="150" height="32" rx="16" />
-                      <text x="97" y="43">Hand-drawn</text>
-                    </g>
-                  </svg>
-                  <code class="pen__code" data-pen-code>M40 170 C140 40, 220 60, 300 110</code>
-                </div>
-              </div>
-            </article>
-
-            <!-- 02 High Performance: the gauge runs once on view, and again from the button -->
-            <article class="why-card" data-why-card>
-              <span class="why-card__num" aria-hidden="true">02</span>
-              <div class="why-card__inner">
-                <div class="why-card__stage gauge" data-why-gauge>
-                  <div class="gauge__dial" aria-hidden="true">
-                    <svg viewBox="0 0 120 120">
-                      <defs>
-                        <linearGradient id="why-gauge-grad" x1="0" y1="0" x2="1" y2="1">
-                          <stop offset="0" stop-color="#8fa5c6" />
-                          <stop offset="1" stop-color="#d9a796" />
-                        </linearGradient>
-                      </defs>
-                      <circle class="gauge__track" cx="60" cy="60" r="50" pathLength="100" />
-                      <circle class="gauge__ring" cx="60" cy="60" r="50" pathLength="100" data-gauge-ring />
-                    </svg>
-                    <span class="gauge__score"><b data-gauge-score>100</b><small>/100</small></span>
-                  </div>
-                  <dl class="gauge__metrics" aria-hidden="true">
-                    <div><dt>TTFB</dt><dd data-gauge-metric="18" data-bad="640" data-unit="ms">18ms</dd></div>
-                    <div><dt>FCP</dt><dd data-gauge-metric="0.2" data-bad="3.4" data-unit="s" data-decimals="1">0.2s</dd></div>
-                    <div><dt>CLS</dt><dd data-gauge-metric="0" data-bad="0.31" data-decimals="2">0.00</dd></div>
-                  </dl>
-                  <button type="button" class="gauge__btn" data-gauge-run>
-                    <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" aria-hidden="true">
-                      <path d="M9 1L2 9h6l-1 6 7-8H8l1-6z" />
-                    </svg>
-                    <span data-gauge-label>Run benchmark</span>
-                  </button>
-                </div>
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M9 1L2 9h6l-1 6 7-8H8l1-6z" />
-                    </svg>
-                    Instant Load
-                  </span>
-                  <h3 class="why-card__title">High Performance</h3>
-                  <p class="why-card__text">Optimized architecture for instant loading and seamless browsing.</p>
-                </div>
-              </div>
-            </article>
-
-            <!-- 03 SEO Optimized: your result climbs from third to first (replays on hover) -->
-            <article class="why-card" data-why-card>
-              <span class="why-card__num" aria-hidden="true">03</span>
-              <div class="why-card__inner">
-                <div class="why-card__stage serp" aria-hidden="true" data-why-serp>
-                  <div class="serp__search">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round">
-                      <circle cx="7" cy="7" r="5" />
-                      <path d="M11 11l4 4" />
-                    </svg>
-                    <span class="serp__query">web development studio</span>
-                  </div>
-                  <ol class="serp__list">
-                    <li class="serp__row serp__row--a"><i></i><span><b></b><em></em></span></li>
-                    <li class="serp__row serp__row--b"><i></i><span><b></b><em></em></span></li>
-                    <li class="serp__row serp__row--you">
-                      <i></i>
-                      <span><b>Your Brand</b><em>yourbrand.com</em></span>
-                      <strong class="serp__rank">#1</strong>
-                    </li>
-                  </ol>
-                </div>
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <circle cx="7" cy="7" r="5" />
-                      <path d="M11 11l4 4" />
-                    </svg>
-                    Search Superiority
-                  </span>
-                  <h3 class="why-card__title">SEO Optimized</h3>
-                  <p class="why-card__text">Built with clean code structures that search engines love.</p>
-                </div>
-              </div>
-            </article>
-
-            <!-- 04 Secure & Reliable: a radar sweep and a status page (bars built by script.js) -->
-            <article class="why-card why-card--wide" data-why-card>
-              <span class="why-card__num" aria-hidden="true">04</span>
-              <div class="why-card__inner">
-                <div class="why-card__content">
-                  <span class="why-card__tag">
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <rect x="3" y="7" width="10" height="8" rx="1.5" />
-                      <path d="M5 7V4a3 3 0 0 1 6 0v3" />
-                    </svg>
-                    24/7 Defense
-                  </span>
-                  <h3 class="why-card__title">Secure &amp; Reliable</h3>
-                  <p class="why-card__text">Modern deployment practices to keep your site online and protected 24/7.</p>
-                  <ul class="why-card__pills" aria-label="Highlights">
-                    <li>SSL / TLS</li>
-                    <li>Edge CDN</li>
-                    <li>Daily backups</li>
-                  </ul>
-                </div>
-
-                <div class="why-card__stage status" aria-hidden="true">
-                  <div class="status__radar">
-                    <span class="status__sweep"></span>
-                    <svg viewBox="0 0 48 48" class="status__shield">
-                      <path d="M24 6 38 12v12c0 9-7 15-14 18-7-3-14-9-14-18V12Z" />
-                      <path d="m18 24 4 4 8-8" />
-                    </svg>
-                    <i class="status__blip" style="--x: 22%; --y: 30%; --d: 0.4s"></i>
-                    <i class="status__blip" style="--x: 74%; --y: 62%; --d: 1.6s"></i>
-                    <i class="status__blip" style="--x: 38%; --y: 78%; --d: 2.5s"></i>
-                  </div>
-                  <div class="status__board">
-                    <p class="status__head"><span class="status__dot"></span>All systems operational
-                      <span class="status__pct">99.99%</span></p>
-                    <div class="status__bars" data-why-bars></div>
-                    <svg viewBox="0 0 280 44" class="status__ecg">
-                      <path class="status__ecg-track" pathLength="100"
-                        d="M0 22H70L80 8 90 36 100 22H180L190 6 200 38 210 22H280" />
-                      <path class="status__ecg-pulse" pathLength="100"
-                        d="M0 22H70L80 8 90 36 100 22H180L190 6 200 38 210 22H280" />
-                    </svg>
-                    <ul class="status__regions">
-                      <li>Singapore</li>
-                      <li>Frankfurt</li>
-                      <li>New York</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
+        <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Clients</p>
+          <h2 id="testimonials-title" class="h-section" data-split-words>In their <span class="accent">words.</span>
+          </h2>
+        </header>
+        <div class="testimonials__grid" data-testimonials-list></div>
       </div>
     </section>
 
@@ -992,7 +1351,7 @@
         <header class="section-head reveal">
           <p class="badge"><span class="badge__dot" aria-hidden="true"></span>FAQ</p>
           <h2 id="faq-title" class="h-section" data-split-words>Common <span class="accent">questions.</span></h2>
-          <p class="section-lead">What businesses in Sri Lanka usually ask us before a website project.</p>
+          <p class="section-lead">What businesses usually ask us before a website project.</p>
         </header>
 
         <div class="faq__list reveal" data-stagger>
@@ -1002,8 +1361,8 @@
               <p>At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application
                 with a database, user accounts and an admin dashboard starts at LKR 100,000. Both are one-time prices.
                 Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts
-                with a discovery call and a fixed, written quote. See <a href="#pricing">Pricing</a> for what each
-                package includes.</p>
+                with a discovery call and a fixed, written quote. Use the <a href="#estimate">estimator under
+                  Pricing</a> for an itemised starting price.</p>
             </div>
           </details>
 
@@ -1021,8 +1380,10 @@
           <details class="faq__item" name="faq">
             <summary class="faq__q">Do you use templates or page builders?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>No. Every CobWebZ site is designed and coded for your business, with no generic themes, no page
-                builders and no bloat. Static sites are written in HTML, CSS and JavaScript, and web applications in
+              <p>We don't use page builders or third-party themes. Custom sites are designed and coded for your
+                business from scratch. If you'd like to launch sooner, you can start from one of <a
+                  href="products.html">our own hand-coded templates</a>, which we adapt to your brand, content and
+                photos. Either way, static sites are written in HTML, CSS and JavaScript, and web applications in
                 Python/Django or PHP, so pages stay light and load fast.</p>
             </div>
           </details>
@@ -1030,9 +1391,8 @@
           <details class="faq__item" name="faq">
             <summary class="faq__q">Will my website work on mobile phones?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>Yes. Every site we build is responsive, so the same pages fit phones, tablets and desktops. We aim for
-                a Lighthouse score of 100 (Google's speed and quality check) and a load time under a second, so pages
-                stay quick on mobile data.</p>
+              <p>Yes. Every site we build is responsive, so the same pages fit phones, tablets and desktops. We test on
+                all three and build to Google's Core Web Vitals thresholds, so pages stay quick on mobile data.</p>
             </div>
           </details>
 
@@ -1061,7 +1421,7 @@
             <div class="faq__a">
               <p>Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or
                 PHP with a MySQL database and an admin dashboard for your products. Online payments are added with
-                Payment Gateway Setup, from LKR 25,000. For an example, see the MUTE clothing store under
+                Payment Gateway Setup, from LKR 25,000. For an example, see the MUTE store concept under
                 <a href="#work">Our Work</a>.</p>
             </div>
           </details>
@@ -1070,8 +1430,8 @@
             <summary class="faq__q">Can you add online payments, WhatsApp or more than one language?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
               <p>Yes, as add-ons to any package: payment gateway setup from LKR 25,000, WhatsApp and CRM integrations
-                from LKR 10,000, and multilingual support (for example English, Sinhala and Tamil) from LKR 20,000. Tick
-                the ones you want under <a href="#addons">Optional Enhancements</a> and the estimate updates as you
+                from LKR 10,000, and multilingual support (for example English, Sinhala and Tamil) from LKR 20,000. Pick
+                the ones you want in the <a href="#estimate">estimator under Pricing</a> and the total updates as you
                 go.</p>
             </div>
           </details>
@@ -1100,8 +1460,8 @@
           <details class="faq__item" name="faq">
             <summary class="faq__q">Do you work with businesses outside Colombo?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>Yes. CobWebZ is based in Colombo and works with businesses across Sri Lanka. Send an enquiry from the
-                form below, or message us on WhatsApp, wherever you are.</p>
+              <p>Yes. CobWebZ is based in Colombo and works with businesses across Sri Lanka and abroad. Send an enquiry
+                from the form below, or message us on WhatsApp, wherever you are.</p>
             </div>
           </details>
         </div>
@@ -1120,88 +1480,154 @@
     </section>
 
     <!-- ============ CONTACT ============ -->
-    <section class="section" id="contact" aria-labelledby="contact-title">
+    <!-- Direct channels on the left (filled from CUBE_CONFIG; any left empty there disappears),
+         the enquiry form on the right. The reply-time line shows once contact.responseTime is
+         set in script.js. -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
       <canvas class="particles" data-particles="contact" aria-hidden="true"></canvas>
       <div class="container-cube">
         <header class="section-head reveal">
+          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>Contact</p>
           <h2 id="contact-title" class="h-section" data-split-words>Start a <span class="accent">project.</span></h2>
           <p class="section-lead">Tell us what you're building and we'll reply with questions or a proposal. No
             obligation.</p>
         </header>
 
-        <form class="card enquiry reveal" id="enquiry-form" novalidate data-enquiry-form>
-          <div class="enquiry__grid">
-            <div class="field">
-              <label for="f-name">Name <span aria-hidden="true">*</span></label>
-              <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100"
-                aria-describedby="f-name-err">
-              <p class="field__error" id="f-name-err"></p>
+        <div class="contact__layout">
+          <aside class="contact__aside reveal" aria-labelledby="contact-direct-title">
+            <h3 id="contact-direct-title" class="contact__h">Talk to us directly</h3>
+            <ul class="channels">
+              <li data-config-item="contact.whatsapp">
+                <a class="channel" href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">
+                  <span class="channel__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.3l1.3-4.2a8.5 8.5 0 1 1 15.7-4.5Z"/><path d="M9 9.2c.3 2.6 2.4 4.9 5.6 5.6"/></svg></span>
+                  <span class="channel__text"><span class="channel__label">WhatsApp</span><span class="channel__value" data-config-value="contact.phone"></span></span>
+                  <span class="channel__arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+              <li data-config-item="contact.email">
+                <a class="channel" href="#" data-config-link="contact.email">
+                  <span class="channel__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></svg></span>
+                  <span class="channel__text"><span class="channel__label">Email</span><span class="channel__value" data-config-value="contact.email"></span></span>
+                </a>
+                <button type="button" class="channel__copy" data-copy="contact.email" aria-label="Copy email address">Copy</button>
+              </li>
+              <li data-config-item="contact.phone">
+                <a class="channel" href="#" data-config-link="contact.phone">
+                  <span class="channel__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3.5h3l1.6 4.2-2 1.3a11 11 0 0 0 7.4 7.4l1.3-2 4.2 1.6v3a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 3 5.7a2 2 0 0 1 2-2.2Z"/></svg></span>
+                  <span class="channel__text"><span class="channel__label">Phone</span><span class="channel__value" data-config-value="contact.phone"></span></span>
+                </a>
+              </li>
+            </ul>
+            <p class="contact__meta" data-config-item="contact.responseTime"><span class="contact__live" aria-hidden="true"></span>We reply <span data-config-text="contact.responseTime"></span>.</p>
+            <p class="contact__meta"><span class="contact__pin" aria-hidden="true"></span>Based in Colombo, Sri Lanka.
+              Working with clients at home and abroad.</p>
+
+            <div class="contact__social" data-config-block>
+              <p class="contact__h contact__h--small">Follow the studio</p>
+              <ul>
+                <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a></li>
+                <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a></li>
+                <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
+                <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></li>
+              </ul>
             </div>
-            <div class="field">
-              <label for="f-email">Email <span aria-hidden="true">*</span></label>
-              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="150"
-                aria-describedby="f-email-err">
-              <p class="field__error" id="f-email-err"></p>
+
+            <div class="contact__next">
+              <p class="contact__h contact__h--small">What happens next</p>
+              <ol>
+                <li>We read your message, properly.</li>
+                <li>We reply with questions or a proposal.</li>
+                <li>A short discovery call, then a fixed, written quote.</li>
+              </ol>
             </div>
-            <div class="field">
-              <label for="f-business">Company <span class="field__opt">Optional</span></label>
-              <input id="f-business" name="business" type="text" autocomplete="organization" maxlength="120">
-            </div>
-            <div class="field">
-              <label for="f-package">Plan <span class="field__opt">Optional</span></label>
-              <select id="f-package" name="package" data-package-select>
-                <option value="">Not sure yet</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="f-budget">Budget (LKR) <span class="field__opt">Optional</span></label>
-              <select id="f-budget" name="budget">
-                <option value="">Prefer not to say</option>
-                <option>Under 25,000</option>
-                <option>25,000 – 50,000</option>
-                <option>50,000 – 100,000</option>
-                <option>100,000 – 200,000</option>
-                <option>200,000+</option>
-              </select>
-            </div>
-            <!-- The plan above plus the add-ons ticked under Pricing, filled in by script.js
-                 and sent with the enquiry. Hidden until a plan or add-on is chosen. -->
-            <div class="field field--full" data-estimate-field hidden>
-              <p class="field__label" id="f-estimate-label">Your estimate</p>
-              <div class="estimate-box" role="group" aria-labelledby="f-estimate-label">
-                <ul class="estimate-box__lines" data-estimate-lines></ul>
-                <p class="estimate-box__total"><span>Estimated total</span> <b data-estimate-sum></b></p>
+          </aside>
+
+          <form class="card enquiry reveal" id="enquiry-form" novalidate data-enquiry-form>
+            <!-- A template chosen on products.html (?template=…) shows here and is sent along -->
+            <p class="enquiry__chip" data-template-chip hidden><span>Template:</span> <b data-template-name></b>
+              <button type="button" class="enquiry__chip-x" data-template-clear aria-label="Remove template">×</button>
+            </p>
+            <input type="hidden" name="template" value="" data-template-input>
+            <div class="enquiry__grid">
+              <div class="field">
+                <label for="f-name">Name <span aria-hidden="true">*</span></label>
+                <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100"
+                  aria-describedby="f-name-err">
+                <p class="field__error" id="f-name-err"></p>
               </div>
-              <p class="field__hint">A starting estimate, not a quote. <a href="#addons" class="estimate-box__edit">Change
-                  add-ons</a></p>
+              <div class="field">
+                <label for="f-email">Email <span aria-hidden="true">*</span></label>
+                <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="150"
+                  aria-describedby="f-email-err">
+                <p class="field__error" id="f-email-err"></p>
+              </div>
+              <div class="field">
+                <label for="f-business">Company <span class="field__opt">Optional</span></label>
+                <input id="f-business" name="business" type="text" autocomplete="organization" maxlength="120">
+              </div>
+              <div class="field">
+                <label for="f-package">Plan <span class="field__opt">Optional</span></label>
+                <select id="f-package" name="package" data-package-select>
+                  <option value="">Not sure yet</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-budget">Budget (LKR) <span class="field__opt">Optional</span></label>
+                <select id="f-budget" name="budget">
+                  <option value="">Prefer not to say</option>
+                  <option>Under 25,000</option>
+                  <option>25,000 – 50,000</option>
+                  <option>50,000 – 100,000</option>
+                  <option>100,000 – 200,000</option>
+                  <option>200,000+</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-timeline">When do you need it? <span class="field__opt">Optional</span></label>
+                <select id="f-timeline" name="timeline">
+                  <option value="">No fixed date</option>
+                  <option>As soon as possible</option>
+                  <option>Within a month</option>
+                  <option>In 1–3 months</option>
+                  <option>Later this year</option>
+                </select>
+              </div>
+              <!-- The estimate from Pricing, filled in by script.js and sent with the enquiry.
+                   Hidden until a website type or an option is chosen. -->
+              <div class="field field--full" data-estimate-field hidden>
+                <p class="field__label" id="f-estimate-label">Your estimate</p>
+                <div class="estimate-box" role="group" aria-labelledby="f-estimate-label">
+                  <ul class="estimate-box__lines" data-estimate-form-lines></ul>
+                  <p class="estimate-box__total"><span>Estimated total</span> <b data-estimate-sum></b></p>
+                </div>
+                <p class="field__hint">A starting estimate, not a quote. <a href="#estimate"
+                    class="estimate-box__edit">Change it</a></p>
+              </div>
+              <div class="field field--full">
+                <label for="f-message">Project description <span class="field__opt">Optional</span></label>
+                <textarea id="f-message" name="message" rows="5" maxlength="3000" aria-describedby="f-message-hint"
+                  placeholder="What are you building, what should it do, and do you have a deadline?"></textarea>
+                <p class="field__hint" id="f-message-hint"><span data-char-count>0</span> / 3000</p>
+              </div>
+              <!-- Spam trap: real visitors never see or fill this -->
+              <div class="hp" aria-hidden="true">
+                <label for="f-website">Leave this empty</label>
+                <input id="f-website" name="botcheck" type="text" tabindex="-1" autocomplete="off">
+              </div>
             </div>
-            <div class="field field--full">
-              <label for="f-message">Project description <span class="field__opt">Optional</span></label>
-              <textarea id="f-message" name="message" rows="5" maxlength="3000" aria-describedby="f-message-hint"
-                placeholder="What are you building, what should it do, and do you have a deadline?"></textarea>
-              <p class="field__hint" id="f-message-hint"><span data-char-count>0</span> / 3000</p>
-            </div>
-            <!-- Spam trap: real visitors never see or fill this -->
-            <div class="hp" aria-hidden="true">
-              <label for="f-website">Leave this empty</label>
-              <input id="f-website" name="botcheck" type="text" tabindex="-1" autocomplete="off">
-            </div>
-          </div>
 
-          <div class="enquiry__footer">
-            <p class="field__hint"><span aria-hidden="true">*</span> Required fields</p>
-            <button type="submit" class="btn btn--primary btn--lg" data-submit>
-              <span data-submit-label>Send enquiry</span> <span aria-hidden="true">→</span>
-            </button>
-          </div>
-          <div class="form-status" role="status" aria-live="polite" tabindex="-1" hidden data-form-status></div>
-        </form>
-
-        <ul class="contact-list reveal" data-contact-list>
-          <li data-config-item="contact.email"><span>Email</span><a href="#" data-config-link="contact.email"></a></li>
-          <li data-config-item="contact.whatsapp"><span>WhatsApp</span><a href="#" data-config-link="contact.whatsapp"
-              target="_blank" rel="noopener"></a></li>
-        </ul>
+            <div class="enquiry__footer">
+              <p class="field__hint"><span aria-hidden="true">*</span> Required fields</p>
+              <button type="submit" class="btn btn--primary btn--lg btn--sheen" data-submit>
+                <span data-submit-label>Send enquiry</span> <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <p class="enquiry__privacy" data-privacy-note>We use your details only to reply to this enquiry. Pressing
+              send opens WhatsApp with your message filled in; nothing is sent until you press Send there, and this
+              website stores nothing. <a href="privacy.html">Privacy notice</a></p>
+            <div class="form-status" role="status" aria-live="polite" tabindex="-1" hidden data-form-status></div>
+          </form>
+        </div>
       </div>
     </section>
   </main>
@@ -1215,20 +1641,29 @@
         <a href="#overview" class="footer__logo" aria-label="CobWebZ — back to top">
           <img src="assets/logo.png" alt="" width="104" height="83">
         </a>
-        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka.</p>
-        <a href="#contact" class="btn btn--primary">Start a Project</a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working
+          with clients at home and abroad.</p>
+        <a href="#contact" class="btn btn--primary">Start a project</a>
       </div>
 
       <nav class="footer__nav" aria-label="Footer">
         <div class="footer__col">
-          <h2 class="footer__h">Navigate</h2>
+          <h2 class="footer__h">Studio</h2>
           <ul>
-            <li><a href="#overview">Overview</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#work">Our Work</a></li>
-            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#lab">Live Lab</a></li>
             <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="work.html">Case studies</a></li>
+            <li><a href="products.html">Templates</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="portal.html">Client portal</a></li>
           </ul>
         </div>
         <!-- Contact and Social columns show only when their values are set in script.js -->
@@ -1237,6 +1672,8 @@
           <ul>
             <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
             <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank"
+                rel="noopener">WhatsApp</a></li>
           </ul>
         </div>
         <div class="footer__col" data-config-block>
@@ -1244,6 +1681,8 @@
           <ul>
             <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank"
                 rel="noopener">GitHub</a></li>
+            <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank"
+                rel="noopener">LinkedIn</a></li>
             <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank"
                 rel="noopener">Instagram</a></li>
             <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank"
@@ -1252,12 +1691,18 @@
         </div>
       </nav>
 
-      <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="privacy.html" class="footer__legal">Privacy</a>
+        <a href="#overview" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
     </div>
     <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
   </footer>
 
+  <script src="originkit.js"></script>
   <script src="script.js"></script>
+  <script src="lab.js" defer></script>
 </body>
 
 </html>

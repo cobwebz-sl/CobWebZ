@@ -15,6 +15,12 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Images rarely change, but keep their names when they do, so they're kept for a day and
+# quietly refreshed in the background for a week after that. (CSS, JS and pages keep the
+# host's default: checked on every visit, so an update shows straight away.)
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
 # Duplicate copies: the Worker's own workers.dev and preview addresses would serve this same
 # site. Keep them switched off (Worker → Settings → Domains & Routes) so only www.cobwebz.lk
 # is ever crawled.

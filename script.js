@@ -12,8 +12,30 @@ const CUBE_CONFIG = {
   contact: {
     email: 'cobwebzsl@gmail.com',
     phone: '+94 71 907 0320', // shown as typed; must match the Google Business Profile and the structured data in index.html
-    whatsapp: '94719070320' // 071 907 0320, international format, digits only. Enquiries go here.
+    whatsapp: '94719070320', // 071 907 0320, international format, digits only. Enquiries go here.
+    // How quickly you reply, finishing the sentence "We reply …", e.g. 'within one working day'.
+    // Shown in the contact section once set. Only promise what you can keep.
+    responseTime: ''
   },
+
+  /* The founder card in "The minds behind the web". Hidden until a name is set, so nobody is
+     invented. photo: a path such as 'assets/founder.webp' (square-ish, about 800px), or leave
+     it empty for a monogram. link: a full profile URL (LinkedIn, GitHub…) and its label. */
+  founder: {
+    name: '',
+    role: 'Founder & lead developer',
+    bio: '',
+    photo: '',
+    link: '',
+    linkLabel: 'LinkedIn'
+  },
+
+  /* Client testimonials. The section stays hidden while this list is empty. Only add words a
+     client actually wrote and agreed to share, for example:
+       { quote: 'They rebuilt our site in…', name: 'Nimal Perera', role: 'Owner',
+         company: 'Example Café', source: 'Google review', url: 'https://…' }
+     role, company, source and url are optional. */
+  testimonials: [],
 
   social: {
     instagram: 'https://www.instagram.com/cobwebz_sl/', // full URLs only
@@ -56,25 +78,32 @@ const CUBE_CONFIG = {
     return /^https?:\/\//i.test(value) ? value : ''; // social profiles: web addresses only
   }
 
+  // How a value reads on the page: the WhatsApp number is shown like the phone number when
+  // they're the same line, otherwise as +digits
+  function displayFor(path, value) {
+    if (path !== 'contact.whatsapp') return value;
+    const digits = value.replace(/\D/g, '');
+    const phone = getConfig('contact.phone');
+    return phone && phone.replace(/\D/g, '') === digits ? phone : `+${digits}`;
+  }
+
+  // An item holding a link shows when its value makes a working address; an item holding
+  // only text (e.g. the reply time) shows when its value is set
   function applyConfig() {
     $$('[data-config-item]').forEach((item) => {
       const path = item.dataset.configItem;
       const value = getConfig(path).trim();
-      const href = value && hrefFor(path, value);
-      item.hidden = !href;
+      const links = $$(`[data-config-link="${path}"]`, item);
+      const href = value && links.length ? hrefFor(path, value) : '';
+      item.hidden = links.length ? !href : !value;
       if (!href) return;
-      $$(`[data-config-link="${path}"]`, item).forEach((link) => {
+      links.forEach((link) => {
         link.href = href;
-        if (!link.textContent.trim()) {
-          link.textContent = path === 'contact.whatsapp' ? `+${value.replace(/\D/g, '')}` : value;
-        }
+        if (!link.textContent.trim()) link.textContent = displayFor(path, value);
       });
     });
 
-    const contactList = $('[data-contact-list]');
-    if (contactList) contactList.hidden = !$$('[data-config-item]', contactList).some((li) => !li.hidden);
-
-    // Footer columns built from config values hide when none of their values are set
+    // Columns and groups built from config values hide when none of their values are set
     $$('[data-config-block]').forEach((block) => {
       block.hidden = !$$('[data-config-item]', block).some((li) => !li.hidden);
     });
@@ -83,17 +112,64 @@ const CUBE_CONFIG = {
       const value = getConfig(el.dataset.configText);
       if (value) el.textContent = value;
     });
+    $$('[data-config-value]').forEach((el) => {
+      const path = el.dataset.configValue;
+      const value = getConfig(path).trim();
+      if (value) el.textContent = displayFor(path, value);
+    });
 
     $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
+  }
+
+  /* ---------- Copy buttons: [data-copy="contact.email"] copies that config value ---------- */
+  function initCopy() {
+    $$('[data-copy]').forEach((btn) => {
+      const value = getConfig(btn.dataset.copy).trim();
+      if (!value || !navigator.clipboard) { btn.hidden = true; return; }
+      const label = btn.textContent;
+      let timer = 0;
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(value);
+          btn.textContent = 'Copied';
+          btn.classList.add('is-done');
+        } catch (e) {
+          btn.textContent = 'Not copied';
+        }
+        clearTimeout(timer);
+        timer = setTimeout(() => { btn.textContent = label; btn.classList.remove('is-done'); }, 1800);
+      });
+    });
   }
 
   /* ---------- Active nav link ---------- */
   function initActiveNav() {
     const links = $$('[data-nav]');
     const linked = new Set(links.map((a) => (a.getAttribute('href') || '').split('#')[1]));
-    // Only sections a link points to, so passing one without a link keeps the last one lit
-    const sections = $$('main > section[id]').filter((s) => linked.has(s.id));
+    // Only sections a link points to, so passing one without a link keeps the last one lit;
+    // plus the hero, so being back at the top lights none
+    const sections = $$('main > section[id]').filter((s) => linked.has(s.id) || s.id === 'overview');
     if (!links.length || !sections.length) return;
+
+    // The header's dot slides under the lit link (wide screens, where the links show)
+    const nav = $('.site-nav');
+    const dot = $('[data-nav-dot]');
+    let placed = false;
+    // Measured from the link's <li>: its offsets are relative to the nav and ignore the slide
+    // and blur the links get while folded (which would otherwise make each <li> the link's
+    // offset parent and throw the numbers off)
+    const placeDot = () => {
+      if (!nav || !dot) return;
+      const link = $('.site-nav__link.is-active', nav);
+      nav.classList.toggle('has-active', Boolean(link));
+      const item = link && link.parentElement;
+      if (!item || !item.offsetWidth) return;
+      if (!placed) nav.classList.add('is-placing'); // first time: appear in place, no slide
+      dot.style.setProperty('--x', `${(item.offsetLeft + item.offsetWidth / 2 - 2).toFixed(1)}px`);
+      dot.style.setProperty('--y', `${(item.offsetTop + item.offsetHeight + 4).toFixed(1)}px`);
+      if (!placed) requestAnimationFrame(() => requestAnimationFrame(() => nav.classList.remove('is-placing')));
+      placed = true;
+    };
 
     const setActive = (id) => {
       links.forEach((a) => {
@@ -104,7 +180,10 @@ const CUBE_CONFIG = {
         if (active) a.setAttribute('aria-current', 'true');
         else a.removeAttribute('aria-current');
       });
+      placeDot();
     };
+    window.addEventListener('resize', placeDot);
+    document.fonts?.ready.then(placeDot); // link widths change once Geist has loaded
 
     setActive('overview');
 
@@ -161,12 +240,38 @@ const CUBE_CONFIG = {
     set(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* not remembered */ } }
   };
 
+  // Text from a visitor, made safe to pass on: control characters and the invisible
+  // direction-override marks that can disguise text are removed, and the length is capped.
+  // (It's only ever written into the page with textContent, never as HTML.)
+  const clean = (value, max = 200) => String(value ?? '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F​-‏‪-‮⁦-⁩]/g, '')
+    .trim()
+    .slice(0, max);
+
+  // Runs fn once, the first time el is at least `threshold` on screen
+  function whenSeen(el, fn, threshold = 0.4) {
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    const seen = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      seen.disconnect();
+      fn();
+    }, { threshold });
+    seen.observe(el);
+  }
+
   // Two toggles: the sun/moon button in the header, and the switch in the menu that stands
-  // in for it on phones
+  // in for it on phones. Until a visitor picks one, the theme follows their device's
+  // light/dark setting, live (the inline script in <head> does the same before first paint).
   function initTheme() {
     const toggles = $$('[data-theme-toggle]');
-    if (!toggles.length) return;
     const meta = $('meta[name="theme-color"]');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const preferred = () => storage.get('theme') || (systemDark.matches ? 'dark' : 'light');
+    if (!toggles.length) {
+      document.documentElement.dataset.theme = preferred();
+      return;
+    }
 
     function apply(t) {
       document.documentElement.dataset.theme = t;
@@ -182,13 +287,69 @@ const CUBE_CONFIG = {
       if (meta) meta.setAttribute('content', t === 'dark' ? '#0c0d10' : '#f0f1f3'); // browser UI colour
     }
 
-    apply(storage.get('theme') === 'dark' ? 'dark' : 'light');
+    apply(preferred());
 
     toggles.forEach((toggle) => toggle.addEventListener('click', () => {
       const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
       apply(next);
       storage.set('theme', next);
     }));
+    systemDark.addEventListener('change', () => { if (!storage.get('theme')) apply(preferred()); });
+  }
+
+  /* ---------- Hero: the name, drawn as rising letters that lean toward the pointer ---------- */
+  // The heading's own "CobWebZ" text stays put (transparent) so it's read and indexed once.
+  // The visible letters are an aria-hidden layer whose text comes from CSS (data-c), so it
+  // isn't part of the page's text at all. With a fine pointer, letters near it lift a little
+  // (translate only, so nothing around them moves).
+  function initHeroBrand() {
+    const brand = $('[data-hero-brand]');
+    if (!brand) return;
+    const text = brand.textContent.trim();
+    const fx = document.createElement('span');
+    fx.className = 'hero__brand-fx';
+    fx.setAttribute('aria-hidden', 'true');
+    const chars = [...text].map((c, i) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.dataset.c = c;
+      span.style.setProperty('--i', i);
+      fx.append(span);
+      return span;
+    });
+    brand.append(fx);
+    brand.classList.add('has-fx');
+
+    const hero = brand.closest('.hero');
+    if (!hero || !finePointer.matches) return;
+    // Letter centres inside the layer, from offsets (which ignore the letters' own transforms,
+    // so the lift can't feed back into where they seem to be)
+    let centres = null;
+    let frame = 0;
+    let px = 0;
+    let py = 0;
+    const lean = () => {
+      frame = 0;
+      centres ||= chars.map((c) => [c.offsetLeft + c.offsetWidth / 2, c.offsetTop + c.offsetHeight / 2]);
+      const r = fx.getBoundingClientRect();
+      chars.forEach((c, i) => {
+        const dx = px - (r.left + centres[i][0]);
+        const dy = py - (r.top + centres[i][1]);
+        const near = Math.max(0, 1 - Math.hypot(dx, dy * 1.4) / 260);
+        c.style.setProperty('--lift', `${(-near * 10).toFixed(2)}px`);
+        c.classList.toggle('is-near', near > 0.45);
+      });
+    };
+    const rest = () => chars.forEach((c) => { c.style.removeProperty('--lift'); c.classList.remove('is-near'); });
+    hero.addEventListener('pointermove', (e) => {
+      if (reduceMotion.matches || !document.body.classList.contains('is-loaded')) return;
+      px = e.clientX;
+      py = e.clientY;
+      if (!frame) frame = requestAnimationFrame(lean);
+    });
+    hero.addEventListener('pointerleave', rest);
+    window.addEventListener('resize', () => { centres = null; });
+    document.fonts?.ready.then(() => { centres = null; });
   }
 
   /* ---------- Menu (dropdown under the Menu pill) ---------- */
@@ -405,7 +566,13 @@ const CUBE_CONFIG = {
       });
     }
 
-    function tick() {
+    // The springs were tuned per 60 Hz frame. Stepping them at exactly that rate, however fast
+    // the screen refreshes, keeps the motion the same on 60, 120 and 144 Hz displays.
+    const STEP = 1000 / 60;
+    let lastTime = 0;
+    let carry = 0;
+    let ta = 0;
+    function step() {
       if (drag) {
         const px = x;
         const py = y;
@@ -422,15 +589,29 @@ const CUBE_CONFIG = {
         y += vy;
       }
       // Leans into the direction it's being pulled, and swings with its momentum
-      const ta = Math.max(-20, Math.min(20, x * 0.18 + vx * 1.6));
+      ta = Math.max(-20, Math.min(20, x * 0.18 + vx * 1.6));
       angle += (ta - angle) * 0.2;
+      return swing();
+    }
+    function tick(now) {
+      carry += lastTime ? Math.min(100, now - lastTime) : STEP;
+      lastTime = now;
+      let ringing = false;
+      let steps = 0;
+      while (carry >= STEP && steps < 6) {
+        ringing = step() || ringing;
+        carry -= STEP;
+        steps++;
+      }
+      if (steps === 6) carry = 0; // after a stall, don't try to catch up
       root.classList.toggle('is-scuttling', Math.hypot(vx, vy) > 0.5);
       render();
-      const ringing = swing();
+      drawThreads();
 
-      const settled = !drag && !ringing && Math.abs(tx - x) + Math.abs(ty - y) < 0.05 &&
+      const settled = steps && !drag && !ringing && Math.abs(tx - x) + Math.abs(ty - y) < 0.05 &&
         Math.abs(vx) + Math.abs(vy) < 0.05 && Math.abs(ta - angle) < 0.05;
       frame = settled ? 0 : requestAnimationFrame(tick);
+      if (!frame) lastTime = carry = 0;
     }
     const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
 
@@ -444,6 +625,11 @@ const CUBE_CONFIG = {
         t.v = (t.v + (rest - t.a) * 0.3) * damping;
         t.a += t.v;
         if (Math.abs(rest - t.a) + Math.abs(t.v) < 0.05) { t.a = rest; t.v = 0; } else ringing = true;
+      });
+      return ringing;
+    }
+    function drawThreads() {
+      threads.forEach((t) => {
         const a = Math.abs(t.a) < 0.05 ? 0 : Math.round(t.a * 10) / 10;
         if (a === t.shown) return;
         t.shown = a;
@@ -452,7 +638,6 @@ const CUBE_CONFIG = {
         const qy = (t.ay + t.by) / 2 + t.ny * a * 2;
         t.el.setAttribute('d', a ? `${t.head}Q${qx.toFixed(1)} ${qy.toFixed(1)} ${t.tail}` : t.d);
       });
-      return ringing;
     }
 
     // Strikes thread t at w (0 at A … 1 at B) with a kick along its normal
@@ -1176,8 +1361,11 @@ const CUBE_CONFIG = {
         copy.setAttribute('aria-hidden', 'true');
         r.track.append(copy);
       });
+      // One measurement of a single set says how many copies fill the screen (measuring
+      // after every copy would force a fresh layout of the whole page each time)
       const minWidth = Math.max(window.innerWidth, screen.width || 0);
-      for (let n = 0; n < 8 && r.track.scrollWidth < minWidth; n++) append(items);
+      const copies = Math.min(8, Math.max(0, Math.ceil(minWidth / (r.track.scrollWidth || minWidth)) - 1));
+      for (let n = 0; n < copies; n++) append(items);
       append([...r.track.children]);
       new ResizeObserver(() => { r.loop = r.track.scrollWidth / 2; }).observe(r.track);
       r.row.addEventListener('pointerenter', () => { r.hovered = true; });
@@ -1251,7 +1439,8 @@ const CUBE_CONFIG = {
 
     targets.forEach((el) => {
       el.addEventListener('pointerenter', (e) => {
-        badge.textContent = `${el.dataset.cursor} ↗`;
+        // ↗ for a site that opens in a new tab, → for a page on this site
+        badge.textContent = `${el.dataset.cursor} ${el.target === '_blank' ? '↗' : '→'}`;
         if (!shown) { // appear under the pointer rather than flying in from the last spot
           x = tx = e.clientX;
           y = ty = e.clientY;
@@ -1605,7 +1794,9 @@ const CUBE_CONFIG = {
       });
       const width = x1 - x0;
       const height = y1 - y0;
-      Object.assign(canvas.style, { left: `${x0}px`, top: `${y0}px`, width: `${width}px`, height: `${height}px` });
+      // Placed with a transform, not left/top: the box's corner never moves, so resizing or
+      // re-placing a canvas that's already on screen never counts as a layout shift
+      Object.assign(canvas.style, { left: '0px', top: '0px', width: `${width}px`, height: `${height}px`, transform: `translate(${x0}px, ${y0}px)` });
       canvas.width = width;
       canvas.height = height;
       scene.image = scene.ctx.createImageData(width, height);
@@ -1709,7 +1900,7 @@ const CUBE_CONFIG = {
     reduceMotion.addEventListener('change', start);
   }
 
-  /* ---------- Enquiry selections (plan) ---------- */
+  /* ---------- Enquiry selections: the plan dropdown ---------- */
   const form = $('[data-enquiry-form]');
   const packageSelect = $('[data-package-select]');
 
@@ -1721,145 +1912,111 @@ const CUBE_CONFIG = {
     });
   }
 
-  function flash(select) {
-    const field = select.closest('.field');
-    field.classList.remove('is-flash');
-    void field.offsetWidth;
-    field.classList.add('is-flash');
-    setTimeout(() => field.classList.remove('is-flash'), 1300);
+  function flash(el) {
+    const target = el.closest('.field') || el;
+    target.classList.remove('is-flash');
+    void target.offsetWidth;
+    target.classList.add('is-flash');
+    setTimeout(() => target.classList.remove('is-flash'), 1300);
   }
 
-  function setSelect(select, value) {
+  function setSelect(select, value, { quiet = false } = {}) {
     if (!select || ![...select.options].some((o) => o.value === value)) return false;
+    if (select.value === value) return true;
     select.value = value;
     select.dispatchEvent(new Event('change', { bubbles: true }));
-    flash(select);
+    if (!quiet) flash(select);
     return true;
   }
 
   function syncSelectedCards() {
-    $$('[data-package]').forEach((c) => c.classList.toggle('is-selected', c.dataset.package === packageSelect.value));
+    const value = packageSelect ? packageSelect.value : '';
+    $$('[data-package]').forEach((c) => c.classList.toggle('is-selected', c.dataset.package === value));
   }
 
-  /* ---------- Add-ons and the running estimate ---------- */
-  // Plan and add-on prices are read from the text on the page, so the HTML stays the only
-  // place to edit them. The plan lives in the form's plan dropdown; the add-ons are tick
-  // boxes added to each Optional Enhancements item. An item marked data-addon-qty (e.g.
-  // Additional Pages) also gets a − / + number picker; its tick box follows the count.
+  /* ---------- Estimator ---------- */
+  // Every price is read from the text on the page (see the comment above the estimator in
+  // index.html), so the HTML stays the only place to edit them. "/ mo" makes a price
+  // monthly; "Starting at" or "+" makes it a starting price; text with no number at all
+  // ("Included", "Quoted") adds nothing to the total but still shows in the breakdown and
+  // travels with the enquiry.
   const flatText = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
   const lkr = (text) => {
     const m = text.match(/\d[\d,]*/);
     return m ? Number(m[0].replace(/,/g, '')) : null;
   };
   const fmtLKR = (n) => `LKR ${n.toLocaleString('en-US')}`;
-  let addons = [];
+  const MAX_PAGES = 40;
+  const est = {
+    root: $('[data-estimator]'),
+    types: [],
+    options: [],
+    hosting: [],
+    domain: null,
+    pages: null,
+    pagePrice: 0,
+    lastTotal: ''
+  };
 
-  // How many of an add-on: the picker's value (0…max) for quantity items, otherwise 1
-  const qtyOf = (a) => (a.qty ? Math.max(0, Math.min(a.max, parseInt(a.qty.value, 10) || 0)) : 1);
-
-  function setQty(a, n) {
-    a.qty.value = String(Math.max(0, Math.min(a.max, n)));
-    a.input.checked = qtyOf(a) > 0;
-  }
-
-  function addQuantity(li, a) {
-    const button = (text, label, step) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'qty__btn';
-      b.textContent = text;
-      b.setAttribute('aria-label', label);
-      b.addEventListener('click', () => { setQty(a, qtyOf(a) + step); updateEstimate(); });
-      return b;
+  function readOption(input) {
+    const label = input.closest('label');
+    const priceText = flatText($('.est-option__price, .est-choice__price', label));
+    return {
+      input,
+      label,
+      name: flatText($('.est-option__name, .est-choice__name', label)),
+      priceText,
+      price: lkr(priceText), // null when the price is words, not a number
+      monthly: /\/\s*mo\b/i.test(priceText),
+      from: /starting|from|\+/i.test(priceText)
     };
-    a.qty = document.createElement('input');
-    Object.assign(a.qty, { type: 'number', className: 'qty__input', min: '0', max: String(a.max), step: '1', value: '0' });
-    a.qty.inputMode = 'numeric';
-    a.qty.setAttribute('aria-label', `${a.name}, how many`);
-    // While typing, follow the number; on leaving the field, tidy it into range
-    a.qty.addEventListener('input', () => { a.input.checked = qtyOf(a) > 0; updateEstimate(); });
-    a.qty.addEventListener('change', () => { setQty(a, qtyOf(a)); updateEstimate(); });
-
-    const picker = document.createElement('div');
-    picker.className = 'qty';
-    picker.append(button('−', `One fewer: ${a.name}`, -1), a.qty, button('+', `One more: ${a.name}`, 1));
-    li.classList.add('has-qty');
-    li.append(picker);
-  }
-
-  function initAddons() {
-    addons = $$('.addons__list li').map((li) => {
-      const name = flatText($('.addons__item', li));
-      const priceText = flatText($('.addons__price', li));
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.className = 'addon__check';
-      input.value = name;
-      const box = document.createElement('span');
-      box.className = 'addon__box';
-      box.setAttribute('aria-hidden', 'true');
-      const label = document.createElement('label');
-      label.className = 'addon';
-      label.append(input, box, ...li.childNodes);
-      li.append(label);
-      const a = {
-        name,
-        priceText,
-        price: lkr(priceText) || 0,
-        monthly: /\/\s*mo\b/i.test(priceText),
-        from: /starting|from|\+/i.test(priceText),
-        input,
-        qty: null,
-        max: Number(li.dataset.addonMax) || 20
-      };
-      if (li.hasAttribute('data-addon-qty')) addQuantity(li, a);
-      input.addEventListener('change', () => {
-        // Ticking a quantity item starts it at 1; unticking sets it back to 0
-        if (a.qty) setQty(a, input.checked ? Math.max(1, qtyOf(a)) : 0);
-        updateEstimate();
-      });
-      return a;
-    });
-
-    const panel = $('[data-estimate]');
-    if (panel) panel.hidden = false;
-    // "Add to enquiry" scrolls to the form (its own href) and points out the estimate there
-    $('[data-estimate-add]')?.addEventListener('click', () => {
-      const field = $('[data-estimate-field]');
-      if (!field || field.hidden) return;
-      field.classList.remove('is-flash');
-      void field.offsetWidth;
-      field.classList.add('is-flash');
-      setTimeout(() => field.classList.remove('is-flash'), 1300);
-    });
-    updateEstimate();
   }
 
   function getEstimate() {
-    const card = $$('[data-package]').find((c) => c.dataset.package === packageSelect.value) || null;
-    const planText = card ? flatText($('.price__price', card)) : '';
-    const planPrice = card ? lkr(planText) : null;
-    const picked = addons.filter((a) => a.input.checked);
-    const sum = (list) => list.reduce((total, a) => total + a.price * qtyOf(a), 0);
+    const type = est.types.find((t) => t.input.checked) || null;
+    const custom = Boolean(type) && type.price === null; // the retainer: quoted, not priced
+    const included = type ? Number(type.input.dataset.pages) || 0 : 0;
+    const pages = est.pages ? Math.max(1, Math.min(MAX_PAGES, parseInt(est.pages.value, 10) || 1)) : 0;
+    const extraPages = included ? Math.max(0, pages - included) : 0;
+    const pagesCost = extraPages * est.pagePrice;
+    const picked = est.options.filter((o) => o.input.checked && !o.input.disabled);
+    const hosting = est.hosting.find((h) => h.input.checked && !h.input.disabled) || null;
+    const domain = est.domain && est.domain.input.checked ? est.domain : null;
+    const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
     return {
-      plan: card ? card.dataset.package : '',
-      planText,                                // e.g. "LKR 40,000+" or "Custom"
-      custom: Boolean(card) && planPrice === null,
+      type,
+      custom,
+      included,
+      pages,
+      extraPages,
+      pagesCost,
       picked,
-      once: (planPrice || 0) + sum(picked.filter((a) => !a.monthly)),
-      monthly: sum(picked.filter((a) => a.monthly)),
-      from: planText.includes('+') || picked.some((a) => a.from) // starting prices, so the total is too
+      hosting,
+      domain,
+      once: (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly)),
+      monthly: sum(picked.filter((o) => o.monthly)),
+      from: Boolean(type && type.from) || picked.some((o) => o.from),
+      any: Boolean(type || picked.length || hosting || domain)
     };
   }
 
-  // [name, price] for one ticked add-on, e.g. ["Additional Pages × 3", "LKR 15,000"]
-  function addonLine(a) {
-    if (!a.qty) return [a.name, a.priceText];
-    const n = qtyOf(a);
-    return [`${a.name} × ${n}`, fmtLKR(a.price * n)];
+  // [label, price] rows: the breakdown, the form's copy and the enquiry message
+  function estimateLines(e) {
+    const rows = [];
+    if (e.type) rows.push([e.type.name, e.type.priceText]);
+    if (e.type && e.included) {
+      rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'} (${e.included} included)`,
+        e.extraPages ? `${e.extraPages} × ${fmtLKR(est.pagePrice)}` : 'Included']);
+    } else if (e.custom) {
+      rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'}`, 'Scoped on a call']);
+    }
+    e.picked.forEach((o) => rows.push([o.name, o.priceText]));
+    if (e.hosting) rows.push([`Hosting: ${e.hosting.name}`, e.hosting.priceText]);
+    if (e.domain) rows.push([e.domain.name, e.domain.priceText]);
+    return rows;
   }
 
-  // One line for the form and the message, e.g. "LKR 55,000+ one-time + LKR 5,000 / mo"
+  // One line for the total, e.g. "LKR 55,000+ one-time + LKR 5,000 / mo"
   function estimateText(e) {
     const parts = [];
     if (e.custom) parts.push('Custom retainer (quoted after a discovery call)');
@@ -1868,84 +2025,189 @@ const CUBE_CONFIG = {
     return parts.join(' + ');
   }
 
-  function updateEstimate() {
-    if (!packageSelect) return;
-    const e = getEstimate();
-    const count = e.picked.length;
-    const addonCount = `${count} add-on${count === 1 ? '' : 's'}`;
-    const plus = e.from ? '+' : '';
+  const listRows = (ul, rows) => ul.replaceChildren(...rows.map(([name, price]) => {
+    const li = document.createElement('li');
+    const n = document.createElement('span');
+    const p = document.createElement('span');
+    n.textContent = name;
+    p.textContent = price;
+    li.append(n, p);
+    return li;
+  }));
 
-    // Pricing: the add-ons intro and the pinned estimate panel
-    const lead = $('[data-addons-lead]');
-    if (lead) {
-      lead.textContent = e.plan
-        ? `Extras for your ${e.plan} plan. Tick any to add them to your estimate.`
-        : 'Pick a plan above, then tick any extras to build an estimate.';
+  let announceTimer = 0;
+  function updateEstimate() {
+    if (!est.root) return;
+    const e = getEstimate();
+    const typeValue = e.type ? e.type.input.value : '';
+
+    // Choices that depend on the website type: free hosting only for static sites, and the
+    // retainer already covers basic maintenance
+    est.hosting.forEach((h) => {
+      const only = h.input.dataset.only;
+      h.input.disabled = Boolean(only && typeValue && only !== typeValue);
+      if (h.input.disabled) h.input.checked = false;
+    });
+    const isRetainer = e.custom;
+    est.options.filter((o) => o.input.hasAttribute('data-est-care')).forEach((o) => {
+      o.input.disabled = isRetainer;
+      if (isRetainer) o.input.checked = false;
+    });
+    const careHint = $('[data-est-care-hint]', est.root);
+    if (careHint) careHint.hidden = !isRetainer;
+
+    // The pages note says what this type includes
+    const note = $('[data-est-pages-note]', est.root);
+    if (note) {
+      const price = fmtLKR(est.pagePrice);
+      if (!e.type) {
+        note.innerHTML = 'Static sites include up to 5 pages and web apps 5 to 7 core layouts. Each extra page is <b></b>.';
+        $('b', note).textContent = `${price} / page`;
+      } else if (e.custom) {
+        note.textContent = 'Retainers are scoped on a call, so pages aren\'t priced here. We\'ll still note how many you have.';
+      } else {
+        note.innerHTML = '';
+        const lead = `${e.type.name} includes ${e.included} page${e.included === 1 ? '' : 's'}. `;
+        const b = document.createElement('b');
+        b.textContent = e.extraPages ? `${e.extraPages} extra × ${price} = ${fmtLKR(e.pagesCost)}` : `Extra pages are ${price} each`;
+        note.append(lead, b, '.');
+      }
     }
 
+    // The summary card
     let total = '—';
-    let note = '';
+    let sub = 'Choose a website type to start';
     if (e.custom) {
-      total = e.once ? `Custom + ${fmtLKR(e.once)}${plus}` : 'Custom';
-      note = 'retainer quoted after a call';
+      total = e.once ? `Custom + ${fmtLKR(e.once)}${e.from ? '+' : ''}` : 'Custom';
+      sub = e.once ? 'retainer quoted on a call, plus one-time work' : 'retainer, quoted after a call';
     } else if (e.once) {
-      total = `${fmtLKR(e.once)}${plus}`;
-      note = 'one-time';
+      total = `${fmtLKR(e.once)}${e.from ? '+' : ''}`;
+      sub = e.from ? 'one-time, starting at' : 'one-time';
     } else if (e.monthly) {
       total = fmtLKR(e.monthly);
-      note = 'per month';
+      sub = 'per month';
+    } else if (e.any) {
+      sub = 'no priced items yet';
     }
-    if (e.monthly && (e.custom || e.once)) note += ` · plus ${fmtLKR(e.monthly)} / mo`;
-
-    const totalEl = $('[data-estimate-total]');
-    if (totalEl) totalEl.textContent = total;
-    const noteEl = $('[data-estimate-note]');
-    if (noteEl) noteEl.textContent = note;
-    const planEl = $('[data-estimate-plan]');
-    if (planEl) {
-      planEl.textContent = e.plan
-        ? `${e.plan} · ${count ? addonCount : 'no add-ons yet'}`
-        : count ? `No plan chosen yet · ${addonCount}` : 'Choose a plan above to start.';
+    const totalEl = $('[data-estimate-total]', est.root);
+    const shown = totalEl && (totalEl.dataset.value ?? totalEl.textContent);
+    if (totalEl && shown !== total) {
+      // Digits roll like an odometer once originkit.js has loaded (CobwebzKit.roll)
+      if (window.CobwebzKit) window.CobwebzKit.roll(totalEl, total);
+      else totalEl.textContent = total;
+      if (!reduceMotion.matches) {
+        totalEl.classList.remove('is-bump');
+        void totalEl.offsetWidth;
+        totalEl.classList.add('is-bump');
+      }
+    }
+    const subEl = $('[data-estimate-note]', est.root);
+    if (subEl) subEl.textContent = sub;
+    const monthlyEl = $('[data-estimate-monthly]', est.root);
+    if (monthlyEl) {
+      monthlyEl.hidden = !(e.monthly && (e.once || e.custom));
+      monthlyEl.textContent = `plus ${fmtLKR(e.monthly)} / month`;
+    }
+    const rows = estimateLines(e);
+    const lines = $('[data-estimate-lines]', est.root);
+    if (lines) {
+      if (rows.length) listRows(lines, rows);
+      else lines.innerHTML = '<li class="is-empty"><span>Nothing chosen yet</span><span></span></li>';
+    }
+    // Screen readers hear the new total once the visitor pauses
+    const status = $('[data-estimate-status]', est.root);
+    const said = estimateText(e);
+    if (status && said !== est.lastTotal) {
+      clearTimeout(announceTimer);
+      announceTimer = setTimeout(() => { status.textContent = said ? `Estimate: ${said}` : ''; }, 700);
+      est.lastTotal = said;
     }
 
-    // Enquiry form: the itemised estimate
+    // The enquiry form's copy of it
+    syncSelectedCards();
     const field = $('[data-estimate-field]');
-    if (!field) return;
-    field.hidden = !e.plan && !count;
-    const lines = $('[data-estimate-lines]', field);
-    lines.replaceChildren(...[
-      ...(e.plan ? [[`${e.plan} plan`, e.planText]] : []),
-      ...e.picked.map(addonLine)
-    ].map(([name, price]) => {
-      const li = document.createElement('li');
-      const n = document.createElement('span');
-      const p = document.createElement('span');
-      n.textContent = name;
-      p.textContent = price;
-      li.append(n, p);
-      return li;
+    if (field) {
+      field.hidden = !e.any;
+      const formLines = $('[data-estimate-form-lines]', field);
+      if (formLines) listRows(formLines, rows);
+      const sumEl = $('[data-estimate-sum]', field);
+      if (sumEl) sumEl.textContent = said || 'Quoted after a call';
+    }
+  }
+
+  function setType(value) {
+    est.types.forEach((t) => { t.input.checked = t.input.value === value; });
+    updateEstimate();
+  }
+
+  function resetEstimate() {
+    est.types.forEach((t) => { t.input.checked = false; });
+    [...est.options, ...est.hosting].forEach((o) => { o.input.checked = false; });
+    if (est.domain) est.domain.input.checked = false;
+    if (est.pages) est.pages.value = '5';
+    setSelect(packageSelect, '', { quiet: true });
+    updateEstimate();
+  }
+
+  function initEstimator() {
+    if (!est.root) return;
+    est.types = $$('[data-est-type]', est.root).map(readOption);
+    est.options = $$('[data-est-option]', est.root).map(readOption);
+    est.hosting = $$('[data-est-hosting]', est.root).map(readOption);
+    const domain = $('[data-est-domain]', est.root);
+    est.domain = domain ? readOption(domain) : null;
+    est.pages = $('[data-est-pages]', est.root);
+    est.pagePrice = lkr(flatText($('[data-est-page-price]', est.root))) || 0;
+
+    est.root.addEventListener('change', (e) => {
+      if (e.target.matches('[data-est-type]')) setSelect(packageSelect, e.target.value, { quiet: true });
+      if (e.target === est.pages) est.pages.value = String(getEstimate().pages); // tidy into 1…40
+      updateEstimate();
+    });
+    est.pages?.addEventListener('input', updateEstimate);
+    $$('[data-est-pages-step]', est.root).forEach((btn) => btn.addEventListener('click', () => {
+      const next = (parseInt(est.pages.value, 10) || 1) + Number(btn.dataset.estPagesStep);
+      est.pages.value = String(Math.max(1, Math.min(MAX_PAGES, next)));
+      updateEstimate();
     }));
-    $('[data-estimate-sum]', field).textContent = estimateText(e) || '—';
+    $('[data-estimate-reset]', est.root)?.addEventListener('click', resetEstimate);
+
+    // Narrow screens: the breakdown opens and closes under the total
+    const summary = $('[data-estimate]', est.root);
+    const toggle = $('[data-estimate-toggle]', est.root);
+    toggle?.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = open ? 'Hide' : 'Details';
+      summary.classList.toggle('is-expanded', open);
+    });
+
+    // "Send with my enquiry" scrolls to the form (its own href) and points out the estimate
+    $('[data-estimate-add]', est.root)?.addEventListener('click', () => {
+      const field = $('[data-estimate-field]');
+      if (field && !field.hidden) setTimeout(() => flash($('.estimate-box', field)), 450);
+    });
+    updateEstimate();
   }
 
   function initSelections() {
-    if (!form) return;
+    if (!form || !packageSelect) return;
     buildFormOptions();
-    initAddons();
+    initEstimator();
 
+    // A package card's "Get started" picks that type in the estimator (its href scrolls there)
     document.addEventListener('click', (e) => {
       const trigger = e.target.closest('[data-select-package]');
       if (!trigger) return;
-      setSelect(packageSelect, trigger.dataset.selectPackage);
-      // The link's own href handles scrolling (#addons, so the add-ons come next)
+      setSelect(packageSelect, trigger.dataset.selectPackage, { quiet: true });
     });
 
     packageSelect.addEventListener('change', () => {
-      syncSelectedCards();
-      updateEstimate();
+      if (est.types.length) setType(packageSelect.value);
+      else syncSelectedCards();
     });
 
-    // Support deep links, e.g. ?package=Dynamic%20Applications#contact
+    // Deep links, e.g. ?package=Dynamic%20Applications#contact
     const params = new URLSearchParams(window.location.search);
     if (params.get('package')) setSelect(packageSelect, params.get('package'));
   }
@@ -1988,6 +2250,44 @@ const CUBE_CONFIG = {
     const updateCount = () => { counter.textContent = message.value.length; };
     message.addEventListener('input', updateCount);
 
+    // Where enquiries go decides what the privacy line under the button says
+    const { web3formsKey: w3fKey, formspreeEndpoint: fsEndpoint } = CUBE_CONFIG.form;
+    const privacy = $('[data-privacy-note]', form);
+    if (privacy && !waNumber) {
+      const link = $('a', privacy);
+      const service = w3fKey.trim() ? 'Web3Forms' : fsEndpoint.trim() ? 'Formspree' : '';
+      privacy.textContent = service
+        ? `We use your details only to reply to this enquiry. It is delivered to our inbox by ${service}, a form-delivery service; this website itself stores nothing. `
+        : 'We use your details only to reply to this enquiry. Pressing send opens your email app with your message filled in; nothing is sent until you press Send there. ';
+      if (link) privacy.append(link);
+    }
+
+    // A template chosen on the Products page (?template=Vela%20One) rides along, shown as a chip
+    const chip = $('[data-template-chip]', form);
+    const templateInput = $('[data-template-input]', form);
+    const setTemplate = (name) => {
+      if (!chip || !templateInput) return;
+      templateInput.value = name;
+      $('[data-template-name]', chip).textContent = name;
+      chip.hidden = !name;
+    };
+    const chosen = clean(new URLSearchParams(window.location.search).get('template'), 60).replace(/[^\p{L}\p{N} .'&-]/gu, '');
+    if (chosen) setTemplate(chosen);
+    $('[data-template-clear]', form)?.addEventListener('click', () => {
+      setTemplate('');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('template');
+      history.replaceState(null, '', url);
+      form.elements.name.focus();
+    });
+
+    // Spam: a hidden field bots fill in (botcheck), and a time check. People take a few
+    // seconds to fill in a form; a submit faster than that gets one polite "please check"
+    // instead of being sent, and goes through when pressed again.
+    let startedAt = 0;
+    form.addEventListener('focusin', () => { startedAt ||= performance.now(); });
+    let warnedFast = false;
+
     function showStatus(type, heading, body = '') {
       status.className = `form-status form-status--${type}`;
       status.innerHTML = `<div><strong></strong>${body ? '<p></p>' : ''}</div>`;
@@ -2011,19 +2311,18 @@ const CUBE_CONFIG = {
       return [`${prefix} `, link, '.'];
     }
 
-    // The plan's price, the ticked add-ons and the estimate travel with the form fields
+    // The form's fields (cleaned), the chosen template and the itemised estimate
     function collect() {
-      const data = Object.fromEntries(new FormData(form).entries());
-      delete data.botcheck;
-      const est = getEstimate();
-      if (est.plan) data.package = `${est.plan} — ${est.planText}`;
-      if (est.picked.length) {
-        data.addons = est.picked.map((a) => {
-          const [name, price] = addonLine(a);
-          return a.qty ? `${name} — ${price} (${a.priceText})` : `${name} — ${price}`;
-        }).join('\n');
-      }
-      if (est.plan || est.picked.length) data.estimate = estimateText(est);
+      const limits = { name: 100, email: 150, business: 120, message: 3000, template: 60 };
+      const data = {};
+      new FormData(form).forEach((value, key) => {
+        if (key !== 'botcheck') data[key] = clean(value, limits[key] || 200);
+      });
+      const e = getEstimate();
+      if (e.type) data.package = `${e.type.input.value} — ${e.type.priceText}`;
+      const rows = estimateLines(e);
+      if (rows.length) data.estimate_items = rows.map(([name, price]) => `${name} — ${price}`).join('\n');
+      if (e.any) data.estimate = estimateText(e) || 'Quoted after a call';
       return data;
     }
 
@@ -2032,11 +2331,13 @@ const CUBE_CONFIG = {
         `Name: ${data.name}`,
         `Email: ${data.email}`,
         `Business: ${data.business || '—'}`,
+        ...(data.template ? [`Template: ${data.template}`] : []),
         `Plan: ${data.package || 'Not sure yet'}`,
-        ...(data.addons ? ['Add-ons:', ...data.addons.split('\n').map((line) => `• ${line}`)] : []),
-        ...(data.estimate ? [`Estimate: ${data.estimate}`] : []),
+        ...(data.estimate_items ? ['Estimate details:', ...data.estimate_items.split('\n').map((line) => `• ${line}`)] : []),
+        ...(data.estimate ? [`Estimated total: ${data.estimate} (an estimate, not a quote)`] : []),
         `Budget (LKR): ${data.budget || 'Prefer not to say'}`,
-        ...(data.message.trim() ? ['', data.message.trim()] : [])
+        `Timeline: ${data.timeline || 'No fixed date'}`,
+        ...(data.message ? ['', data.message] : [])
       ].join('\n');
     }
 
@@ -2070,13 +2371,11 @@ const CUBE_CONFIG = {
 
     function resetForm() {
       form.reset();
-      addons.forEach((a) => {
-        a.input.checked = false;
-        if (a.qty) setQty(a, 0);
-      });
+      setTemplate('');
+      resetEstimate();
       updateCount();
-      syncSelectedCards();
-      updateEstimate();
+      startedAt = 0;
+      warnedFast = false;
       $$('[aria-invalid]', form).forEach((f) => f.removeAttribute('aria-invalid'));
     }
 
@@ -2093,6 +2392,13 @@ const CUBE_CONFIG = {
 
       // Bots fill the hidden field; quietly drop the submission
       if (form.elements.botcheck.value) { resetForm(); return; }
+
+      // Filled in faster than a person types? Ask once; a real visitor just presses again
+      if (!warnedFast && (!startedAt || performance.now() - startedAt < 2500)) {
+        warnedFast = true;
+        showStatus('info', 'Quick check before we send', 'Please make sure your name and email are right, then press the button again.');
+        return;
+      }
 
       const data = collect();
       const { web3formsKey, formspreeEndpoint } = CUBE_CONFIG.form;
@@ -2152,23 +2458,12 @@ const CUBE_CONFIG = {
   // Draws one big web (viewBox -500…500, hub at 0 0) into both [data-why-web] layers; CSS
   // shows the first faintly and the second only round the pointer (--mx / --my on the
   // panel). Cards tilt toward the pointer (--rx / --ry) and light their edge nearest it
-  // (--mouse-x / --mouse-y). Each card's demo starts the first time it comes into view.
+  // (--mouse-x / --mouse-y). The live checks in the cards are further down (initLiveStats…).
   function initWhyChooseUs() {
     const root = $('[data-why]');
     if (!root) return;
     const cards = $$('[data-why-card]', root);
     const f = (n) => n.toFixed(1);
-    const ease = (t) => 1 - (1 - t) ** 3;
-    const onView = (el, fn, threshold) => {
-      if (!el) return;
-      if (!('IntersectionObserver' in window)) { fn(); return; }
-      const seen = new IntersectionObserver((entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        seen.disconnect();
-        fn();
-      }, { threshold });
-      seen.observe(el);
-    };
 
     // The web: 18 spokes, then 9 rings (inner to outer) that dip between the spokes
     const SPOKES = 18;
@@ -2253,30 +2548,6 @@ const CUBE_CONFIG = {
       });
     }
 
-    // Stats count from data-from to the number written in the page
-    const statsList = $('[data-why-stats]', root);
-    const stats = $$('b[data-from]', root);
-    if (stats.length && !reduceMotion.matches) {
-      const runs = stats.map((b) => {
-        const to = parseFloat(b.textContent);
-        const from = parseFloat(b.dataset.from);
-        const dec = parseInt(b.dataset.decimals || '0', 10);
-        const suffix = b.dataset.suffix || '';
-        const show = (v) => { b.textContent = v.toFixed(dec) + suffix; };
-        show(from);
-        return (t) => show(from + (to - from) * ease(t));
-      });
-      onView(statsList, () => {
-        const t0 = performance.now();
-        const step = (now) => {
-          const t = Math.min(1, (now - t0) / 1800);
-          runs.forEach((run) => run(t));
-          if (t < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }, 0.5);
-    }
-
     // 01 — the pen tool. The middle anchor's two handles mirror each other through it; the
     // pointer pulls one, and left alone it drifts by itself. Runs only while on screen.
     const pen = $('[data-why-pen]', root);
@@ -2332,95 +2603,481 @@ const CUBE_CONFIG = {
       pen.addEventListener('pointerleave', () => { goal = null; });
     }
 
-    // 02 — the speed gauge: runs once on view, and again from the button. The metrics
-    // improve from data-bad to their real value as the score climbs.
-    const gauge = $('[data-why-gauge]', root);
-    if (gauge) {
-      const ring = $('[data-gauge-ring]', gauge);
-      const score = $('[data-gauge-score]', gauge);
-      const btn = $('[data-gauge-run]', gauge);
-      const label = $('[data-gauge-label]', gauge);
-      const metrics = $$('[data-gauge-metric]', gauge).map((dd) => ({
-        dd,
-        good: parseFloat(dd.dataset.gaugeMetric),
-        bad: parseFloat(dd.dataset.bad),
-        dec: parseInt(dd.dataset.decimals || '0', 10),
-        unit: dd.dataset.unit || ''
-      }));
-      const show = (t) => {
-        ring.style.strokeDashoffset = f(100 - 100 * t);
-        score.textContent = String(Math.round(100 * t));
-        metrics.forEach((m) => { m.dd.textContent = (m.bad + (m.good - m.bad) * t).toFixed(m.dec) + m.unit; });
-      };
-      let running = false;
-      const run = () => {
-        if (running || reduceMotion.matches) return;
-        running = true;
-        btn.disabled = true;
-        btn.classList.remove('is-done');
-        label.textContent = 'Running…';
-        const t0 = performance.now();
-        const step = (now) => {
-          const t = Math.min(1, (now - t0) / 1900);
-          show(ease(t));
-          if (t < 1) { requestAnimationFrame(step); return; }
-          running = false;
-          btn.disabled = false;
-          btn.classList.add('is-done');
-          label.textContent = 'Scored 100 · run again';
-        };
-        requestAnimationFrame(step);
-      };
-      if (!reduceMotion.matches) show(0);
-      btn?.addEventListener('click', run);
-      onView(gauge, run, 0.6);
-    }
-
-    // 03 — the search results: held at the start until in view, then yours climbs to #1;
-    // hovering the card plays it again
-    const serp = $('[data-why-serp]', root);
-    if (serp && !reduceMotion.matches) {
-      let busy = true;
-      serp.classList.add('is-climbing', 'is-held');
-      const you = $('.serp__row--you', serp);
-      you?.addEventListener('animationend', () => { busy = false; });
-      onView(serp, () => serp.classList.remove('is-held'), 0.6);
-      serp.closest('[data-why-card]')?.addEventListener('pointerenter', () => {
-        if (busy) return;
-        busy = true;
-        serp.classList.remove('is-climbing');
-        void serp.offsetWidth; // restart the animations
-        serp.classList.add('is-climbing');
-      });
-    }
-
-    // 04 — the status page's bars, one per day
-    const bars = $('[data-why-bars]', root);
-    if (bars) bars.innerHTML = Array.from({ length: 36 }, (_, i) => `<i style="--i: ${i}"></i>`).join('');
-
-    // Its looping animations (radar, heartbeat, status lights) rest while it's off screen
+    // Its looping animations (radar, status light) rest while it's off screen
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([entry]) => root.classList.toggle('is-offscreen', !entry.isIntersecting)).observe(root);
     }
   }
 
+  /* ---------- Why us: everything on the panel is measured live ---------- */
+  const fmtMs = (ms) => (ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(2)} s`);
+  const isLocal = () => /^(localhost|127\.|\[?::1\]?$|0\.0\.0\.0)/.test(window.location.hostname);
+  const easeOut = (t) => 1 - (1 - t) ** 3;
+
+  // Counts a number up to its value (or shows it at once with reduced motion)
+  function countTo(el, value, format, ms = 1400) {
+    if (!el) return;
+    if (reduceMotion.matches) { el.textContent = format(value); return; }
+    const t0 = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - t0) / ms);
+      el.textContent = format(value * easeOut(t));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // The four stats come from this visit's own performance records: how soon the largest
+  // thing on screen was drawn, how much was downloaded, how many requests, and how many of
+  // those went to anyone but us
+  function initLiveStats() {
+    const list = $('[data-live-stats]');
+    if (!list || !window.performance || !performance.getEntriesByType) return;
+    let lcp = 0;
+    const lcpSupported = (window.PerformanceObserver?.supportedEntryTypes || []).includes('largest-contentful-paint');
+    if (lcpSupported) {
+      try {
+        new PerformanceObserver((records) => {
+          const all = records.getEntries();
+          const last = all[all.length - 1];
+          if (last) lcp = last.renderTime || last.startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (e) { /* not available */ }
+    }
+    const out = (key) => $(`[data-stat="${key}"]`, list);
+    whenSeen(list, () => {
+      const nav = performance.getEntriesByType('navigation')[0];
+      const resources = performance.getEntriesByType('resource');
+      const fcp = performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0;
+      const paint = lcp || fcp || (nav ? nav.domContentLoadedEventEnd : 0);
+      const label = $('[data-stat-label="paint"]', list);
+      if (label) label.textContent = lcp ? 'Largest paint' : fcp ? 'First paint' : 'Page ready';
+      const size = (entry) => (entry ? entry.encodedBodySize || entry.transferSize || 0 : 0);
+      const bytes = [nav, ...resources].reduce((total, entry) => total + size(entry), 0);
+      const thirdParty = resources.filter((entry) => {
+        try { return new URL(entry.name).origin !== window.location.origin; } catch (e) { return false; }
+      }).length;
+
+      countTo(out('paint'), paint / 1000, (v) => `${v.toFixed(v < 1 ? 2 : 1)}s`);
+      countTo(out('weight'), bytes / 1024, (v) => (v >= 1024 ? `${(v / 1024).toFixed(1)} MB` : `${Math.round(v)} KB`));
+      countTo(out('requests'), resources.length + 1, (v) => String(Math.round(v)));
+      countTo(out('third'), thirdParty, (v) => String(Math.round(v)));
+      const note = $('[data-stats-note]');
+      const conn = navigator.connection?.effectiveType;
+      if (note && conn) note.textContent = `Measured on this visit, in your browser, on a ${conn} connection. Results vary with your device and network.`;
+    }, 0.5);
+  }
+
+  // Cloudflare names its data centres by airport code; a few likely ones get a city
+  const EDGES = {
+    CMB: 'Colombo', MAA: 'Chennai', BOM: 'Mumbai', DEL: 'New Delhi', BLR: 'Bengaluru', HYD: 'Hyderabad',
+    CCU: 'Kolkata', MLE: 'Malé', DAC: 'Dhaka', KTM: 'Kathmandu', SIN: 'Singapore', KUL: 'Kuala Lumpur',
+    BKK: 'Bangkok', HKG: 'Hong Kong', NRT: 'Tokyo', KIX: 'Osaka', ICN: 'Seoul', SYD: 'Sydney', MEL: 'Melbourne',
+    DXB: 'Dubai', DOH: 'Doha', MCT: 'Muscat', LHR: 'London', MAN: 'Manchester', AMS: 'Amsterdam', FRA: 'Frankfurt',
+    CDG: 'Paris', MAD: 'Madrid', MXP: 'Milan', ZRH: 'Zurich', ARN: 'Stockholm', IAD: 'Ashburn', EWR: 'Newark',
+    JFK: 'New York', ORD: 'Chicago', DFW: 'Dallas', LAX: 'Los Angeles', SJC: 'San Jose', SEA: 'Seattle',
+    YYZ: 'Toronto', GRU: 'São Paulo', JNB: 'Johannesburg'
+  };
+  const PROTOCOLS = { h3: 'HTTP/3', h2: 'HTTP/2', 'http/1.1': 'HTTP/1.1', 'http/1.0': 'HTTP/1.0' };
+
+  // A fresh, uncached request for this page's headers, timed. Time to first byte comes from
+  // the browser's own resource timing; "served from" is the data centre that answered.
+  async function timedHead(tag) {
+    const url = new URL(window.location.pathname, window.location.origin);
+    url.searchParams.set(tag, Date.now().toString(36));
+    const t0 = performance.now();
+    const res = await fetch(url, { method: 'HEAD', cache: 'no-store', credentials: 'same-origin' });
+    await res.text();
+    const total = performance.now() - t0;
+    await new Promise((r) => setTimeout(r, 0)); // let the timing entry land
+    const entry = performance.getEntriesByName(url.href).pop();
+    const ttfb = entry && entry.responseStart > 0 && entry.requestStart > 0 ? entry.responseStart - entry.requestStart : total;
+    return { res, total, ttfb, protocol: entry?.nextHopProtocol || '' };
+  }
+
+  function initSpeedTest() {
+    const root = $('[data-speedtest]');
+    if (!root) return;
+    const ring = $('[data-gauge-ring]', root);
+    const value = $('[data-speed-value]', root);
+    const btn = $('[data-speed-run]', root);
+    const label = $('[data-speed-label]', root);
+    const status = $('[data-speed-status]', root);
+    const set = (key, text) => { const el = $(`[data-speed="${key}"]`, root); if (el) el.textContent = text; };
+    const GOOD = 800; // Google's "good" time to first byte, in ms
+    let running = false;
+
+    const fill = (to) => {
+      if (!ring) return;
+      if (reduceMotion.matches) { ring.style.strokeDashoffset = (100 - 100 * to).toFixed(1); return; }
+      const from = 100 - (parseFloat(ring.style.strokeDashoffset) || 100);
+      const t0 = performance.now();
+      const step = (now) => {
+        const t = Math.min(1, (now - t0) / 1100);
+        ring.style.strokeDashoffset = (100 - (from / 100 + (to - from / 100) * easeOut(t)) * 100).toFixed(2);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    if (ring) ring.style.strokeDashoffset = '100';
+
+    async function run() {
+      if (running) return;
+      running = true;
+      btn.disabled = true;
+      label.textContent = 'Testing…';
+      root.classList.add('is-running');
+      try {
+        const { res, total, ttfb, protocol } = await timedHead('speedtest');
+        const ray = res.headers.get('cf-ray') || '';
+        const code = ray.includes('-') ? ray.split('-').pop().toUpperCase() : '';
+        const server = res.headers.get('server') || '';
+        const edge = code ? `${code}${EDGES[code] ? ` · ${EDGES[code]}` : ''}` : isLocal() ? 'Local preview' : server || 'Origin';
+        countTo(value, ttfb, (v) => String(Math.round(v)), 900);
+        fill(Math.max(0.04, 1 - Math.min(ttfb, GOOD) / GOOD));
+        set('rtt', fmtMs(total));
+        set('edge', edge);
+        set('proto', PROTOCOLS[protocol] || protocol.toUpperCase() || '—');
+        status.textContent = `Speed test finished: ${Math.round(ttfb)} milliseconds to first byte, served from ${edge}.`;
+        label.textContent = 'Run again';
+      } catch (err) {
+        set('edge', 'No response');
+        status.textContent = 'The speed test could not reach the server. Check your connection and try again.';
+        label.textContent = 'Try again';
+      } finally {
+        running = false;
+        btn.disabled = false;
+        root.classList.remove('is-running');
+      }
+    }
+    btn?.addEventListener('click', run);
+    whenSeen(root, run, 0.6);
+  }
+
+  // Reads this page's own markup the way a search engine would, and shows the result
+  // snippet its title and description make. It reports what it finds; it promises nothing.
+  function initSeoAudit() {
+    const root = $('[data-seo-audit]');
+    if (!root) return;
+    const cut = (text, max) => (text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text);
+    const title = document.title.trim();
+    const desc = ($('meta[name="description"]')?.content || '').trim();
+    const canonical = $('link[rel="canonical"]')?.href || '';
+    const h1s = $$('h1').length;
+    const imgs = $$('img');
+    const withAlt = imgs.filter((img) => img.hasAttribute('alt')).length;
+    const types = new Set();
+    $$('script[type="application/ld+json"]').forEach((script) => {
+      try {
+        const json = JSON.parse(script.textContent);
+        (json['@graph'] || [json]).forEach((node) => [].concat(node['@type'] || []).forEach((t) => types.add(t)));
+      } catch (e) { /* invalid JSON-LD counts as none */ }
+    });
+    const lang = document.documentElement.lang;
+    const viewport = Boolean($('meta[name="viewport"]'));
+    const social = Boolean($('meta[property="og:title"]') && $('meta[property="og:image"]'));
+
+    const site = $('[data-seo-url]', root);
+    if (site) {
+      const path = window.location.pathname.replace(/\.html$/, '').split('/').filter((part) => part && part !== 'index');
+      site.textContent = ['cobwebz.lk', ...path].join(' › ');
+    }
+    $('[data-seo-title]', root).textContent = cut(title, 60);
+    $('[data-seo-desc]', root).textContent = cut(desc, 158);
+
+    const checks = [
+      ['Page title', `${title.length} chars`, title.length >= 10 && title.length <= 60],
+      ['Meta description', `${desc.length} chars`, desc.length >= 50 && desc.length <= 160],
+      ['One H1 heading', `${h1s} found`, h1s === 1],
+      ['Canonical URL', canonical ? 'set' : 'missing', Boolean(canonical)],
+      ['Structured data', `${types.size} type${types.size === 1 ? '' : 's'}`, types.size > 0],
+      ['Image alt text', `${withAlt}/${imgs.length}`, withAlt === imgs.length],
+      ['Language & viewport', lang || 'missing', Boolean(lang) && viewport],
+      ['Social preview tags', social ? 'set' : 'missing', social]
+    ];
+    const list = $('[data-seo-checks]', root);
+    list.replaceChildren(...checks.map(([name, found, ok], i) => {
+      const li = document.createElement('li');
+      li.style.setProperty('--i', i);
+      li.classList.toggle('is-warn', !ok);
+      const b = document.createElement('b');
+      b.textContent = found;
+      li.append(`${name}${ok ? '' : ' (check)'}`, b);
+      return li;
+    }));
+    whenSeen(root, () => list.classList.add('is-done'), 0.5);
+  }
+
+  // Asks this site for this page's headers and checks the protections they switch on
+  function initSecurityCheck() {
+    const root = $('[data-sec-check]');
+    if (!root) return;
+    const list = $('[data-sec-list]', root);
+    const summary = $('[data-sec-summary]', root);
+    const score = $('[data-sec-score]', root);
+    const NAMES = ['HTTPS', 'HSTS (HTTPS only)', 'Content Security Policy', 'MIME sniffing blocked', 'Framing blocked',
+      'Referrer policy', 'Permissions policy', 'Third-party scripts'];
+    // The rows exist (invisibly) from the start, so the results arriving don't move anything
+    const row = (name, i, ok = true, found = '…') => {
+      const li = document.createElement('li');
+      li.style.setProperty('--i', i);
+      li.classList.toggle('is-warn', !ok);
+      const b = document.createElement('b');
+      b.textContent = found;
+      li.append(name, b);
+      return li;
+    };
+    list.replaceChildren(...NAMES.map((name, i) => row(name, i)));
+    const note = $('[data-sec-note]', root);
+    if (note && isLocal()) {
+      note.textContent = 'Local preview: HTTPS and some headers are only switched on by the live host.';
+      note.hidden = false;
+    }
+
+    async function run() {
+      let headers = null;
+      try { headers = (await timedHead('headers')).res.headers; } catch (e) { /* offline: header checks fail */ }
+      const h = (name) => (headers && headers.get(name)) || '';
+      const csp = `${h('content-security-policy')} ${$('meta[http-equiv="Content-Security-Policy"]')?.content || ''}`;
+      const foreignScripts = $$('script[src]').filter((s) => {
+        try { return new URL(s.src).origin !== window.location.origin; } catch (e) { return true; }
+      }).length;
+      const results = [
+        window.location.protocol === 'https:',
+        /max-age=\d+/i.test(h('strict-transport-security')),
+        /default-src/.test(csp),
+        /nosniff/i.test(h('x-content-type-options')),
+        /frame-ancestors/.test(csp) || Boolean(h('x-frame-options')),
+        Boolean(h('referrer-policy') || $('meta[name="referrer"]')),
+        Boolean(h('permissions-policy')),
+        foreignScripts === 0
+      ];
+      const passed = results.filter(Boolean).length;
+      list.replaceChildren(...NAMES.map((name, i) => {
+        const ok = results[i];
+        const found = i === 7 ? (foreignScripts ? String(foreignScripts) : 'none') : ok ? 'on' : 'off';
+        return row(name, i, ok, found);
+      }));
+      summary.textContent = headers ? `${passed} of ${NAMES.length} protections on` : 'Couldn\'t reach the server';
+      if (score) score.textContent = `${passed}/${NAMES.length}`;
+      root.classList.add('is-done');
+      requestAnimationFrame(() => list.classList.add('is-done'));
+    }
+    whenSeen(root, run, 0.4);
+  }
+
+  /* ---------- How we work: the rail fills as you scroll ---------- */
+  function initProcess() {
+    const track = $('[data-process]');
+    if (!track) return;
+    const steps = $$('.process__step', track);
+    const wide = window.matchMedia('(min-width: 960px)');
+    let queued = false;
+    function update() {
+      queued = false;
+      const vh = window.innerHeight;
+      const r = track.getBoundingClientRect();
+      if (r.bottom < -vh || r.top > vh * 2) return;
+      let p = 1;
+      if (!reduceMotion.matches) {
+        // Across: fills as the row rises from the bottom of the screen to its upper half.
+        // Down: follows a reading line 62% of the way down the screen.
+        p = wide.matches ? (vh * 0.92 - r.top) / (vh * 0.5) : (vh * 0.62 - r.top - 16) / Math.max(1, r.height - 32);
+      }
+      p = Math.min(1, Math.max(0, p));
+      track.style.setProperty('--p', p.toFixed(4));
+      steps.forEach((step, i) => {
+        const reached = wide.matches
+          ? p >= i / (steps.length - 1) - 0.001
+          : 16 + p * (track.offsetHeight - 32) >= step.offsetTop + 17;
+        step.classList.toggle('is-reached', reached);
+      });
+    }
+    const queue = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    wide.addEventListener('change', queue);
+    update();
+  }
+
+  /* ---------- The studio: the founder card, from CUBE_CONFIG.founder ---------- */
+  function initFounder() {
+    const card = $('[data-founder]');
+    const f = CUBE_CONFIG.founder || {};
+    const name = (f.name || '').trim();
+    if (!card || !name) return;
+    $('[data-founder-name]', card).textContent = name;
+    $('[data-founder-role]', card).textContent = (f.role || '').trim();
+    $('[data-founder-bio]', card).textContent = (f.bio || '').trim();
+    const photo = $('[data-founder-photo]', card);
+    if (f.photo && /^[\w./-]+\.(webp|jpe?g|png|avif)$/i.test(f.photo)) {
+      const img = document.createElement('img');
+      img.src = f.photo;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      photo.append(img);
+    } else {
+      const mono = document.createElement('span');
+      mono.className = 'founder__monogram';
+      mono.textContent = name.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+      photo.append(mono);
+    }
+    const link = $('[data-founder-link]', card);
+    if (link && /^https:\/\//i.test(f.link || '')) {
+      link.href = f.link;
+      $('[data-founder-link-label]', link).textContent = f.linkLabel || 'Profile';
+      link.hidden = false;
+    }
+    card.hidden = false;
+  }
+
+  /* ---------- Testimonials: real ones only, from CUBE_CONFIG.testimonials ---------- */
+  function initTestimonials() {
+    const section = $('[data-testimonials]');
+    const list = $('[data-testimonials-list]');
+    if (!section || !list) return;
+    const items = (CUBE_CONFIG.testimonials || []).filter((t) => t && t.quote && t.name);
+    if (!items.length) return;
+    list.replaceChildren(...items.map((t, i) => {
+      const fig = document.createElement('figure');
+      fig.className = 'testimonial reveal';
+      fig.style.setProperty('--delay', `${(i % 3) * 90}ms`);
+      const quote = document.createElement('blockquote');
+      const p = document.createElement('p');
+      p.textContent = String(t.quote).trim();
+      quote.append(p);
+      const cap = document.createElement('figcaption');
+      const avatar = document.createElement('span');
+      avatar.className = 'testimonial__avatar';
+      avatar.setAttribute('aria-hidden', 'true');
+      avatar.textContent = String(t.name).trim()[0].toUpperCase();
+      const who = document.createElement('span');
+      const name = document.createElement('span');
+      name.className = 'testimonial__name';
+      name.textContent = String(t.name).trim();
+      who.append(name, [t.role, t.company].filter(Boolean).join(', '));
+      cap.append(avatar, who);
+      if (t.source) {
+        const src = document.createElement('span');
+        src.className = 'testimonial__source';
+        if (/^https:\/\//i.test(t.url || '')) {
+          const a = document.createElement('a');
+          a.href = t.url;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.textContent = t.source;
+          src.append(a);
+        } else src.textContent = t.source;
+        cap.append(src);
+      }
+      fig.append(quote, cap);
+      return fig;
+    }));
+    section.hidden = false;
+  }
+
+  /* ---------- Products: filter the catalogue by category ---------- */
+  function initCatalogue() {
+    const root = $('[data-catalogue]');
+    if (!root) return;
+    const items = $$('[data-product]', root);
+    const buttons = $$('[data-filter]');
+    const status = $('[data-catalogue-status]');
+    buttons.forEach((btn) => {
+      const cat = btn.dataset.filter;
+      const n = cat === 'all' ? items.length : items.filter((p) => p.dataset.category === cat).length;
+      const count = $('[data-filter-count]', btn);
+      if (count) count.textContent = n;
+    });
+    function apply(cat, { focus = false } = {}) {
+      if (!buttons.some((b) => b.dataset.filter === cat)) cat = 'all';
+      let shown = 0;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === cat)));
+      items.forEach((item) => {
+        const on = cat === 'all' || item.dataset.category === cat;
+        if (on && item.hidden && !reduceMotion.matches) {
+          item.classList.remove('is-entering');
+          void item.offsetWidth;
+          item.classList.add('is-entering');
+        }
+        item.hidden = !on;
+        if (on) shown++;
+      });
+      const label = buttons.find((b) => b.dataset.filter === cat);
+      const name = label ? flatText($('[data-filter-name]', label) || label) : '';
+      if (status) status.textContent = cat === 'all' ? `Showing all ${shown} templates.` : `Showing ${shown} ${name.toLowerCase()} template${shown === 1 ? '' : 's'}.`;
+      const url = new URL(window.location.href);
+      if (cat === 'all') url.searchParams.delete('category'); else url.searchParams.set('category', cat);
+      history.replaceState(null, '', url);
+      if (focus) root.focus?.({ preventScroll: true });
+    }
+    buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn.dataset.filter)));
+    apply(new URLSearchParams(window.location.search).get('category') || 'all');
+  }
+
+  /* ---------- Tabs (client portal preview): click or arrow keys ---------- */
+  function initTabs() {
+    $$('[data-tabs]').forEach((root) => {
+      const tabs = $$('[role="tab"]', root);
+      const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+      const select = (i, focus) => {
+        tabs.forEach((tab, j) => {
+          const on = i === j;
+          tab.setAttribute('aria-selected', String(on));
+          tab.tabIndex = on ? 0 : -1;
+          if (panels[j]) panels[j].hidden = !on;
+        });
+        if (focus) tabs[i].focus();
+      };
+      tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i)));
+      root.addEventListener('keydown', (e) => {
+        const i = tabs.indexOf(document.activeElement);
+        if (i < 0) return;
+        const keys = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+        let next = null;
+        if (e.key in keys) next = (i + keys[e.key] + tabs.length) % tabs.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = tabs.length - 1;
+        if (next === null) return;
+        e.preventDefault();
+        select(next, true);
+      });
+    });
+  }
+
+  // First, only what the first screen needs, so the hero starts animating (and paints) as
+  // soon as possible.
   applyConfig();
   initTheme();
+  initFounder();
+  initTestimonials(); // before initSplitText and initMotion, so a filled section animates in like the rest
+  initHeroBrand();
   initSplitText(); // before initMotion, so the words exist when the hero starts animating
   initActiveNav();
   initHeaderScroll();
   initMenu();
   initCobwebs(); // before initMotion, so the webs exist before they're marked is-visible
   initMotion();
-  initScrollEffects();
-  initSpiderMark();
-  initServices();
-  initWorkPreviews();
-  initParticles();
-  initMarquees();
-  initCursorBadge();
-  initMagnetic();
-  initSelections();
-  initWhyChooseUs();
-  initForm();
+  initParticles(); // its canvases only draw once they're near the screen
+
+  // Then everything further down the page, a few at a time in short separate tasks, so the
+  // browser can paint and respond in between (one long start-up task would block both).
+  const later = [
+    initScrollEffects, initSpiderMark, initServices, initWorkPreviews, initMarquees,
+    initCursorBadge, initMagnetic, initProcess, initSelections, initForm, initCopy,
+    initWhyChooseUs, initLiveStats, initSpeedTest, initSeoAudit, initSecurityCheck,
+    initCatalogue, initTabs
+  ];
+  const nextTask = (fn) => (window.scheduler?.postTask ? scheduler.postTask(fn, { priority: 'user-visible' }) : setTimeout(fn, 0));
+  const runLater = () => {
+    const start = performance.now();
+    while (later.length && performance.now() - start < 12) later.shift()();
+    if (later.length) nextTask(runLater);
+  };
+  nextTask(runLater);
 })();

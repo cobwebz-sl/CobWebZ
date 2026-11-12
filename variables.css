@@ -50,7 +50,7 @@
   --color-on-ink: #ffffff;         /* text on ink-filled buttons and badges */
   --color-muted: #7d7f85;          /* second line of display headings */
   --color-body: #696b70;           /* paragraphs, footer links */
-  --color-subtle: #9a9ca1;         /* captions inside illustrations */
+  --color-subtle: #6c6e73;         /* small captions and labels: at least 4.5:1 on white, soft and canvas (WCAG AA) */
   --color-black-hover: #262626;
   --color-line: rgba(10, 10, 10, 0.08);
   --color-line-strong: rgba(10, 10, 10, 0.16);
@@ -72,8 +72,11 @@
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --tracking-tight: -0.035em;
 
-  /* Shape */
+  /* Shape: one scale for every corner. Cards 24, inset panels 16, controls 12, chips 8. */
   --radius-card: 24px;
+  --radius-panel: 16px;
+  --radius-control: 12px;
+  --radius-chip: 8px;
   --radius-pill: 999px;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 20px 40px -10px rgba(0, 0, 0, 0.08);
   --shadow-soft: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
@@ -87,6 +90,10 @@
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Lab experiments: a faint engineering grid behind each stage */
+  --lab-grid: rgba(10, 10, 10, 0.07);
 }
 
 [data-theme="dark"] {
@@ -99,7 +106,7 @@
   --color-on-ink: #0c0d10;
   --color-muted: #95989f;
   --color-body: #a2a5ac;
-  --color-subtle: #6c6f76;
+  --color-subtle: #84878e;         /* 4.5:1 or better on every dark surface */
   --color-black-hover: #ffffff;
   --color-line: rgba(255, 255, 255, 0.08);
   --color-line-strong: rgba(255, 255, 255, 0.18);
@@ -112,4 +119,6 @@
   --shadow-soft-hover: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
   --shadow-pill: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px -6px rgba(0, 0, 0, 0.5);
   --shadow-button: 0 1px 2px rgba(255, 255, 255, 0.15), 0 8px 18px -6px rgba(255, 255, 255, 0.2);
+
+  --lab-grid: rgba(255, 255, 255, 0.07);
 }
