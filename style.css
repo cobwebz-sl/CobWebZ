@@ -670,8 +670,6 @@
     font-weight: 500;
     line-height: 0.9;
     letter-spacing: -0.065em;
-    /* Masks the letters as they rise in; extended so the p's descender isn't cut */
-    clip-path: inset(-0.2em -0.1em -0.18em);
   }
   /* The heading keeps its one real "CobWebZ" (see initHeroBrand). It turns transparent, and the
      letters drawn over it are CSS-generated text, so they never repeat the name to screen
@@ -686,14 +684,19 @@
     user-select: none;
   }
   .hero__brand-fx .char::before { content: attr(data-c); }
+  /* Focus Reveal (adapted from Originkit): each letter starts soft, faint and a touch large,
+     then sharpens into place, left to right, once. Only opacity, transform and filter move. */
   .js .hero__brand .char {
-    transform: translateY(130%);
-    /* translate is the pointer lean (--lift, set by script.js), separate from the rise-in */
-    translate: 0 var(--lift, 0px);
-    transition: transform 1.1s var(--ease-out) calc(var(--i) * 45ms + 60ms), translate 0.6s var(--ease-out), color 0.6s var(--ease-out);
+    opacity: 0;
+    transform: scale(1.12);
+    filter: blur(10px);
+    will-change: transform, opacity, filter;
+    transition-property: opacity, transform, filter;
+    transition-duration: 0.9s;
+    transition-timing-function: var(--ease-out);
+    transition-delay: calc(var(--i) * 60ms + 80ms);
   }
-  .js .is-loaded .hero__brand .char { transform: none; }
-  .hero__brand .char.is-near { color: color-mix(in srgb, var(--color-ink) 82%, var(--color-dusty-blue-deep)); }
+  .js .is-loaded .hero__brand .char { opacity: 1; transform: none; filter: none; }
   .hero__tagline {
     --split-delay: 320ms; /* as the name's letters finish rising */
     display: block;
@@ -767,33 +770,6 @@
   /* With nothing else in the hero to follow, the buttons come in after the tagline's words */
   .js .hero--home .hero__actions[data-hero-step] { transition-delay: 0.95s; }
 
-  /* Every few seconds a band of colour, dusty blue into rose gold, runs through the letters
-     one after another. The letters are CSS-generated text (::before, see .hero__brand-fx), so
-     the band is that text's background clipped to the glyphs. The padding (cancelled by the
-     margin) lets the background reach the parts of each glyph that the tight letter-spacing
-     pushes outside its box, so no edge gets shaved off. */
-  .hero--home .hero__brand-fx .char { --brand-ink: var(--color-ink); }
-  .hero--home .hero__brand-fx .char.is-near {
-    --brand-ink: color-mix(in srgb, var(--color-ink) 82%, var(--color-dusty-blue-deep));
-  }
-  .hero--home .hero__brand-fx .char::before {
-    padding-inline: 0.12em;
-    margin-inline: -0.12em;
-    color: transparent;
-    background: linear-gradient(100deg,
-        var(--brand-ink) 38%, var(--color-dusty-blue) 46%, var(--color-rose-gold) 54%, var(--brand-ink) 62%)
-      100% 0 / 300% 100% no-repeat;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: brand-shine 7s ease-in-out calc(1.8s + var(--i) * 80ms) infinite;
-  }
-  @keyframes brand-shine {
-    0% { background-position: 100% 0; }
-    28%, 100% { background-position: 0% 0; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero--home .hero__brand-fx .char::before { animation: none; }
-  }
 
   /* ---------- Type accents ---------- */
   /* Second, quieter tone for part of a heading */
@@ -2301,7 +2277,7 @@
     }
     .js .reveal, .js [data-hero-step] { opacity: 1; transform: none; }
     .js [data-split-words] .word,
-    .js .hero__brand .char { opacity: 1; transform: none; }
+    .js .hero__brand .char { opacity: 1; transform: none; filter: none; }
     .js [data-split-words] .word { filter: none; }
     .js .about__body { --p: 1 !important; }
     .about__mark.is-scuttling .spider__leg { animation: none; }
@@ -3932,18 +3908,6 @@
   }
   [data-theme='dark'] .ok-glow { --glow-head: var(--color-dusty-blue); }
 
-  /* Wave Arcs: behind the hero text, fading out at the edges so it melts into the page */
-  .wave-arcs {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.32;
-    pointer-events: none;
-    -webkit-mask-image: radial-gradient(120% 90% at 50% 55%, #000 35%, transparent 80%);
-    mask-image: radial-gradient(120% 90% at 50% 55%, #000 35%, transparent 80%);
-  }
-  [data-theme='dark'] .wave-arcs { opacity: 0.4; }
-  .wave-arcs canvas { display: block; width: 100%; height: 100%; }
   .badge.has-ok-glow { --glow-w: 1px; }
   .price.has-ok-glow { --glow-w: 1.5px; }
 

@@ -226,7 +226,6 @@
           <li><a href="#about" class="site-nav__link" data-nav>About</a></li>
           <li><a href="#services" class="site-nav__link" data-nav>Services</a></li>
           <li><a href="#work" class="site-nav__link" data-nav>Work</a></li>
-          <li><a href="#lab" class="site-nav__link" data-nav>Lab</a></li>
           <li><a href="#pricing" class="site-nav__link" data-nav>Pricing</a></li>
           <li><a href="#contact" class="site-nav__link" data-nav>Contact</a></li>
         </ul>
@@ -249,7 +248,6 @@
               <li><a href="#about" data-nav>About</a></li>
               <li><a href="#services" data-nav>Services</a></li>
               <li><a href="#work" data-nav>Work</a></li>
-              <li><a href="#lab" data-nav>Lab</a></li>
               <li><a href="#pricing" data-nav>Pricing</a></li>
               <li><a href="#contact" data-nav>Contact</a></li>
             </ul>
@@ -301,13 +299,11 @@
   <main id="main">
     <!-- ============ HERO ============ -->
     <!-- The name appears once in the heading's text. initHeroBrand() (script.js) draws the
-         big rising letters as decoration over it, so screen readers, search engines and
-         copy-paste all get "CobWebZ" a single time. The letters lean toward the pointer, and
-         a band of colour runs through them every few seconds. Kept minimal on purpose: the
+         big letters as decoration over it, so screen readers, search engines and
+         copy-paste all get "CobWebZ" a single time. The letters sharpen into focus once on
+         load (Focus Reveal, adapted from Originkit). Kept minimal on purpose: the
          name, one line and the two buttons. -->
     <section class="hero hero--home" id="overview" aria-labelledby="hero-title">
-      <!-- Wave Arcs, drawn by originkit.js -->
-      <div class="wave-arcs" data-wave-arcs aria-hidden="true"></div>
 
       <div class="container-cube hero__inner">
         <h1 id="hero-title" class="hero__title">
@@ -760,164 +756,6 @@
               </article>
             </div>
           </div>
-        </div>
-
-        <h3 class="principles__title reveal">How we build</h3>
-        <ol class="principles reveal" data-stagger data-principles>
-          <li class="principle">
-            <span class="principle__num" aria-hidden="true">01</span>
-            <h4 class="principle__name">Hand-coded, not assembled</h4>
-            <p class="principle__text">No page builders, no bloated themes. Every line is written for your site, so it
-              does what you need and nothing else.</p>
-          </li>
-          <li class="principle">
-            <span class="principle__num" aria-hidden="true">02</span>
-            <h4 class="principle__name">Fast is a feature</h4>
-            <p class="principle__text">Light pages, optimised images and self-hosted fonts. Speed is designed in from
-              the first commit, not patched on at the end.</p>
-          </li>
-          <li class="principle">
-            <span class="principle__num" aria-hidden="true">03</span>
-            <h4 class="principle__name">Secure by default</h4>
-            <p class="principle__text">HTTPS, strict security headers and protection against common attacks are where
-              we start, not optional extras.</p>
-          </li>
-          <li class="principle">
-            <span class="principle__num" aria-hidden="true">04</span>
-            <h4 class="principle__name">Usable by everyone</h4>
-            <p class="principle__text">Readable contrast, keyboard-friendly controls and reduced-motion support, so
-              more people can use what we build.</p>
-          </li>
-          <li class="principle">
-            <span class="principle__num" aria-hidden="true">05</span>
-            <h4 class="principle__name">Plain, honest numbers</h4>
-            <p class="principle__text">Fixed, written quotes and estimates labelled as estimates. No ranking promises
-              and no invented statistics.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============ LIVE LAB ============ -->
-    <!-- Four small, working experiments (lab.js). Each pauses while off screen, works with
-         touch, mouse and keyboard, and settles into a still version with reduced motion. -->
-    <section class="section lab" id="lab" aria-labelledby="lab-title">
-      <div class="container-cube">
-        <header class="section-head reveal">
-          <p class="badge"><span class="badge__dot" aria-hidden="true"></span>CobWebZ Live Lab</p>
-          <h2 id="lab-title" class="h-section" data-split-words>Explore what the web <span class="accent">can
-              become.</span></h2>
-          <p class="section-lead">Small, working experiments built with the same tools we use on client sites. No
-            plugins and no libraries: just the web platform.</p>
-        </header>
-
-        <div class="lab__grid">
-          <!-- EXP 01: a mini site in a frame you can resize; container queries reflow it -->
-          <article class="lab-card lab-card--full reveal" aria-labelledby="lab-fluid-title" data-lab="fluid">
-            <div class="lab-card__stage lab-fluid">
-              <div class="lab-fluid__frame" data-fluid-frame>
-                <div class="lab-fluid__viewport" aria-hidden="true">
-                  <div class="mini">
-                    <div class="mini__nav"><span class="mini__logo"></span><span class="mini__links"><i></i><i></i><i></i><i></i></span><span class="mini__burger"><i></i><i></i><i></i></span></div>
-                    <div class="mini__hero">
-                      <div class="mini__copy">
-                        <b class="mini__title">Your site, on every screen.</b>
-                        <span class="mini__line"></span><span class="mini__line mini__line--short"></span>
-                        <span class="mini__btn">Get started</span>
-                      </div>
-                      <span class="mini__media"></span>
-                    </div>
-                    <div class="mini__grid"><span></span><span></span><span></span></div>
-                  </div>
-                </div>
-                <span class="lab-fluid__handle" aria-hidden="true" data-fluid-handle><i></i></span>
-              </div>
-            </div>
-            <div class="lab-card__body">
-              <p class="lab-card__id">EXP 01 · Responsive</p>
-              <h3 id="lab-fluid-title" class="lab-card__title">Layouts that adapt</h3>
-              <p class="lab-card__text">Drag the frame's edge, or use the slider. The layout reflows to fit its own
-                width: the menu folds away, columns stack and type scales, just as your site will on a phone, a tablet
-                or a wide screen.</p>
-              <div class="lab-control">
-                <label for="lab-fluid-range">Frame width</label>
-                <input type="range" id="lab-fluid-range" min="0" max="100" value="100" data-fluid-range>
-                <output for="lab-fluid-range" data-fluid-out>Full width</output>
-              </div>
-              <p class="lab-card__tech">CSS container queries · clamp() · Pointer Events</p>
-            </div>
-          </article>
-
-          <!-- EXP 02: a web wrapped round a sphere, projected from 3D on a 2D canvas -->
-          <article class="lab-card reveal" aria-labelledby="lab-globe-title" data-lab="globe">
-            <div class="lab-card__stage lab-globe" tabindex="0" role="img" data-globe-stage
-              aria-label="A 3D web wrapped round a sphere. Drag it, or press the arrow keys while it has focus, to turn it.">
-              <canvas data-globe></canvas>
-            </div>
-            <div class="lab-card__body">
-              <p class="lab-card__id">EXP 02 · 3D</p>
-              <h3 id="lab-globe-title" class="lab-card__title">A web in three dimensions</h3>
-              <p class="lab-card__text">Drag to spin it. Every thread is projected from 3D onto your screen, frame by
-                frame, without a 3D library.</p>
-              <p class="lab-card__tech">Canvas 2D · perspective maths · 0 dependencies</p>
-            </div>
-          </article>
-
-          <!-- EXP 03: one variable font file; each letter's weight follows the pointer -->
-          <article class="lab-card reveal" aria-labelledby="lab-type-title" data-lab="type">
-            <div class="lab-card__stage lab-type" data-type-stage>
-              <p class="lab-type__word" aria-hidden="true" data-type-word>Explore</p>
-              <p class="lab-type__axis" aria-hidden="true">wght <b data-type-readout>400</b></p>
-            </div>
-            <div class="lab-card__body">
-              <p class="lab-card__id">EXP 03 · Typography</p>
-              <h3 id="lab-type-title" class="lab-card__title">Type that responds</h3>
-              <p class="lab-card__text">Move across the word, or drag a finger over it. Each letter's weight follows
-                you, from 300 to 700, from a single variable font file.</p>
-              <div class="lab-control">
-                <label for="lab-type-range">Weight</label>
-                <input type="range" id="lab-type-range" min="300" max="700" step="10" value="400" data-type-range>
-                <output for="lab-type-range" data-type-out>400</output>
-              </div>
-              <p class="lab-card__tech">Variable fonts · font-variation-settings</p>
-            </div>
-          </article>
-
-          <!-- EXP 04: a node on a spring; pull it and the graph traces how it settles -->
-          <article class="lab-card lab-card--wide reveal" aria-labelledby="lab-spring-title" data-lab="spring">
-            <div class="lab-card__stage lab-spring">
-              <svg class="lab-spring__svg" viewBox="0 0 600 260" aria-hidden="true" data-spring-svg>
-                <path class="lab-spring__thread" data-spring-thread d="" />
-                <circle class="lab-spring__anchor" cx="300" cy="20" r="6" />
-                <g class="lab-spring__node" data-spring-node>
-                  <circle r="34" class="lab-spring__hit" />
-                  <circle r="20" class="lab-spring__ball" />
-                </g>
-              </svg>
-              <canvas class="lab-spring__plot" data-spring-plot aria-hidden="true"></canvas>
-            </div>
-            <div class="lab-card__body">
-              <p class="lab-card__id">EXP 04 · Motion</p>
-              <h3 id="lab-spring-title" class="lab-card__title">Motion with real physics</h3>
-              <p class="lab-card__text">Pull the node and let go. It springs back the way real objects do, and the
-                graph traces its path. Tune the spring and feel the difference.</p>
-              <div class="lab-control">
-                <label for="lab-stiff">Stiffness</label>
-                <input type="range" id="lab-stiff" min="40" max="400" value="170" data-spring-k>
-                <output for="lab-stiff" data-spring-k-out>170</output>
-              </div>
-              <div class="lab-control">
-                <label for="lab-damp">Damping</label>
-                <input type="range" id="lab-damp" min="2" max="40" value="9" data-spring-c>
-                <output for="lab-damp" data-spring-c-out>9</output>
-              </div>
-              <div class="lab-spring__foot">
-                <button type="button" class="btn btn--light" data-spring-flick>Flick it</button>
-                <p class="lab-spring__readout" data-spring-readout aria-live="polite">Settles in — s</p>
-              </div>
-              <p class="lab-card__tech">requestAnimationFrame · spring physics</p>
-            </div>
-          </article>
         </div>
       </div>
     </section>
@@ -1497,7 +1335,6 @@
             <li><a href="#about">About</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#process">Process</a></li>
-            <li><a href="#lab">Live Lab</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
         </div>
@@ -1543,7 +1380,6 @@
 
   <script src="originkit.js"></script>
   <script src="script.js"></script>
-  <script src="lab.js" defer></script>
 </body>
 
 </html>

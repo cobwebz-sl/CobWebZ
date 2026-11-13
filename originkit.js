@@ -1,6 +1,6 @@
 /* =========================================================================
-   CobWebZ × Originkit — seven effects adapted from Originkit components
-   (originkit.dev): Spider Button, Glow Border, Wave Arcs, Scramble Text, Rolling
+   CobWebZ × Originkit — six effects adapted from Originkit components
+   (originkit.dev): Spider Button, Glow Border, Scramble Text, Rolling
    Counter, Bouncing Dot Tabs and Tilt. The originals are React/Framer components; these
    are plain-JavaScript ports, recoloured to the CobWebZ palette, that need no
    libraries and load nothing from elsewhere (the site's security policy allows
@@ -9,7 +9,6 @@
    Each one is switched on by an attribute in the HTML:
      [data-spider-button]  a button with cobwebs inside that webs the pointer
      [data-glow-border]    a comet of light running round an element's edge
-     [data-wave-arcs]      rolling arcs behind the hero that tilt with the pointer
      [data-scramble]       text that decodes itself when it scrolls into view
      [data-tilt]           a card that gives way under the pointer
      [data-dot-tabs]       a filter row whose dot jumps to the chosen tab
@@ -507,130 +506,6 @@
     });
   }
 
-  /* ---------- Wave Arcs ---------- */
-  // Adapted from Originkit's Wave Arcs: a family of circles that all touch at one point a
-  // little below the middle of the box. Each one grows out of that point, flattens into a
-  // straight line and comes back in from the other side, so the arcs seem to roll through
-  // without end; the bigger a circle, the brighter its line. With a mouse, the pointer's
-  // height tilts the whole family up or down. The original paints its own black background;
-  // this one draws on a transparent canvas in the ink colour, so it follows the theme. It
-  // waits for the browser to be idle before starting (the hero text paints first), and only
-  // runs while it's on screen and the tab is in view. With reduced motion it's one still frame.
-  function initWaveArcs(host) {
-    const canvas = document.createElement('canvas');
-    host.append(canvas);
-    const ctx = canvas.getContext('2d');
-    const LINES = Number(host.dataset.waveArcs) || 76;
-    const SPEED = 6;
-    const GLOW = 10;
-    const map = (v, a, b, c, d) => ((v - a) / (b - a)) * (d - c) + c;
-    let w = 0;
-    let h = 0;
-    let ink = [255, 255, 255];
-    let t = 0; // in 60 fps frames, as the original counts them
-    const mouse = { y: 0, target: 0, moved: false };
-
-    const readInk = () => { ink = toRgb(cssVar('--color-ink')); };
-    const size = () => {
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      w = host.clientWidth;
-      h = host.clientHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (!mouse.moved) mouse.y = mouse.target = h / 2;
-    };
-
-    function draw(dt = 1) {
-      ctx.clearRect(0, 0, w, h);
-      if (!w || !h) return;
-      mouse.y += (mouse.target - mouse.y) * (1 - Math.pow(0.9, dt));
-      const mobile = w < 768;
-      const bright0 = 55000 / GLOW;
-      const half = w / 2;
-      const tilt = map(mouse.y, 0, h, 1.2, -1.2);
-      const rate = map(clamp(w, 320, 1440), 320, 1440, 0.002, 5e-4) * (SPEED / 5);
-      const n = mobile ? Math.round(LINES * 0.6) : LINES;
-      ctx.save();
-      ctx.lineWidth = 1.5;
-      ctx.translate(half, h + (mobile ? 60 : 40));
-      for (let k = 0; k < n; k++) {
-        const ang = (map(k, 0, n, 0, Math.PI) + t * rate) % Math.PI;
-        const l = (Math.tan(ang) - tilt) * h; // the circle's diameter, signed by side
-        const r = Math.abs(l) / 2;
-        const cy = -h / 2 + l / 2;
-        const bright = clamp(map(Math.abs(l), 0, bright0, -20, 255), 0, 255) / 255;
-        if (bright <= 0) continue;
-        ctx.strokeStyle = rgba(ink, bright);
-        ctx.beginPath();
-        if (r > 499999.5) {
-          // so big it's a straight line
-          ctx.moveTo(-half, -h / 2);
-          ctx.lineTo(half, -h / 2);
-          ctx.stroke();
-          continue;
-        }
-        // only the parts of the circle inside the box's width (plus a margin)
-        const cut = Math.acos(Math.min(1, (half + 50) / r));
-        const total = Math.max(Math.ceil(r / 120), 200);
-        for (const [from, to] of [[cut, Math.PI - cut], [Math.PI + cut, 2 * Math.PI - cut]]) {
-          const steps = Math.max(Math.ceil(((to - from) / (2 * Math.PI)) * total), 60);
-          const step = (to - from) / steps;
-          for (let s = 0; s <= steps; s++) {
-            const a = from + step * s;
-            const x = Math.cos(a) * r;
-            const y = cy + Math.sin(a) * r;
-            if (s) ctx.lineTo(x, y); else ctx.moveTo(x, y);
-          }
-        }
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-
-    let frame = 0;
-    let last = 0;
-    let visible = false;
-    let ready = false;
-    const loop = (now) => {
-      const dt = last ? Math.min(6, ((now - last) / 1000) * 60) : 1;
-      last = now;
-      t += dt;
-      draw(dt);
-      frame = requestAnimationFrame(loop);
-    };
-    const start = () => {
-      if (frame || !ready || !visible || document.hidden || reduceMotion.matches) return;
-      last = 0;
-      frame = requestAnimationFrame(loop);
-    };
-    const stop = () => { if (frame) { cancelAnimationFrame(frame); frame = 0; } };
-    const still = () => { if (!frame) draw(); };
-
-    readInk();
-    size();
-    new ResizeObserver(() => { size(); still(); }).observe(host);
-    themeListeners.push(() => { readInk(); still(); });
-    whenVisible(host, (on) => { visible = on; if (on) start(); else stop(); });
-    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-    // the pointer's height over the box, tracked anywhere on the page
-    let top = host.getBoundingClientRect().top;
-    let queued = false;
-    window.addEventListener('scroll', () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => { queued = false; top = host.getBoundingClientRect().top; });
-    }, { passive: true });
-    document.addEventListener('mousemove', (e) => {
-      if (!visible) return;
-      mouse.moved = true;
-      mouse.target = e.clientY - top;
-    }, { passive: true });
-    const begin = () => { ready = true; draw(); start(); };
-    if ('requestIdleCallback' in window) requestIdleCallback(begin, { timeout: 1200 });
-    else setTimeout(begin, 150);
-  }
-
   /* ---------- Scramble Text ---------- */
   // Adapted from Originkit's Scramble Text: when the text first scrolls into view, every
   // letter flickers through random glyphs and they lock into place left to right; with a
@@ -830,7 +705,6 @@
   // Every button gets the cobwebs, and every badge and pricing card the glow border
   $$('[data-spider-button], .btn').forEach(initSpider);
   $$('[data-glow-border], .badge, .price').forEach(initGlow);
-  $$('[data-wave-arcs]').forEach(initWaveArcs);
   $$('[data-scramble]').forEach(initScramble);
   $$('[data-tilt]').forEach(initTilt);
   $$('[data-dot-tabs]').forEach(initDotTabs);

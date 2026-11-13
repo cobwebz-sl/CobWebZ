@@ -285,11 +285,11 @@ const CUBE_CONFIG = {
     systemDark.addEventListener('change', () => { if (!storage.get('theme')) apply(preferred()); });
   }
 
-  /* ---------- Hero: the name, drawn as rising letters that lean toward the pointer ---------- */
-  // The heading's own "CobWebZ" text stays put (transparent) so it's read and indexed once.
-  // The visible letters are an aria-hidden layer whose text comes from CSS (data-c), so it
-  // isn't part of the page's text at all. With a fine pointer, letters near it lift a little
-  // (translate only, so nothing around them moves).
+  /* ---------- Hero: the name, brought into focus letter by letter ---------- */
+  // Focus Reveal, adapted from Originkit: each letter sharpens from a soft blur once, on
+  // load, then sits still (no loop, no pointer tracking). The heading's own "CobWebZ" text
+  // stays put (transparent) so it's read and indexed once. The visible letters are an
+  // aria-hidden layer whose text comes from CSS (data-c), so it isn't part of the page's text.
   function initHeroBrand() {
     const brand = $('[data-hero-brand]');
     if (!brand) return;
@@ -307,37 +307,10 @@ const CUBE_CONFIG = {
     });
     brand.append(fx);
     brand.classList.add('has-fx');
-
-    const hero = brand.closest('.hero');
-    if (!hero || !finePointer.matches) return;
-    // Letter centres inside the layer, from offsets (which ignore the letters' own transforms,
-    // so the lift can't feed back into where they seem to be)
-    let centres = null;
-    let frame = 0;
-    let px = 0;
-    let py = 0;
-    const lean = () => {
-      frame = 0;
-      centres ||= chars.map((c) => [c.offsetLeft + c.offsetWidth / 2, c.offsetTop + c.offsetHeight / 2]);
-      const r = fx.getBoundingClientRect();
-      chars.forEach((c, i) => {
-        const dx = px - (r.left + centres[i][0]);
-        const dy = py - (r.top + centres[i][1]);
-        const near = Math.max(0, 1 - Math.hypot(dx, dy * 1.4) / 260);
-        c.style.setProperty('--lift', `${(-near * 10).toFixed(2)}px`);
-        c.classList.toggle('is-near', near > 0.45);
-      });
-    };
-    const rest = () => chars.forEach((c) => { c.style.removeProperty('--lift'); c.classList.remove('is-near'); });
-    hero.addEventListener('pointermove', (e) => {
-      if (reduceMotion.matches || !document.body.classList.contains('is-loaded')) return;
-      px = e.clientX;
-      py = e.clientY;
-      if (!frame) frame = requestAnimationFrame(lean);
-    });
-    hero.addEventListener('pointerleave', rest);
-    window.addEventListener('resize', () => { centres = null; });
-    document.fonts?.ready.then(() => { centres = null; });
+    // Once every letter is sharp, drop the will-change hints so nothing stays on its own layer
+    chars.at(-1)?.addEventListener('transitionend', () => {
+      chars.forEach((c) => { c.style.willChange = 'auto'; });
+    }, { once: true });
   }
 
   /* ---------- Menu (dropdown under the Menu pill) ---------- */
