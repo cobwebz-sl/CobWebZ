@@ -494,8 +494,8 @@ const CUBE_CONFIG = {
   }
 
   /* ---------- Hero field: the drifting layer the hero and About scroll over ---------- */
-  // The spheres are CSS alone (style.css, "Hero field"); this is only the network of dots
-  // that join up as they drift, drawn by tsParticles into #hero-particles. Everything here
+  // The spheres are CSS alone (style.css, "Hero field"); this is only the drift of dots,
+  // drawn by tsParticles into #hero-particles. Everything here
   // is decoration, so it gives up easily: no element, no library (the CDN blocked, offline,
   // or the integrity check refused the file), or reduced motion asked for, and the page is
   // simply itself without it.
@@ -524,26 +524,28 @@ const CUBE_CONFIG = {
     const options = () => ({
       fpsLimit: 60,
       detectRetina: true,
-      fullScreen: { enable: false }, // it lives in the hero, not over the whole page
+      fullScreen: { enable: false }, // it is the field's own layer, not an overlay on the page
       background: { color: 'transparent' },
       particles: {
         // A flat count, not a density: spread over an area, a phone's canvas works out at
-        // barely a handful of dots, which is no network at all
+        // barely a handful of dots
         number: { value: narrow.matches ? 26 : 64, density: { enable: false } },
         color: { value: tone() },
         shape: { type: 'circle' },
         opacity: { value: narrow.matches ? 0.34 : 0.45 },
         size: { value: { min: 1, max: 2.2 } },
-        links: { enable: true, color: tone(), distance: 132, opacity: 0.3, width: 1 },
+        links: { enable: false }, // no joining lines: drifting dots on their own
         move: { enable: true, speed: 0.45, direction: 'none', straight: false, random: false, outModes: { default: 'out' } }
       },
       interactivity: {
         detectsOn: 'window', // so the canvas itself can stay out of the way of the buttons
         events: {
-          onHover: { enable: finePointer.matches, mode: 'grab' },
+          // Grab would draw a line from the pointer to every dot near it, which is the one
+          // thing this is meant not to do now; repulse parts them around the cursor instead
+          onHover: { enable: finePointer.matches, mode: 'repulse' },
           resize: { enable: true }
         },
-        modes: { grab: { distance: 150, links: { opacity: 0.55 } } }
+        modes: { repulse: { distance: 110, duration: 0.4 } }
       }
     });
 
@@ -569,9 +571,7 @@ const CUBE_CONFIG = {
     // The theme switch repaints the dots in the new ink
     new MutationObserver(() => {
       if (!heroNet) return;
-      const ink = tone();
-      heroNet.options.particles.color.value = ink;
-      heroNet.options.particles.links.color.value = ink;
+      heroNet.options.particles.color.value = tone();
       heroNet.refresh();
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }

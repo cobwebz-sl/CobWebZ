@@ -658,7 +658,7 @@
   }
 
   /* ---------- Hero field: the drifting background the page scrolls over ---------- */
-  /* Two things on one layer, both decoration: the particle network tsParticles draws into
+  /* Two things on one layer, both decoration: the drifting dots tsParticles draws into
      .hero-field__net (script.js, initHeroField) and five glass spheres that float on the
      keyframes below. It is fixed to the screen and sits at the foot of the page's own
      stacking order: z-index 0 and first in the markup, so every section, which is positioned
@@ -677,9 +677,9 @@
     transition: opacity 0.6s var(--ease-out);
   }
   .js .hero-field.is-live { opacity: 1; }
-  /* The network covers the screen now that it travels the whole page, with one soft mask to
-     take the hard edge off it: full strength through the middle, easing out at the very
-     edges so the dots never look cut off against the frame. The canvas tsParticles makes is
+  /* The dots cover the screen now that they travel the whole page, with one soft mask to
+     take the hard edge off them: full strength through the middle, easing out at the very
+     edges so they never look cut off against the frame. The canvas tsParticles makes is
      sized by this box, so it is given one. */
   .hero-field__net {
     position: absolute;
@@ -2921,6 +2921,11 @@
   .studio__layout {
     display: grid;
     gap: clamp(40px, 6vw, 64px);
+  }
+  .studio__aside {
+    position: sticky;
+    top: calc(var(--header-h) + clamp(16px, 4vh, 40px));
+    align-self: start;
   }
   .studio__head { text-align: left; }
   .studio__head .section-lead { margin-inline: 0; }
