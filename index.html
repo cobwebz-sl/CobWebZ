@@ -286,7 +286,7 @@
           </svg>
         </button>
 
-        <a href="work.html" class="site-header__cta-btn" data-magnetic>
+        <a href="work.html" class="site-header__cta-btn" data-magnetic data-spider-button>
           <span>Explore more</span>
           <span class="site-header__cta-arrow" aria-hidden="true">
             <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
@@ -322,8 +322,7 @@
          big letters as decoration over it, so screen readers, search engines and
          copy-paste all get "CobWebZ" a single time. The letters sharpen into focus once on
          load (Focus Reveal, adapted from Originkit). Kept minimal on purpose: the
-         name, one quiet line, one button and one text link. The button is left plain
-         (data-plain: originkit.js draws no cobwebs in it). Behind all of it sits .hero-field,
+         name, one quiet line and two buttons. Behind all of it sits .hero-field,
          the drifting background, which stays on screen while this text lifts away and fades
          (initHeroScroll in script.js). -->
     <section class="hero hero--home" id="overview" aria-labelledby="hero-title">
@@ -335,9 +334,9 @@
               running.</span></span>
         </h1>
         <div class="hero__actions" data-hero-step>
-          <a href="#contact" class="btn btn--primary btn--lg" data-plain>Start a project <span
+          <a href="#contact" class="btn btn--primary btn--lg">Start a project <span
               aria-hidden="true">→</span></a>
-          <a href="#estimate" class="hero__link">Estimate your price</a>
+          <a href="#estimate" class="btn btn--ghost btn--lg">Estimate your price</a>
         </div>
       </div>
 
@@ -345,10 +344,10 @@
     </section>
 
     <!-- ============ ABOUT ============ -->
-    <!-- As this section scrolls past, the statement's letters fly in from all over the
-         section to their places in the line and the spider mark spins its web. Both follow
-         --p, which script.js sets on .about__body; when it reaches the end the body is
-         marked .is-settled and a sweep of light runs down the finished sentence. Once it has
+    <!-- As this section scrolls past, the statement lights up word by word out of faint
+         ghost text, a band of the brand glow sweeping along it (data-scroll-lit, scrubbed
+         by GSAP ScrollTrigger in initHeroScroll), and the spider mark spins its web on --p,
+         which script.js sets on .about__body. Once it has
          landed the spider can be dragged and its web plucked (initSpiderMark); its back legs
          are web threads. -->
     <section class="section about" id="about" aria-labelledby="about-title">
@@ -356,7 +355,7 @@
         <h2 id="about-title" class="sr-only">About CobWebZ</h2>
 
         <div class="about__body" data-scrub>
-          <p class="about__statement" data-scrub-letters>At CobWebZ, we design and build fast, secure, search-ready
+          <p class="about__statement" data-scroll-lit>At CobWebZ, we design and build fast, secure, search-ready
             websites for businesses in Sri Lanka and beyond. We pair clean, custom design with careful front-end
             engineering, so every site loads quickly, grows with you and holds your audience's attention.</p>
           <div class="about__mark" data-spider>

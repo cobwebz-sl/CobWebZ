@@ -392,6 +392,7 @@ const CUBE_CONFIG = {
             });
           } else {
             span.style.setProperty('--i', i++);
+            if (unit === 'word') span.style.setProperty('--w', w++);
             span.textContent = part;
           }
           frag.append(span);
@@ -401,58 +402,13 @@ const CUBE_CONFIG = {
     };
     walk(root);
     root.style.setProperty('--n', i);
-    if (unit === 'both') root.style.setProperty('--words', w);
-  }
-
-  // Gives every letter of a [data-scrub-letters] paragraph the place it flies in from: a
-  // point of its own somewhere out across the whole section it sits in. The points are taken
-  // from the R2 sequence rather than Math.random(), which spreads them evenly over the area
-  // instead of leaving clumps and gaps, and makes a letter come in the same way every time.
-  // Each letter's trip is that point less where the letter belongs, which is measured with
-  // the line held in its places (.is-measuring), so what's measured is its seat in the line
-  // and not wherever it has flown to. style.css carries them home as the section scrolls
-  // past (--p). It's worked out again when the line is re-laid, which is only when the page
-  // is resized or a late font changes the measurements.
-  function scatterLetters(el) {
-    const chars = $$('.char', el);
-    const section = el.closest('.section');
-    if (!chars.length || !section) return;
-    const rnd = (k) => {
-      const x = Math.sin(k * 127.1 + 311.7) * 43758.545;
-      return x - Math.floor(x);
-    };
-    const INSET = 0.05; // kept just inside the section, so no letter starts on its edge
-    const place = () => {
-      el.classList.add('is-measuring');
-      const box = section.getBoundingClientRect();
-      const homes = chars.map((ch) => ch.getBoundingClientRect()); // read together: one layout
-      el.classList.remove('is-measuring');
-      const span = 1 - 2 * INSET;
-      chars.forEach((ch, k) => {
-        const fromX = box.left + box.width * (INSET + span * (((k + 1) * 0.7548776662) % 1));
-        const fromY = box.top + box.height * (INSET + span * (((k + 1) * 0.5698402909) % 1));
-        const home = homes[k];
-        ch.style.setProperty('--dx', `${(fromX - (home.left + home.width / 2)).toFixed(1)}px`);
-        ch.style.setProperty('--dy', `${(fromY - (home.top + home.height / 2)).toFixed(1)}px`);
-        ch.style.setProperty('--r', (rnd(k + 17) * 2 - 1).toFixed(3));
-      });
-    };
-    place();
-    document.fonts?.ready.then(place); // the line can shift once the real font is in
-    if ('ResizeObserver' in window) {
-      // Nothing here changes the section's size, so watching it can't set itself off again
-      new ResizeObserver(place).observe(section);
-    } else {
-      window.addEventListener('resize', place);
-    }
+    if (unit !== 'char') root.style.setProperty('--words', w);
   }
 
   function initSplitText() {
     $$('[data-split-words]').forEach((el) => splitText(el, 'word'));
-    $$('[data-scrub-letters]').forEach((el) => {
-      splitText(el, 'both');
-      scatterLetters(el);
-    });
+    // Lit word by word as it scrolls past (initHeroScroll: the scroll-lit statement)
+    $$('[data-scroll-lit]').forEach((el) => splitText(el, 'word'));
     $$('[data-split-letters]').forEach((el) => {
       splitText(el, 'char');
       el.classList.add('is-split');
@@ -584,9 +540,12 @@ const CUBE_CONFIG = {
   //   2. the hero's text lifts and fades out over the first stretch of the hero, leaving the
   //      spheres and the network on an otherwise empty screen. autoAlpha, not opacity, so
   //      once it has gone it is visibility: hidden too and cannot take keyboard focus.
-  //   3. the About statement arrives into that: its letters fly to their places on --p
-  //      (initScrollEffects), which is already running by then, so the two overlap by
-  //      design rather than waiting on one another.
+  //   3. the About statement arrives into that: it sits as faint ghost text and its words
+  //      light up in reading order as it scrolls through the screen. Each word's --lit runs
+  //      0 → 1 on one scrubbed, staggered tween; style.css turns that into its opacity, a
+  //      small rise and a passing flash of the brand glow, so a few words are mid-way at any
+  //      moment and the glow reads as one band sweeping along the sentence. Without GSAP
+  //      (or with reduced motion) --lit is never set and the words are simply there.
   // Then, once About has gone with it, the field itself fades and its loop is stopped.
   // Everything is inside gsap.matchMedia, so asking for reduced motion gets the plain page
   // and ScrollTrigger cleans itself up. If GSAP never arrives, the sections just scroll:
@@ -685,6 +644,16 @@ const CUBE_CONFIG = {
           ease: 'none',
           scrollTrigger: { trigger: hero, start: 'top top', end: '12% top', scrub: true }
         });
+        const lit = $('[data-scroll-lit]');
+        const words = lit ? $$('.word', lit) : [];
+        if (words.length) {
+          gsap.fromTo(words, { '--lit': 0 }, {
+            '--lit': 1,
+            ease: 'none', // the easing lives in style.css, per word
+            stagger: 0.12,
+            scrollTrigger: { trigger: lit, start: 'top 85%', end: 'bottom 50%', scrub: 0.5 }
+          });
+        }
         roam();
       });
       // The About statement is split and measured after the fonts land, which can move
@@ -747,7 +716,7 @@ const CUBE_CONFIG = {
     const legs = $$('.spider__leg', root);
     const hint = $('.about__hint', root);
     const scrub = root.closest('[data-scrub]');
-    const statement = scrub && $('[data-scrub-letters]', scrub);
+    const statement = scrub && $('[data-scroll-lit]', scrub);
     const C = { x: 387.5, y: 281 }; // body centre, in viewBox units
     const nums = (s) => s.match(/-?\d+(?:\.\d+)?/g).map(Number);
     // M x y C x y x y x y C x y x y x y → 14 numbers per arm
@@ -1688,8 +1657,8 @@ const CUBE_CONFIG = {
         drop.classList.remove('is-gone');
         spider.classList.add('is-ready');
         const step = (now) => {
-          const t = Math.min(1, (now - t0) / 1100);
-          const e = 1 + 2.7 * (t - 1) ** 3 + 1.7 * (t - 1) ** 2; // overshoots a touch, then settles
+          const t = Math.min(1, (now - t0) / 850);
+          const e = 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2; // a soft overshoot, then settles
           aimView();
           ringPoint(spot); // where it will land, as the web looks at this moment
           const cy = top + (py - top) * e;
@@ -1705,16 +1674,18 @@ const CUBE_CONFIG = {
           land(spot);
         };
         requestAnimationFrame(step);
-      }, 1500);
+      }, 650); // the spokes are out by then; it lands while the rings are still spinning
     }
+    // Watched on the web itself, not the whole stage: on phones the stage also holds every
+    // panel, stacked, so 30% of it could be screens away and the spider would arrive late
     if ('IntersectionObserver' in window) {
       const seen = new IntersectionObserver((entries) => {
         if (!introduced && entries.some((entry) => entry.isIntersecting)) {
           seen.disconnect();
           intro();
         }
-      }, { threshold: 0.3 });
-      seen.observe(root);
+      }, { threshold: 0.25 });
+      seen.observe(web);
     } else {
       intro();
     }
