@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="utf-8">
@@ -10,7 +10,7 @@
        console prints the new hash to paste here. connect-src lists the two form services
        script.js can send enquiries to ('self' also covers the live speed and security checks,
        which only ever ask this site). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- SEO: the title and description are what Google shows in its results. Keep the title
@@ -19,7 +19,7 @@
   <meta name="description"
     content="CobWebZ is a web design and development studio in Colombo, Sri Lanka. Fast, secure websites from LKR 40,000, Django and PHP web apps, hosting and support.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#f0f1f3">
+  <meta name="theme-color" content="#0c0d10">
   <!-- SEO: the site's public address. Search for "www.cobwebz.lk" across the project
        (every page, robots.txt, sitemap.xml) and replace it when the domain changes. -->
   <link rel="canonical" href="https://www.cobwebz.lk/">
@@ -43,10 +43,10 @@
   <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <!-- Sets the theme before the first paint, so dark-mode visitors never see the light page
-       flash: a saved choice wins, otherwise it follows the device's light/dark setting.
+  <!-- The site is dark first (<html data-theme="dark">); this switches to light before the
+       first paint only for visitors who have chosen light, so they never see a dark flash.
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
 
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="variables.css">

@@ -149,7 +149,6 @@ const CUBE_CONFIG = {
     // Only sections a link points to, so passing one without a link keeps the last one lit;
     // plus the hero, so being back at the top lights none
     const sections = $$('main > section[id]').filter((s) => linked.has(s.id) || s.id === 'overview');
-    if (!links.length || !sections.length) return;
 
     // The header's dot slides under the lit link (wide screens, where the links show)
     const nav = $('.site-nav');
@@ -170,6 +169,15 @@ const CUBE_CONFIG = {
       if (!placed) requestAnimationFrame(() => requestAnimationFrame(() => nav.classList.remove('is-placing')));
       placed = true;
     };
+
+    // Pages away from home (work.html) mark their own link in the HTML and have no sections
+    // to follow: the dot just sits under that link
+    if (!links.length || !sections.length) {
+      window.addEventListener('resize', placeDot);
+      document.fonts?.ready.then(placeDot);
+      placeDot();
+      return;
+    }
 
     const setActive = (id) => {
       links.forEach((a) => {
@@ -249,13 +257,13 @@ const CUBE_CONFIG = {
     .slice(0, max);
 
   // Two toggles: the sun/moon button in the header, and the switch in the menu that stands
-  // in for it on phones. Until a visitor picks one, the theme follows their device's
-  // light/dark setting, live (the inline script in <head> does the same before first paint).
+  // in for it on phones. The site is dark first: every visitor starts in dark mode (the
+  // <html> tag carries data-theme="dark", so even without JavaScript) until they pick light,
+  // which is remembered; the inline script in <head> applies that choice before first paint.
   function initTheme() {
     const toggles = $$('[data-theme-toggle]');
     const meta = $('meta[name="theme-color"]');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-    const preferred = () => storage.get('theme') || (systemDark.matches ? 'dark' : 'light');
+    const preferred = () => (storage.get('theme') === 'light' ? 'light' : 'dark');
     if (!toggles.length) {
       document.documentElement.dataset.theme = preferred();
       return;
@@ -282,7 +290,6 @@ const CUBE_CONFIG = {
       apply(next);
       storage.set('theme', next);
     }));
-    systemDark.addEventListener('change', () => { if (!storage.get('theme')) apply(preferred()); });
   }
 
   /* ---------- Hero: the name, brought into focus letter by letter ---------- */

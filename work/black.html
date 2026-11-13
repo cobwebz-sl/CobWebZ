@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <!-- Only this site's own files may load. The inline theme script below is allowed by its
        sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
        This page lives in /work/, so every link and file path starts from the site root (/). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Black.: Creative Portfolio Website Case Study | CobWebZ</title>
   <meta name="description" content="How CobWebZ designed and built Black., a concept showcase for a photography and sound collective that works as a scroll story or a slide deck.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#f0f1f3">
+  <meta name="theme-color" content="#0c0d10">
   <link rel="canonical" href="https://www.cobwebz.lk/work/black">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="CobWebZ">
@@ -33,7 +33,7 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <!-- Sets the theme before the first paint (saved choice, else the device setting).
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0c0d10'}}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
 
   <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/variables.css">
