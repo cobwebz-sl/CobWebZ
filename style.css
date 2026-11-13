@@ -1810,9 +1810,10 @@
     .faq__item::before { animation: none; }
   }
 
-  /* The Glow Border comet (originkit.js) running round every FAQ card. A closed <details>
-     hides everything but its summary, so it's drawn here on ::after instead of a JS ring;
-     the same two comets, dusty blue fading to rose gold, spin via --faq-spin. */
+  /* The Glow Border comet (originkit.js) running round the open FAQ card only. A closed
+     <details> hides everything but its summary, so it's drawn here on ::after instead of a JS
+     ring; the same two comets, dusty blue fading to rose gold, spin via --faq-spin. Closed
+     cards keep the ring hidden and paused, so only one card animates at a time. */
   .faq__item::after {
     --glow-head: var(--color-dusty-blue-deep);
     --glow-tail: color-mix(in srgb, var(--color-rose-gold) 75%, transparent);
@@ -1833,15 +1834,17 @@
     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     mask-composite: exclude;
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out);
+  }
+  .faq__item[open]::after {
+    opacity: 1;
     animation: faq-comet 11s linear infinite;
   }
   [data-theme='dark'] .faq__item::after { --glow-head: var(--color-dusty-blue); }
-  /* each card starts at a different point, so the comets don't move in lockstep */
-  .faq__item:nth-child(3n + 2)::after { animation-delay: -3.7s; }
-  .faq__item:nth-child(3n + 3)::after { animation-delay: -7.4s; }
   @keyframes faq-comet { to { --faq-spin: 360deg; } }
   @media (prefers-reduced-motion: reduce) {
-    .faq__item::after { animation: none; }
+    .faq__item[open]::after { animation: none; }
   }
 
   /* The question: number on the left, round button on the right */
