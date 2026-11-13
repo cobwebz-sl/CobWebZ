@@ -650,9 +650,131 @@
     text-align: center;
   }
   .hero__inner {
+    position: relative;
+    z-index: 1; /* over the hero's own background */
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  /* ---------- Hero field: the drifting background the page scrolls over ---------- */
+  /* Two things on one layer, both decoration: the particle network tsParticles draws into
+     .hero-field__net (script.js, initHeroField) and five glass spheres that float on the
+     keyframes below. It is fixed to the screen and sits at the foot of the page's own
+     stacking order: z-index 0 and first in the markup, so every section, which is positioned
+     and comes later, paints over it. The sections have no background of their own, so it
+     shows through them, and it takes no pointer events, so nothing it covers stops working.
+     Being fixed is what makes it stay while the hero and About scroll past.
+     It is only there at all with script running (.is-live, set by initHeroField). */
+  .hero-field { display: none; }
+  .js .hero-field {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s var(--ease-out);
+  }
+  .js .hero-field.is-live { opacity: 1; }
+  /* The network covers the screen now that it travels the whole page, with one soft mask to
+     take the hard edge off it: full strength through the middle, easing out at the very
+     edges so the dots never look cut off against the frame. The canvas tsParticles makes is
+     sized by this box, so it is given one. */
+  .hero-field__net {
+    position: absolute;
+    inset: 0;
+    --net-mask: radial-gradient(124% 98% at 50% 50%, #000 38%, rgba(0, 0, 0, 0.5) 74%, transparent 100%);
+    -webkit-mask-image: var(--net-mask);
+    mask-image: var(--net-mask);
+  }
+  .hero-field__net canvas { display: block; }
+
+  /* A sphere: a bright highlight up and to the left where the light falls, a soft dark pool
+     opposite it, a hairline edge and a weighted underside (the inset shadows), and a shadow
+     cast on the page below. backdrop-filter frosts whatever shows through, which here is the
+     network behind it and any sphere it crosses. */
+  .hero-field__orb {
+    --orb-hi: rgba(255, 255, 255, 0.78);
+    --orb-lo: rgba(10, 10, 10, 0.07);
+    --orb-body: rgba(255, 255, 255, 0.09);
+    --orb-edge: rgba(255, 255, 255, 0.55);
+    --orb-deep: rgba(10, 10, 10, 0.16);
+    --orb-cast: rgba(10, 10, 10, 0.14);
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 26%, var(--orb-hi), transparent 38%),
+      radial-gradient(circle at 70% 78%, var(--orb-lo), transparent 58%),
+      var(--orb-body);
+    box-shadow:
+      inset 0 1px 1px var(--orb-hi),
+      inset 0 0 0 1px var(--orb-edge),
+      inset 0 -18px 32px -14px var(--orb-deep),
+      inset 10px -10px 40px -18px var(--orb-deep),
+      0 26px 50px -22px var(--orb-cast);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    will-change: transform, translate; /* its own drift, and the roam script.js scrubs on top */
+  }
+  [data-theme='dark'] .hero-field__orb {
+    --orb-hi: rgba(255, 255, 255, 0.3);
+    --orb-lo: rgba(0, 0, 0, 0.32);
+    --orb-body: rgba(255, 255, 255, 0.045);
+    --orb-edge: rgba(255, 255, 255, 0.13);
+    --orb-deep: rgba(0, 0, 0, 0.55);
+    --orb-cast: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Where each sphere sits and how big it is. They are kept out to the sides and corners, off
+     the middle where the name is set, and sized against the viewport so the arrangement holds
+     at any width. --t and --d are its own pace and how far into that pace it starts: no two
+     share a pair, and the negative delays mean they are already scattered through their
+     paths on the first frame rather than setting off together. */
+  .hero-field__orb:nth-child(2) { --size: clamp(84px, 11vw, 168px); top: 14%; left: 7%; --t: 17s; --d: -3s; }
+  .hero-field__orb:nth-child(3) { --size: clamp(52px, 6.5vw, 104px); top: 24%; right: 11%; --t: 13s; --d: -8s; }
+  .hero-field__orb:nth-child(4) { --size: clamp(110px, 14vw, 224px); bottom: 9%; right: 5%; --t: 23s; --d: -14s; }
+  .hero-field__orb:nth-child(5) { --size: clamp(40px, 4.6vw, 72px); bottom: 26%; left: 16%; --t: 19s; --d: -5s; }
+  .hero-field__orb:nth-child(6) { --size: clamp(60px, 7.5vw, 120px); top: 58%; left: 2%; --t: 15s; --d: -11s; }
+  .hero-field__orb { animation: orb-drift-a var(--t, 18s) ease-in-out var(--d, 0s) infinite; }
+  .hero-field__orb:nth-child(3),
+  .hero-field__orb:nth-child(5) { animation-name: orb-drift-b; }
+  .hero-field__orb:nth-child(4) { animation-name: orb-drift-c; }
+
+  /* Three wandering paths, each returning to where it started so the loop never jumps.
+     Only translate moves, which the compositor can carry on its own. */
+  @keyframes orb-drift-a {
+    0%, 100% { translate: 0 0; }
+    25% { translate: 26px -34px; }
+    50% { translate: -14px -56px; }
+    75% { translate: -32px -20px; }
+  }
+  @keyframes orb-drift-b {
+    0%, 100% { translate: 0 0; }
+    30% { translate: -30px 26px; }
+    60% { translate: 18px 44px; }
+    80% { translate: 34px 10px; }
+  }
+  @keyframes orb-drift-c {
+    0%, 100% { translate: 0 0; }
+    20% { translate: -38px -18px; }
+    45% { translate: -20px 30px; }
+    70% { translate: 24px 36px; }
+    88% { translate: 30px -12px; }
+  }
+
+  /* Narrow screens: the two smallest spheres go, and the rest give up the frosting. The
+     backdrop has to be re-blurred for every frame a sphere moves, which is the one costly
+     part of this; on a phone it buys almost nothing, as there is little behind them. */
+  @media (max-width: 760px) {
+    .hero-field__orb:nth-child(3),
+    .hero-field__orb:nth-child(5) { display: none; }
+    .hero-field__orb {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
   }
   .hero__title {
     margin-top: 28px;
@@ -728,19 +850,17 @@
   }
   .hero__note:hover { color: var(--color-ink); }
 
+  /* A thin line with a bead running down it: the one hint that there's more below. The link
+     around it is 44px wide and 48px tall, so it's still easy to tap. */
   .scroll-cue {
     position: absolute;
+    z-index: 1; /* over the hero's own background */
     left: 50%;
-    bottom: clamp(20px, 4vh, 40px);
+    bottom: clamp(16px, 3.5vh, 36px);
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-body);
+    justify-content: center;
+    width: 44px;
+    padding-block: 4px;
     translate: -50% 0;
   }
   .scroll-cue i {
@@ -748,7 +868,7 @@
     width: 1px;
     height: 40px;
     overflow: hidden;
-    background: var(--color-line);
+    background: var(--color-line-strong);
   }
   .scroll-cue i::after {
     content: '';
@@ -762,13 +882,40 @@
     60%, 100% { transform: translateY(100%); }
   }
 
-  /* ---------- Homepage hero: just the name, one line and the buttons ---------- */
+  /* ---------- Homepage hero: the name, one quiet line, one button and a text link ---------- */
+  /* Flat canvas, no glow: the name carries the screen and everything else stays small. */
+  .hero--home {
+    min-height: clamp(640px, 100svh, 1000px);
+    background: none;
+  }
   .hero--home .hero__title { margin-top: 0; }
   .hero--home .hero__brand { font-size: clamp(60px, 19vw, 296px); } /* about 80% of the screen width */
-  .hero--home .hero__tagline { margin-top: 0.45em; }
-  .hero--home .hero__actions { margin-top: clamp(32px, 5vh, 52px); }
-  /* With nothing else in the hero to follow, the buttons come in after the tagline's words */
+  .hero--home .hero__tagline {
+    margin-top: clamp(18px, 2.2vw, 32px);
+    font-size: clamp(17px, 1.55vw, 22px);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -0.015em;
+  }
+  /* At this size the usual muted tone would fall under 4.5:1 on the light canvas */
+  .hero--home .hero__tagline .accent { color: var(--color-body); }
+  .hero--home .hero__actions { margin-top: clamp(28px, 4vh, 44px); gap: 6px 22px; }
+  /* With nothing else in the hero to follow, the actions come in after the tagline's words */
   .js .hero--home .hero__actions[data-hero-step] { transition-delay: 0.95s; }
+  /* The quieter second action: a text link, padded out to a 44px-tall target */
+  .hero__link {
+    padding: 12px 4px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-body);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 5px;
+    transition: color 0.2s var(--ease-out), text-decoration-color 0.2s var(--ease-out);
+  }
+  .hero__link:hover { color: var(--color-ink); text-decoration-color: currentColor; }
 
 
   /* ---------- Type accents ---------- */
@@ -820,6 +967,9 @@
   }
 
   /* ---------- About ---------- */
+  /* The statement's letters fly in from outside its column, so the section keeps them off
+     the page's sideways scroll; clip (not hidden) leaves the page's own scrolling alone. */
+  .about { overflow-x: clip; }
   .about__body {
     display: grid;
     align-items: center;
@@ -832,6 +982,7 @@
     }
   }
   .about__statement {
+    --fly-wave: 38; /* how many letters are in the air at once, so the line assembles in a run */
     font-size: clamp(26px, 3.3vw, 46px);
     font-weight: 500;
     line-height: 1.28;
@@ -839,22 +990,59 @@
     color: var(--color-ink);
     text-wrap: pretty;
   }
-  /* Words start soft (at 45%, still readable), gently blurred (2.8px) and resting 5px lower. As you scroll,
-     each word focuses with optical clarity, fades to solid ink, and glides
-     up into place. Hovering gives an elastic ripple like touching a web thread. */
-  .js .about__statement .word {
-    opacity: clamp(0.45, calc((var(--p, 0) * (var(--n) + 8) - var(--i)) / 3), 1); /* 0.45: still 3:1 contrast (large text) before it lights up */
-    transform: translateY(clamp(0px, calc(1px * (var(--i) - var(--p, 0) * (var(--n) + 8)) * 0.9), 5px));
-    filter: blur(clamp(0px, calc(1px * (var(--i) - var(--p, 0) * (var(--n) + 8)) * 0.5), 2.8px));
-    transition: color 0.25s var(--ease-out), opacity 0.25s var(--ease-out), filter 0.25s var(--ease-out);
+  /* The statement puts itself together as the section scrolls past. Every letter starts at a
+     place of its own somewhere out across the whole section — script.js measures where that
+     is from its seat in the line and leaves the trip in --dx, --dy, with a tilt in --r — and
+     flies home to its place in the line, in reading order, as --p runs 0 → 1. Nothing is ever
+     laid out again: a letter holds its place in the line the whole way and only translate,
+     rotate, scale and opacity carry it there, so the flight costs no more than moving the
+     words used to. Hovering a word that has landed gives it an elastic lift, like touching a
+     web thread. */
+  .js .about__statement .char {
+    --fly-t: clamp(0, calc((var(--p, 0) * (var(--n) + var(--fly-wave)) - var(--i)) / var(--fly-wave)), 1);
+    --fly-e: calc((1 - var(--fly-t)) * (1 - var(--fly-t)));
+    translate: calc(var(--fly-e) * var(--dx, 0px)) calc(var(--fly-e) * var(--dy, 0px));
+    rotate: calc(var(--fly-e) * var(--r, 0) * 34deg);
+    scale: calc(1 - var(--fly-e) * 0.2);
+    opacity: clamp(0, calc(var(--fly-t) * 2.4), 1); /* it fades up early on, so you watch it fly */
+  }
+  /* While script.js is working out where each letter starts, the line is held in its places,
+     so what it measures is where the letters belong and not where they happen to be */
+  .js .about__statement.is-measuring .char { translate: none; rotate: none; scale: none; }
+
+  /* Once the last letter is home (.is-settled, from script.js), one sweep of light runs down
+     the finished sentence: the brand's own glow, dusty blue warming to rose gold along the
+     line — the same pair the FAQ border and the process line are drawn with. Each word takes
+     the glow and lifts a hair as the sweep reaches it, then settles back to ink; a word's
+     0.7s is far longer than the 22ms between it and the next, so they overlap into one
+     moving band rather than a row of blinks.
+     It runs over the words, not the letters: five times fewer things to move for a sweep
+     that looks the same, which keeps it smooth on a slow machine. The lift uses translate,
+     which leaves transform free for a word's hover, and it fills neither end, so before and
+     after the sweep a word is simply itself. */
+  .about__statement {
+    --glint-a: var(--color-dusty-blue-deep);
+    --glint-b: var(--color-rose-gold-deep);
+  }
+  [data-theme='dark'] .about__statement {
+    --glint-a: var(--color-dusty-blue);
+    --glint-b: var(--color-rose-gold);
+  }
+  .js .about__body.is-settled .about__statement .word {
+    animation: statement-glint 0.7s var(--ease-out) calc(var(--w) * 22ms);
+  }
+  @keyframes statement-glint {
+    0%, 100% { translate: 0 0; color: var(--color-ink); }
+    45% {
+      translate: 0 -0.09em;
+      color: color-mix(in srgb, var(--glint-b) calc(var(--w) / var(--words) * 100%), var(--glint-a));
+    }
   }
 
   .js .about__statement .word:hover {
     color: var(--color-ink);
-    opacity: 1 !important;
-    filter: blur(0px) !important;
-    transform: translateY(-2.5px) !important;
-    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s, filter 0.15s;
+    transform: translateY(-2.5px);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s;
   }
 
   /* The spider mark spins itself in while the section scrolls past: the W's outer threads
@@ -934,7 +1122,7 @@
   /* Snapping the spider back from far out shakes the web, words included: the tremor runs
      from the last word (nearest the spider) back to the first; script.js sets --tremor */
   .about__statement.is-trembling .word {
-    animation: word-tremor 0.55s var(--ease-out) calc((var(--n) - var(--i)) * 12ms);
+    animation: word-tremor 0.55s var(--ease-out) calc((var(--words) - var(--w)) * 12ms);
   }
   @keyframes word-tremor {
     0%, 100% { translate: 0 0; }
@@ -944,10 +1132,13 @@
   }
 
   /* ---------- Our Services: four services hung on a web ---------- */
-  /* script.js (initServices) draws the web into .services__silk: 12 spokes, 8 rings, the
-     ring the spider walks (.s-path, radius 195 of the 600-unit viewBox) and its thread
-     (.services__trail). The service points sit on that ring at angle --a, which is why they
-     are 32.5% (195 / 600) out from the centre. */
+  /* script.js (initServices) draws the web into .services__silk as a shallow bowl in 3D:
+     12 spokes, 8 rings, the ring the spider walks (.s-path, radius 195 of the 600-unit
+     viewBox) and its thread (.services__trail). It works out the perspective itself and
+     rewrites the paths, so there's no CSS 3D here. The service points sit on that ring at
+     angle --a, which is why they start 32.5% (195 / 600) out from the centre; the script then
+     moves each one (with translate) to where its spot on the bowl appears and hands it the
+     size (--k) and tone (--f) of that depth. */
   .services {
     position: relative;
     overflow-x: clip;
@@ -968,7 +1159,8 @@
     .services__stage { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
   }
 
-  /* The web, its points and the spider tilt together toward the pointer (--rx / --ry) */
+  /* The box the web is drawn in. The bowl's lean (toward the spider, and under the pointer)
+     happens inside the drawing, so the box itself stays flat and still. */
   .services__web {
     position: relative;
     width: min(100%, 560px);
@@ -976,8 +1168,6 @@
     margin-inline: auto;
     color: color-mix(in srgb, var(--color-ink) 22%, transparent);
     container-type: size;
-    transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-    transition: transform 0.6s var(--ease-out);
   }
   .services__silk {
     position: absolute;
@@ -986,7 +1176,7 @@
     height: 100%;
     overflow: visible;
   }
-  .services__silk :is(path, circle, line) {
+  .services__silk :is(path, line) {
     fill: none;
     stroke: currentColor;
     stroke-width: var(--sw, 1); /* script.js keeps this at about a pixel */
@@ -994,10 +1184,11 @@
   }
   .services__silk .s-path,
   .services__silk .s-hub { stroke-width: calc(var(--sw, 1) * 1.6); }
+  /* The thread the spider lays: script.js plots just the stretch it has walked */
   .services__silk .services__trail {
     stroke: var(--color-ink);
     stroke-width: calc(var(--sw, 1) * 2.2);
-    stroke-dasharray: 0 1;
+    stroke-linejoin: round;
     opacity: 0;
     transition: opacity 1.2s var(--ease-out);
   }
@@ -1053,6 +1244,8 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
+  /* The point itself sits on the bowl, so it's drawn at the size (--k) and the tone (--f)
+     of its depth, both set by script.js as the web turns */
   .services__dot {
     position: relative;
     width: 12px;
@@ -1060,7 +1253,9 @@
     border-radius: 50%;
     background: var(--color-canvas);
     box-shadow: inset 0 0 0 1.5px currentColor;
-    transition: background-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), scale 0.3s var(--ease-out);
+    scale: calc(var(--k, 1) * var(--services-hover));
+    opacity: var(--f, 1);
+    transition: background-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), --services-hover 0.3s var(--ease-out);
   }
   /* A ripple keeps going out from the chosen point */
   .services__dot::after {
@@ -1088,9 +1283,16 @@
     font-weight: 500;
     letter-spacing: -0.02em;
     white-space: nowrap;
+    scale: var(--k, 1); /* sized with its point, from the edge nearest it, so it stays put */
+    transform-origin: left center;
     transition: color 0.3s var(--ease-out);
   }
-  .services__node--left .services__label { left: auto; right: calc(100% + 4px); flex-direction: row-reverse; }
+  .services__node--left .services__label {
+    left: auto;
+    right: calc(100% + 4px);
+    flex-direction: row-reverse;
+    transform-origin: right center;
+  }
   .services__num {
     font-family: var(--font-mono);
     font-size: 0.7em;
@@ -1099,7 +1301,7 @@
   }
   .services__node:hover,
   .services__node.is-active { color: var(--color-ink); }
-  .services__node:hover .services__dot { scale: 1.25; }
+  .services__node:hover .services__dot { --services-hover: 1.25; }
   .services__node.is-active .services__dot { background: var(--color-ink); box-shadow: inset 0 0 0 1.5px var(--color-ink); }
   .services__node:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
   /* The points pop on once the web has spun */
@@ -2279,8 +2481,12 @@
       transition-delay: 0ms !important;
     }
     .js .reveal, .js [data-hero-step] { opacity: 1; transform: none; }
+    /* The spheres stay where they are put; initHeroField leaves the network unstarted */
+    .hero-field__orb { animation: none; translate: none; }
     .js [data-split-words] .word,
     .js .hero__brand .char { opacity: 1; transform: none; filter: none; }
+    .js .about__statement .char { translate: none; rotate: none; scale: none; opacity: 1; }
+    .js .about__body.is-settled .about__statement .word { animation: none; }
     .js [data-split-words] .word { filter: none; }
     .js .about__body { --p: 1 !important; }
     .about__mark.is-scuttling .spider__leg { animation: none; }
@@ -2299,6 +2505,31 @@
     }
     .marquee__track .is-clone { display: none; }
   }
+}
+
+/* How far a letter of the opening statement has come in from the screen (--fly-t: 0 still
+   out there … 1 home) and how much of its flight is left to run, eased (--fly-e: the square
+   of what remains, so it comes in fast and settles gently). They're registered as numbers,
+   so each letter works its own out once a frame instead of the whole sum being re-read
+   wherever it's used. */
+@property --fly-t {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+@property --fly-e {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* The growth of a service point under the pointer (.services__dot). It's a number of its
+   own, so the transition eases the hover alone and leaves the perspective size (--k, which
+   script.js rewrites every frame) to follow the web without being dragged behind it. */
+@property --services-hover {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
 }
 
 /* Turns the FAQ cards' glow border (.faq__item::after) */

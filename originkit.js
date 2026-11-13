@@ -702,8 +702,9 @@
   window.CobwebzKit = { roll };
 
   /* ---------- Switch on everything the page asks for ---------- */
-  // Every button gets the cobwebs, and every badge and pricing card the glow border
-  $$('[data-spider-button], .btn').forEach(initSpider);
+  // Every button gets the cobwebs (except one marked data-plain, like the hero's, which
+  // stays a clean pill), and every badge and pricing card the glow border
+  $$('[data-spider-button], .btn:not([data-plain])').forEach(initSpider);
   $$('[data-glow-border], .badge, .price').forEach(initGlow);
   $$('[data-scramble]').forEach(initScramble);
   $$('[data-tilt]').forEach(initTilt);

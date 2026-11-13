@@ -3,11 +3,14 @@
 
 <head>
   <meta charset="utf-8">
-  <!-- Only this site's own files may load. The inline theme script below is allowed by its
-       sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
-       connect-src lists the two form services script.js can send enquiries to ('self' also
-       covers the live speed and security checks, which only ever ask this site). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <!-- Only this site's own files may load, with one exception: the hero's particle library
+       is fetched from jsDelivr, so script-src names that host. The <script> tag that loads it
+       carries an integrity hash, so a changed file is refused rather than run.
+       The inline theme script below is allowed by its sha256 hash: if you change it, Chrome's
+       console prints the new hash to paste here. connect-src lists the two form services
+       script.js can send enquiries to ('self' also covers the live speed and security checks,
+       which only ever ask this site). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-j3TtgVy7odtat8WwSOxIOBZA0OejozkBKo/UN2IVrTc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- SEO: the title and description are what Google shows in its results. Keep the title
@@ -297,12 +300,32 @@
   </header>
 
   <main id="main">
+    <!-- Decoration, and nothing else: a faint network of dots that join up as they drift
+         (tsParticles, started by initHeroField() in script.js) and five glass spheres that
+         float on CSS keyframes. It is fixed to the screen and sits under every section, and
+         it roams the whole page: every section pulls the spheres into a new arrangement as
+         it goes by (initHeroScroll). The whole layer is hidden from screen readers,
+         takes no pointer events and is never above anything, so every word and button stays
+         readable and clickable. Without script, or with reduced motion asked for, it is
+         either absent or simply still. -->
+    <div class="hero-field" aria-hidden="true">
+      <div class="hero-field__net" id="hero-particles"></div>
+      <span class="hero-field__orb"></span>
+      <span class="hero-field__orb"></span>
+      <span class="hero-field__orb"></span>
+      <span class="hero-field__orb"></span>
+      <span class="hero-field__orb"></span>
+    </div>
+
     <!-- ============ HERO ============ -->
     <!-- The name appears once in the heading's text. initHeroBrand() (script.js) draws the
          big letters as decoration over it, so screen readers, search engines and
          copy-paste all get "CobWebZ" a single time. The letters sharpen into focus once on
          load (Focus Reveal, adapted from Originkit). Kept minimal on purpose: the
-         name, one line and the two buttons. -->
+         name, one quiet line, one button and one text link. The button is left plain
+         (data-plain: originkit.js draws no cobwebs in it). Behind all of it sits .hero-field,
+         the drifting background, which stays on screen while this text lifts away and fades
+         (initHeroScroll in script.js). -->
     <section class="hero hero--home" id="overview" aria-labelledby="hero-title">
 
       <div class="container-cube hero__inner">
@@ -312,18 +335,20 @@
               running.</span></span>
         </h1>
         <div class="hero__actions" data-hero-step>
-          <a href="#contact" class="btn btn--primary btn--lg btn--sheen" data-magnetic data-spider-button>Start a project <span
+          <a href="#contact" class="btn btn--primary btn--lg" data-plain>Start a project <span
               aria-hidden="true">→</span></a>
-          <a href="#estimate" class="btn btn--ghost btn--lg">Estimate your price</a>
+          <a href="#estimate" class="hero__link">Estimate your price</a>
         </div>
       </div>
 
-      <a href="#about" class="scroll-cue" aria-label="Scroll to About us">Scroll<i aria-hidden="true"></i></a>
+      <a href="#about" class="scroll-cue" aria-label="Scroll to About us"><i aria-hidden="true"></i></a>
     </section>
 
     <!-- ============ ABOUT ============ -->
-    <!-- As this section scrolls past, the statement darkens word by word and the spider mark
-         spins its web. Both follow --p, which script.js sets on .about__body. Once it has
+    <!-- As this section scrolls past, the statement's letters fly in from all over the
+         section to their places in the line and the spider mark spins its web. Both follow
+         --p, which script.js sets on .about__body; when it reaches the end the body is
+         marked .is-settled and a sweep of light runs down the finished sentence. Once it has
          landed the spider can be dragged and its web plucked (initSpiderMark); its back legs
          are web threads. -->
     <section class="section about" id="about" aria-labelledby="about-title">
@@ -331,7 +356,7 @@
         <h2 id="about-title" class="sr-only">About CobWebZ</h2>
 
         <div class="about__body" data-scrub>
-          <p class="about__statement" data-scrub-words>At CobWebZ, we design and build fast, secure, search-ready
+          <p class="about__statement" data-scrub-letters>At CobWebZ, we design and build fast, secure, search-ready
             websites for businesses in Sri Lanka and beyond. We pair clean, custom design with careful front-end
             engineering, so every site loads quickly, grows with you and holds your audience's attention.</p>
           <div class="about__mark" data-spider>
@@ -1378,6 +1403,25 @@
     <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
   </footer>
 
+  <!-- GSAP and ScrollTrigger, which choreograph the hero handing over to About
+       (initHeroScroll). Same arrangement as the line below: pinned versions, integrity
+       hashes, deferred, and script.js waits for the load event before using them. Nothing
+       on the page depends on them: if they never arrive, the sections simply scroll. -->
+  <script id="gsap-lib" src="https://cdn.jsdelivr.net/npm/gsap@3.15.1/dist/gsap.min.js"
+    integrity="sha384-3vCAhD+a3BOliP3QqjQINn6ZWiZxoqu0WFxX5ZQZgqekDZuSb1mJBrrLMmu94H8f" crossorigin="anonymous"
+    defer></script>
+  <script id="gsap-scrolltrigger" src="https://cdn.jsdelivr.net/npm/gsap@3.15.1/dist/ScrollTrigger.min.js"
+    integrity="sha384-H2WL1iy/jKQQ7MTHU2hskZKNHTYWWD/KgKE1vCNnaWY8An2ESTh23KN/fTp8XS3j" crossorigin="anonymous"
+    defer></script>
+  <!-- The hero's particle network. Pinned to one version and checked against its integrity
+       hash, so jsDelivr can only ever serve these exact bytes; anything else is refused and
+       the hero just loses its dots. Deferred, so it never holds up the page: script.js waits
+       for this tag's load event before starting the network (initHeroField).
+       To drop the third party entirely, save the file into the repo, point src at it and
+       take https://cdn.jsdelivr.net back out of the Content-Security-Policy above. -->
+  <script id="tsparticles-lib" src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.9.1/tsparticles.slim.bundle.min.js"
+    integrity="sha384-5kcDJ+ffJMa++kaV4PRkP1XvsEfY8/TRo+szgO3MHfkufilpbHEAT0t2V2nPK14E" crossorigin="anonymous"
+    defer></script>
   <script src="originkit.js"></script>
   <script src="script.js"></script>
 </body>

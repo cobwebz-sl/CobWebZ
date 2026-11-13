@@ -363,8 +363,13 @@ const CUBE_CONFIG = {
   /* ---------- Split text into words or letters ---------- */
   // Wraps each word (unit 'word') or letter (unit 'char') in a span with --i = its position,
   // keeping inner elements such as .accent, and sets --n = the count on the element.
+  // 'both' does the two at once, for text whose letters move on their own: the words are
+  // still the spans the lines break between, so a word can never be broken apart, and the
+  // letters sit inside them. The letters then carry the running count (--i, and --n on the
+  // element) and the words their own (--w, and --words).
   function splitText(root, unit) {
     let i = 0;
+    let w = 0;
     const walk = (node) => {
       [...node.childNodes].forEach((child) => {
         if (child.nodeType === Node.ELEMENT_NODE) { walk(child); return; }
@@ -375,9 +380,20 @@ const CUBE_CONFIG = {
           if (!part) return;
           if (!part.trim()) { frag.append(part); return; }
           const span = document.createElement('span');
-          span.className = unit;
-          span.style.setProperty('--i', i++);
-          span.textContent = part;
+          span.className = unit === 'both' ? 'word' : unit;
+          if (unit === 'both') {
+            span.style.setProperty('--w', w++);
+            [...part].forEach((letter) => {
+              const ch = document.createElement('span');
+              ch.className = 'char';
+              ch.style.setProperty('--i', i++);
+              ch.textContent = letter;
+              span.append(ch);
+            });
+          } else {
+            span.style.setProperty('--i', i++);
+            span.textContent = part;
+          }
           frag.append(span);
         });
         child.replaceWith(frag);
@@ -385,10 +401,58 @@ const CUBE_CONFIG = {
     };
     walk(root);
     root.style.setProperty('--n', i);
+    if (unit === 'both') root.style.setProperty('--words', w);
+  }
+
+  // Gives every letter of a [data-scrub-letters] paragraph the place it flies in from: a
+  // point of its own somewhere out across the whole section it sits in. The points are taken
+  // from the R2 sequence rather than Math.random(), which spreads them evenly over the area
+  // instead of leaving clumps and gaps, and makes a letter come in the same way every time.
+  // Each letter's trip is that point less where the letter belongs, which is measured with
+  // the line held in its places (.is-measuring), so what's measured is its seat in the line
+  // and not wherever it has flown to. style.css carries them home as the section scrolls
+  // past (--p). It's worked out again when the line is re-laid, which is only when the page
+  // is resized or a late font changes the measurements.
+  function scatterLetters(el) {
+    const chars = $$('.char', el);
+    const section = el.closest('.section');
+    if (!chars.length || !section) return;
+    const rnd = (k) => {
+      const x = Math.sin(k * 127.1 + 311.7) * 43758.545;
+      return x - Math.floor(x);
+    };
+    const INSET = 0.05; // kept just inside the section, so no letter starts on its edge
+    const place = () => {
+      el.classList.add('is-measuring');
+      const box = section.getBoundingClientRect();
+      const homes = chars.map((ch) => ch.getBoundingClientRect()); // read together: one layout
+      el.classList.remove('is-measuring');
+      const span = 1 - 2 * INSET;
+      chars.forEach((ch, k) => {
+        const fromX = box.left + box.width * (INSET + span * (((k + 1) * 0.7548776662) % 1));
+        const fromY = box.top + box.height * (INSET + span * (((k + 1) * 0.5698402909) % 1));
+        const home = homes[k];
+        ch.style.setProperty('--dx', `${(fromX - (home.left + home.width / 2)).toFixed(1)}px`);
+        ch.style.setProperty('--dy', `${(fromY - (home.top + home.height / 2)).toFixed(1)}px`);
+        ch.style.setProperty('--r', (rnd(k + 17) * 2 - 1).toFixed(3));
+      });
+    };
+    place();
+    document.fonts?.ready.then(place); // the line can shift once the real font is in
+    if ('ResizeObserver' in window) {
+      // Nothing here changes the section's size, so watching it can't set itself off again
+      new ResizeObserver(place).observe(section);
+    } else {
+      window.addEventListener('resize', place);
+    }
   }
 
   function initSplitText() {
-    $$('[data-split-words], [data-scrub-words]').forEach((el) => splitText(el, 'word'));
+    $$('[data-split-words]').forEach((el) => splitText(el, 'word'));
+    $$('[data-scrub-letters]').forEach((el) => {
+      splitText(el, 'both');
+      scatterLetters(el);
+    });
     $$('[data-split-letters]').forEach((el) => {
       splitText(el, 'char');
       el.classList.add('is-split');
@@ -429,9 +493,215 @@ const CUBE_CONFIG = {
     revealOn(extras, { threshold: 0 });
   }
 
+  /* ---------- Hero field: the drifting layer the hero and About scroll over ---------- */
+  // The spheres are CSS alone (style.css, "Hero field"); this is only the network of dots
+  // that join up as they drift, drawn by tsParticles into #hero-particles. Everything here
+  // is decoration, so it gives up easily: no element, no library (the CDN blocked, offline,
+  // or the integrity check refused the file), or reduced motion asked for, and the page is
+  // simply itself without it.
+  // It is kept cheap: the canvas is the only thing on the page running a frame loop, so it
+  // runs only while one of the two sections it belongs to is on screen, the count is cut on
+  // small screens, and the pointer is only followed where there is a real one to follow.
+  // Pointer events are read from the window rather than the canvas, so the canvas can stay
+  // pointer-events: none and everything underneath it stays clickable.
+  let heroNet = null; // the running network, which initHeroScroll stops and starts with it
+  function initHeroField() {
+    const box = $('#hero-particles');
+    const layer = $('.hero-field');
+    if (!box || !layer) return;
+    // The layer belongs to the whole page now, so it is simply up for all of it. Asking for
+    // reduced motion stops below: the spheres stay where style.css puts them and the network
+    // is never started, but the five of them are still there to look at, still.
+    layer.classList.add('is-live');
+    if (reduceMotion.matches) return;
+
+    const narrow = window.matchMedia('(max-width: 760px)');
+    // The dots take their tone from the page's own ink, so they suit either theme
+    const tone = () => {
+      const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim();
+      return ink || '#8a8d93';
+    };
+    const options = () => ({
+      fpsLimit: 60,
+      detectRetina: true,
+      fullScreen: { enable: false }, // it lives in the hero, not over the whole page
+      background: { color: 'transparent' },
+      particles: {
+        // A flat count, not a density: spread over an area, a phone's canvas works out at
+        // barely a handful of dots, which is no network at all
+        number: { value: narrow.matches ? 26 : 64, density: { enable: false } },
+        color: { value: tone() },
+        shape: { type: 'circle' },
+        opacity: { value: narrow.matches ? 0.34 : 0.45 },
+        size: { value: { min: 1, max: 2.2 } },
+        links: { enable: true, color: tone(), distance: 132, opacity: 0.3, width: 1 },
+        move: { enable: true, speed: 0.45, direction: 'none', straight: false, random: false, outModes: { default: 'out' } }
+      },
+      interactivity: {
+        detectsOn: 'window', // so the canvas itself can stay out of the way of the buttons
+        events: {
+          onHover: { enable: finePointer.matches, mode: 'grab' },
+          resize: { enable: true }
+        },
+        modes: { grab: { distance: 150, links: { opacity: 0.55 } } }
+      }
+    });
+
+    const start = () => {
+      // The bundle hands over its parts in a loader rather than fitting them to the engine
+      // itself: without this call the engine still makes particles, but nothing registered
+      // to move or draw them, and options like the links go unread. (It is loadSlim in the
+      // slim bundle and loadAll in the full one; either will do.)
+      const register = window.loadSlim || window.loadAll;
+      if (heroNet || !window.tsParticles || !register) return;
+      Promise.resolve(register(tsParticles))
+        .then(() => tsParticles.load({ element: box, options: options() }))
+        .then((container) => { heroNet = container; })
+        .catch(() => {}); // decoration: if it will not start, it stays away
+    };
+
+
+    // Deferred, so the library usually lands after this runs; either way it is caught
+    const tag = $('#tsparticles-lib');
+    if (window.tsParticles) start();
+    else if (tag) tag.addEventListener('load', start, { once: true });
+
+    // The theme switch repaints the dots in the new ink
+    new MutationObserver(() => {
+      if (!heroNet) return;
+      const ink = tone();
+      heroNet.options.particles.color.value = ink;
+      heroNet.options.particles.links.color.value = ink;
+      heroNet.refresh();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+
+  /* ---------- Hero → About: the field stays, the name lifts away, the statement arrives ---------- */
+  // Three beats, all tied to the scroll itself (GSAP ScrollTrigger, scrubbed) rather than
+  // played on a timer, so they follow the scroll exactly, forwards and back:
+  //   1. the field stays. It is fixed (style.css), so it simply does not move while the
+  //      sections travel over it; nothing animates it here until it is no longer wanted.
+  //   2. the hero's text lifts and fades out over the first stretch of the hero, leaving the
+  //      spheres and the network on an otherwise empty screen. autoAlpha, not opacity, so
+  //      once it has gone it is visibility: hidden too and cannot take keyboard focus.
+  //   3. the About statement arrives into that: its letters fly to their places on --p
+  //      (initScrollEffects), which is already running by then, so the two overlap by
+  //      design rather than waiting on one another.
+  // Then, once About has gone with it, the field itself fades and its loop is stopped.
+  // Everything is inside gsap.matchMedia, so asking for reduced motion gets the plain page
+  // and ScrollTrigger cleans itself up. If GSAP never arrives, the sections just scroll:
+  // the layer still appears and goes with the IntersectionObserver above.
+  function initHeroScroll() {
+    const hero = $('.hero--home');
+    if (!hero) return;
+
+    // ---- The roam ----
+    // The spheres don't sit in one place and drift: they cross the whole page. Every section
+    // is a stop on one scrubbed timeline, and at each stop the five of them travel to a fresh
+    // arrangement, so scrolling the site pulls them through a continuous re-forming rather
+    // than a loop that repeats. Scroll back up and they retrace it exactly.
+    // Where each one goes is worked out, not written down: a number derived from the
+    // section's and the sphere's own position (so it is the same arrangement on every visit,
+    // and the page can gain or lose sections without anything here needing a new entry)
+    // mapped into a band down one side or the other, alternating so the page always carries
+    // weight on both edges and the middle, where the words are, is left alone. Sizes vary
+    // with it, and none grows past its starting size, so nothing swells over the text.
+    // The arrangement is given as a position on screen and turned into an offset from where
+    // the sphere's own layout puts it; offsetLeft/offsetTop are read for that because, unlike
+    // a bounding rect, they ignore both the CSS drift and this timeline's own transform. Each
+    // is a function so invalidateOnRefresh can work them out again at a new window size.
+    // It all rides on transform, while the spheres' own wander (style.css, orb-drift-*) rides
+    // on translate: two separate properties the browser adds together, so the wander carries
+    // on underneath the journey instead of being overwritten by it.
+    function roam() {
+      const orbs = $$('.hero-field__orb');
+      const sections = $$('main > section');
+      if (!orbs.length || !sections.length) return;
+      const { mapRange } = gsap.utils;
+      // A repeatable number from a pair of whole numbers, standing in for a seeded random
+      const pick = (a, b) => {
+        const x = Math.sin(a * 127.1 + b * 311.7 + 74.7) * 43758.545;
+        return x - Math.floor(x);
+      };
+      const home = (el) => ({ x: el.offsetLeft + el.offsetWidth / 2, y: el.offsetTop + el.offsetHeight / 2 });
+      const spot = (s, k) => {
+        const inset = mapRange(0, 1, 0.02, 0.2, pick(s + 1, k + 1)); // how far in from its edge
+        // Which edge. A sphere keeps a side for two steps at a time and the spheres are
+        // offset against each other, so at any moment most are settling along an edge and
+        // only one or two are crossing. Were they all to swap at once they would meet in
+        // the middle of the screen every step, right over the column the words are set in.
+        const side = (k + Math.floor(s / 2)) % 2 === 0 ? inset : 1 - inset;
+        return {
+          x: window.innerWidth * side,
+          y: window.innerHeight * mapRange(0, 1, 0.08, 0.92, pick(s + 7, k + 3)),
+          scale: mapRange(0, 1, 0.55, 1, pick(s + 11, k + 5))
+        };
+      };
+
+      // One timeline for the whole journey: a step per section, every sphere moving within
+      // each step, so the page's scroll drives one animation rather than dozens of triggers.
+      const tl = gsap.timeline({
+        defaults: { ease: 'none', duration: 1 },
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1, // a second of catching up, so the journey glides rather than jerks
+          invalidateOnRefresh: true
+        }
+      });
+      sections.forEach((sec, s) => {
+        orbs.forEach((orb, k) => {
+          // Each sphere sets off a little after the one before it, so a step is a loose
+          // procession rather than five things moving in lockstep. The sideways part of the
+          // trip is the short one: a sphere that is changing edges gets across quickly and
+          // then takes the rest of the step drifting up or down, which keeps the crossing
+          // brief and the middle of the screen clear.
+          const at = s + k * 0.1;
+          tl.to(orb, { x: () => spot(s, k).x - home(orb).x, duration: 0.55 }, at);
+          tl.to(orb, {
+            y: () => spot(s, k).y - home(orb).y,
+            scale: () => spot(s, k).scale
+          }, at);
+        });
+      });
+    }
+
+    const start = () => {
+      if (!window.gsap || !window.ScrollTrigger) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const mm = gsap.matchMedia();
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // Created down the page, so they refresh in the order they appear on it
+        gsap.to($('.hero__inner', hero), {
+          y: () => -window.innerHeight * 0.16,
+          autoAlpha: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: hero, start: 'top top', end: '45% top', scrub: true }
+        });
+        // The hint has done its job as soon as the page moves
+        gsap.to($('.scroll-cue', hero), {
+          autoAlpha: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: hero, start: 'top top', end: '12% top', scrub: true }
+        });
+        roam();
+      });
+      // The About statement is split and measured after the fonts land, which can move
+      // everything below it; ScrollTrigger needs telling once that has settled
+      document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    };
+
+    const tag = $('#gsap-scrolltrigger'); // deferred, and loaded after gsap itself
+    if (window.gsap && window.ScrollTrigger) start();
+    else if (tag) tag.addEventListener('load', start, { once: true });
+  }
+
   /* ---------- Scroll-linked: [data-scrub] ---------- */
   // Each [data-scrub] element gets --p from 0 (its top approaches the screen bottom) to
-  // 1 (comfortably centered in view); CSS turns that into the effect.
+  // 1 (comfortably centered in view); CSS turns that into the effect. Once --p has run all
+  // the way through, the element is also marked .is-settled, which is what style.css waits
+  // on to play anything that belongs after the scrub has finished.
   function initScrollEffects() {
     const scrubs = $$('[data-scrub]');
     if (!scrubs.length) return;
@@ -443,8 +713,12 @@ const CUBE_CONFIG = {
       scrubs.forEach((el) => {
         const r = el.getBoundingClientRect();
         if (r.bottom < -vh || r.top > vh * 2) return; // far off screen: nothing to update
-        const p = (vh * 1.05 - r.top) / (vh * 0.32 + r.height);
-        el.style.setProperty('--p', Math.min(1, Math.max(0, p)).toFixed(3));
+        const p = Math.min(1, Math.max(0, (vh * 1.05 - r.top) / (vh * 0.32 + r.height)));
+        el.style.setProperty('--p', p.toFixed(3));
+        // Dropped again well short of the end, so scrolling back up and down plays it afresh
+        // without it flickering on and off while you sit at the boundary
+        if (p >= 1) el.classList.add('is-settled');
+        else if (p < 0.9) el.classList.remove('is-settled');
       });
     }
     const queue = () => {
@@ -473,7 +747,7 @@ const CUBE_CONFIG = {
     const legs = $$('.spider__leg', root);
     const hint = $('.about__hint', root);
     const scrub = root.closest('[data-scrub]');
-    const statement = scrub && $('[data-scrub-words]', scrub);
+    const statement = scrub && $('[data-scrub-letters]', scrub);
     const C = { x: 387.5, y: 281 }; // body centre, in viewBox units
     const nums = (s) => s.match(/-?\d+(?:\.\d+)?/g).map(Number);
     // M x y C x y x y x y C x y x y x y → 14 numbers per arm
@@ -851,12 +1125,21 @@ const CUBE_CONFIG = {
     }
   }
 
-  /* ---------- Our Services: the spider walks the web to each service ---------- */
-  // Draws the web into [data-services-silk] (viewBox -300…300, hub at 0 0): 12 spokes and
-  // 8 rings that dip between the spokes. Each service point sits on the ring of radius PATH_R
-  // at its angle --a (CSS places the buttons from the same angle). Scrolling through the
-  // section moves from one service to the next; each change walks the spider round that ring
-  // to it, laying a thread behind it, rolls the number in the hub and shows its panel.
+  /* ---------- Our Services: the spider walks a web with depth ---------- */
+  // The web is a shallow bowl in three dimensions, drawn into [data-services-silk] (viewBox
+  // -300…300, hub at 0 0): 12 spokes that curve down from the rim to the hub, which sits
+  // DEPTH behind it, and 8 rings that step back with them and dip between the spokes. There
+  // is no canvas and no 3D library: each thread is one SVG path whose few points project()
+  // turns and gives perspective, and the paths are only rewritten while the view is
+  // changing, so a web that's sitting still costs nothing.
+  // The bowl always leans toward wherever the spider is, which brings the service it's on
+  // nearest; with a mouse it also gives a little under the pointer. The service points, the
+  // number in the hub and the spider are ordinary elements, moved to where their spot on
+  // the bowl lands on the page, so their text stays flat-on and sharp.
+  // Each service point sits on the ring of radius PATH_R at its angle --a (CSS places the
+  // buttons from the same angle, flat; redraw() moves them from there). Scrolling through
+  // the section moves from one service to the next; each change walks the spider round that
+  // ring to it, laying a thread behind it, rolls the number in the hub and shows its panel.
   // The spider rides a critically damped spring, timed in seconds rather than frames, so it
   // eases into and out of every move at any frame rate; it turns round instead of flipping,
   // its legs step with the ground it covers, and it's placed with a transform, so it glides
@@ -874,36 +1157,99 @@ const CUBE_CONFIG = {
     if (!web || !silk || !spider || !tabs.length) return;
 
     const SPOKES = 12;
+    const HUB_R = 58;
+    const RIM_R = 296; // where the spokes end
     const PATH_R = 195;
     const RINGS = [84, 112, 140, 168, PATH_R, 224, 254, 284];
     const SAG = 0.955; // how far each span between two spokes dips toward the hub
+    // The bowl, in the web's own units: x to the right, y down, z toward the viewer
+    const DEPTH = 190; // how far behind the rim its middle sits
+    const CAMERA = 720; // the viewer's distance: nearer means stronger perspective
+    const LEAN = 0.34; // how far it leans toward the spider, in radians (about 19°)
+    const TILT = 0.13; // how far it gives under the pointer, edge to middle (about 7°)
+    const FIT = 0.9; // drawn a little smaller, so the leaning rim stays inside its box
+    const depth = (r) => -DEPTH * (1 - (r / RIM_R) ** 2); // a dish: level at the rim, deepest at the hub
+    const PIVOT = depth(PATH_R); // it turns about the level of the ring the spider walks
     const f = (n) => n.toFixed(1);
     const at = (r, deg) => [r * Math.cos((deg * Math.PI) / 180), r * Math.sin((deg * Math.PI) / 180)];
-    const ring = (r) => {
-      let d = '';
-      for (let k = 0; k <= SPOKES; k++) {
-        const [x, y] = at(r, (k * 360) / SPOKES);
-        if (!k) { d += `M${f(x)} ${f(y)}`; continue; }
-        const [cx, cy] = at(r * SAG, ((k - 0.5) * 360) / SPOKES);
-        d += `Q${f(cx)} ${f(cy)} ${f(x)} ${f(y)}`;
-      }
-      return d;
+
+    // The view: the direction the bowl leans in (leanX, leanY; that side comes toward the
+    // viewer) and how far, set by aimView(). project() turns a point of the bowl about PIVOT
+    // and gives it perspective. It leaves its answer in px, py (web units on the flat page)
+    // and pk (how big things are drawn there) rather than making an array for every point.
+    let leanX = 1;
+    let leanY = 0;
+    let sinL = 0;
+    let cosL = 1;
+    let px = 0;
+    let py = 0;
+    let pk = 1;
+    const project = (x, y, z) => {
+      const along = x * leanX + y * leanY; // across the bowl, toward the leaning side
+      const across = y * leanX - x * leanY; // at right angles to that, which the lean leaves alone
+      const deep = z - PIVOT;
+      const turned = along * cosL - deep * sinL;
+      pk = (FIT * CAMERA) / (CAMERA - (along * sinL + deep * cosL));
+      px = (turned * leanX - across * leanY) * pk;
+      py = (turned * leanY + across * leanX) * pk;
     };
 
-    let svg = '<circle class="s-hub" r="58" pathLength="1"/>';
+    // Every thread is one path of curves. Its points are kept as x, y, z triples (a start,
+    // then control-and-end pairs) and redraw() projects them into the path's d.
+    const NS = 'http://www.w3.org/2000/svg';
+    const threads = [];
+    const thread = (cls, pts, i) => {
+      const el = document.createElementNS(NS, 'path');
+      el.setAttribute('class', cls);
+      el.setAttribute('pathLength', '1');
+      if (i !== undefined) el.style.setProperty('--i', i);
+      silk.append(el);
+      if (pts) {
+        el.style.stroke = 'url(#services-depth)'; // set here, not in style.css, where "#…" would point into the stylesheet
+        threads.push({ el, pts });
+      }
+      return el;
+    };
+    const on = (r, deg) => [...at(r, deg), depth(r)]; // a point on the bowl
+    // A ring: its corners on the spokes and, between each pair, a control point bow of the
+    // way out, so a bow under 1 dips every span toward the hub
+    const ringPts = (r, bow) => {
+      const pts = on(r, 0);
+      for (let k = 1; k <= SPOKES; k++) pts.push(...on(r * bow, ((k - 0.5) * 360) / SPOKES), ...on(r, (k * 360) / SPOKES));
+      return pts;
+    };
+    // Two things make the threads read as near or far. Those further down the bowl are
+    // drawn a little fainter (shade), and every thread is stroked with one gradient that
+    // runs across the web the way it leans, full strength on the near side and fading
+    // toward the far one; draw() only has to re-aim that gradient.
+    const shade = (r) => (0.55 + 0.45 * ((r - HUB_R) / (RIM_R - HUB_R))).toFixed(2);
+    silk.textContent = '';
+    const fade = document.createElementNS(NS, 'linearGradient');
+    fade.id = 'services-depth';
+    fade.setAttribute('gradientUnits', 'userSpaceOnUse');
+    const farStop = document.createElementNS(NS, 'stop');
+    const nearStop = document.createElementNS(NS, 'stop');
+    nearStop.setAttribute('offset', 1);
+    [farStop, nearStop].forEach((stop) => stop.setAttribute('stop-color', 'currentColor'));
+    fade.append(farStop, nearStop);
+    silk.append(fade);
+
+    thread('s-hub', ringPts(HUB_R, 1 / Math.cos(Math.PI / SPOKES))); // bowed out instead: a round hub
     for (let k = 0; k < SPOKES; k++) {
-      const [x1, y1] = at(58, (k * 360) / SPOKES);
-      const [x2, y2] = at(296, (k * 360) / SPOKES);
-      svg += `<path class="s-spoke" pathLength="1" style="--i: ${k}" d="M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}"/>`;
+      const deg = (k * 360) / SPOKES;
+      // The dish's slope is a parabola, which a single curve draws exactly: its control
+      // point is halfway out, at the depth where the slopes at the two ends meet
+      thread('s-spoke', [...on(HUB_R, deg), ...at((HUB_R + RIM_R) / 2, deg), -DEPTH * (1 - HUB_R / RIM_R), ...on(RIM_R, deg)], k);
     }
     RINGS.forEach((r, i) => {
-      svg += `<path class="s-ring${r === PATH_R ? ' s-path' : ''}" pathLength="1" style="--i: ${i}" d="${ring(r)}"/>`;
+      thread(`s-ring${r === PATH_R ? ' s-path' : ''}`, ringPts(r, SAG), i).setAttribute('stroke-opacity', r === PATH_R ? 1 : shade(r));
     });
-    svg += `<path class="services__trail" pathLength="1" d="${ring(PATH_R)}"/>` +
-      '<line class="services__drop is-gone" x1="0" y1="-300" x2="0" y2="-300"/>';
-    silk.innerHTML = svg;
-    const trail = $('.services__trail', silk);
-    const drop = $('.services__drop', silk);
+    const trail = thread('services__trail');
+    const drop = document.createElementNS(NS, 'line');
+    drop.setAttribute('class', 'services__drop is-gone');
+    ['x1', 'x2'].forEach((name) => drop.setAttribute(name, 0));
+    ['y1', 'y2'].forEach((name) => drop.setAttribute(name, -300));
+    silk.append(drop);
 
     // The logo's spider: three left legs [path, pivot x, pivot y], mirrored for the right
     const legs = [
@@ -921,8 +1267,10 @@ const CUBE_CONFIG = {
       '<path class="services__body" fill-rule="evenodd" d="M347 244A40 40 0 0 1 427 244L427 318A40 40 0 0 1 347 318Z' +
       'M373 249A14 20 0 1 0 401 249A14 20 0 1 0 373 249ZM374 318A13 15 0 1 0 400 318A13 15 0 1 0 374 318Z"/></svg>';
 
-    // A point on the walked ring, p = 0…1 of the way round from angle 0 (clockwise on screen);
-    // it follows the same curves as the drawn ring, so the spider stays on the thread
+    // A point on the walked ring, p = 0…1 of the way round from angle 0 (clockwise on screen),
+    // as it looks now: like project(), it leaves where that is in px, py and its size in pk.
+    // It follows the same curves as the drawn ring, so the spider stays on the thread.
+    const BOW_DEEP = depth(PATH_R * SAG) - PIVOT; // how much deeper the middle of a span dips
     const ringPoint = (p) => {
       const u = (((p % 1) + 1) % 1) * SPOKES;
       const k = Math.floor(u);
@@ -931,24 +1279,30 @@ const CUBE_CONFIG = {
       const [x1, y1] = at(PATH_R, ((k + 1) * 360) / SPOKES);
       const [cx, cy] = at(PATH_R * SAG, ((k + 0.5) * 360) / SPOKES);
       const s = 1 - t;
-      return [s * s * x0 + 2 * s * t * cx + t * t * x1, s * s * y0 + 2 * s * t * cy + t * t * y1];
+      project(s * s * x0 + 2 * s * t * cx + t * t * x1, s * s * y0 + 2 * s * t * cy + t * t * y1, PIVOT + 2 * s * t * BOW_DEEP);
     };
-    // Which way the spider faces when heading round the ring in direction dir (±1); 0 = up
+    // Which way the spider faces when heading round the ring in direction dir (±1), as the
+    // ring looks now; 0 = up
     const facing = (p, dir) => {
-      const [x0, y0] = ringPoint(p);
-      const [x1, y1] = ringPoint(p + dir * 0.002);
-      return (Math.atan2(x1 - x0, -(y1 - y0)) * 180) / Math.PI;
+      ringPoint(p);
+      const x0 = px;
+      const y0 = py;
+      ringPoint(p + dir * 0.002);
+      return (Math.atan2(px - x0, -(py - y0)) * 180) / Math.PI;
     };
     const stops = tabs.map((tab) => (((parseFloat(tab.style.getPropertyValue('--a')) || 0) % 360) + 360) % 360 / 360);
+    const spots = stops.map((p) => at(PATH_R, p * 360)); // where the CSS puts each service point, flat
+    const hub = count?.parentElement; // the number's box, which follows the hub
     // Placed with a transform, in pixels of the web's current size, so moving it never
-    // re-lays out the page and it can sit between pixels
+    // re-lays out the page and it can sit between pixels; k is its size at that depth
     let size = web.clientWidth || 560;
-    const place = (x, y, h) => {
-      spider.style.transform = `translate3d(${((0.5 + x / 600) * size).toFixed(2)}px, ${((0.5 + y / 600) * size).toFixed(2)}px, 0) translate(-50%, -52%) rotate(${h.toFixed(2)}deg)`;
+    const place = (x, y, h, k) => {
+      spider.style.transform = `translate3d(${((0.5 + x / 600) * size).toFixed(2)}px, ${((0.5 + y / 600) * size).toFixed(2)}px, 0) translate(-50%, -52%) rotate(${h.toFixed(2)}deg) scale(${k.toFixed(3)})`;
     };
 
     let current = 0;
     let landed = false; // until the spider has dropped onto the web
+    let dropping = false; // while it's on its way down
 
     // Its motion. pos (0…1 round the ring) chases aim on a critically damped spring. Walking
     // to a service, aim itself travels to goal at a steady CRUISE (laps a second), so a long
@@ -965,22 +1319,99 @@ const CUBE_CONFIG = {
     let from = pos;
     let cruising = false;
     let heading = 1; // +1 clockwise, -1 anticlockwise
-    let angle = facing(pos, 1); // the way it's drawn facing, which turns toward heading
     let phase = 0; // where its legs are in their stride
     let stride = 0; // 0 standing still … 1 walking
     let frame = 0;
     let last = 0;
+    // The pointer's tilt, in radians each way; tick() eases it toward its goal
+    let tiltX = 0;
+    let tiltY = 0;
+    let tiltGoalX = 0;
+    let tiltGoalY = 0;
+    // The thread last laid: where it starts and how far round it runs (it's kept while it fades)
+    let trailFrom = pos;
+    let trailLen = 0;
 
+    // Points the view: the bowl leans toward the spider, plus whatever the pointer adds
+    function aimView() {
+      const a = pos * 2 * Math.PI;
+      const vx = LEAN * Math.cos(a) + tiltX;
+      const vy = LEAN * Math.sin(a) + tiltY;
+      const lean = Math.hypot(vx, vy);
+      leanX = lean > 1e-6 ? vx / lean : 1;
+      leanY = lean > 1e-6 ? vy / lean : 0;
+      sinL = Math.sin(lean);
+      cosL = Math.cos(lean);
+    }
+    aimView();
+    let angle = facing(pos, 1); // the way it's drawn facing, which turns toward heading
+
+    // Plots everything as the view now has it: every thread, the service points, the number
+    // in the hub, and (once it has landed) the spider and the thread it's laying
     function draw() {
-      const [x, y] = ringPoint(pos);
-      place(x, y, angle);
+      aimView();
+      // the gradient runs from the far side to the near one, and fades more the more it leans
+      const reach = RIM_R * FIT;
+      fade.setAttribute('x1', f(-leanX * reach));
+      fade.setAttribute('y1', f(-leanY * reach));
+      fade.setAttribute('x2', f(leanX * reach));
+      fade.setAttribute('y2', f(leanY * reach));
+      const farOp = Math.max(0.3, 1 - 1.9 * sinL);
+      farStop.setAttribute('stop-opacity', farOp.toFixed(2));
+      for (const { el, pts } of threads) {
+        project(pts[0], pts[1], pts[2]);
+        let d = `M${f(px)} ${f(py)}`;
+        for (let j = 3; j < pts.length; j += 6) {
+          project(pts[j], pts[j + 1], pts[j + 2]);
+          d += `Q${f(px)} ${f(py)}`;
+          project(pts[j + 3], pts[j + 4], pts[j + 5]);
+          d += ` ${f(px)} ${f(py)}`;
+        }
+        el.setAttribute('d', d);
+      }
+      // The service points keep their flat 44px target, and are only moved from their flat
+      // places with translate, so nothing is laid out again. How far round the bowl each one
+      // has gone is passed to style.css instead: --k is how big that spot is drawn at its
+      // depth, which sizes the point and its name, and --f how much of the silk's tone
+      // reaches it, which the dot takes, so the near points come forward and the far ones
+      // sit back into the web. The names keep their full strength, whatever their depth.
+      const unit = size / 600;
+      const dim = Math.max(0.55, farOp); // they never go as faint as the far silk
+      spots.forEach(([x, y], i) => {
+        project(x, y, PIVOT);
+        const tab = tabs[i];
+        tab.style.translate = `calc(-50% + ${((px - x) * unit).toFixed(2)}px) calc(-50% + ${((py - y) * unit).toFixed(2)}px)`;
+        tab.style.setProperty('--k', (pk / FIT).toFixed(3));
+        const near = (x * leanX + y * leanY) / PATH_R; // -1 right away … 1 nearest
+        tab.style.setProperty('--f', (dim + (1 - dim) * (0.5 + 0.5 * near)).toFixed(3));
+      });
+      if (hub) {
+        project(0, 0, depth(0));
+        hub.style.translate = `${(px * unit).toFixed(2)}px ${(py * unit).toFixed(2)}px`;
+        hub.style.scale = (pk * cosL).toFixed(3);
+      }
+      if (!landed) return; // still to drop in: until then the intro places it
+
+      ringPoint(pos);
+      place(px, py, angle, pk);
       spider.style.setProperty('--g', (Math.sin(phase) * stride).toFixed(3));
       const len = wrap(pos - from);
-      const on = Math.abs(len) > 0.003;
-      trail.classList.toggle('is-on', on); // off, the last thread fades
-      if (on) {
-        trail.style.strokeDasharray = `${Math.abs(len).toFixed(4)} ${(1 - Math.abs(len)).toFixed(4)}`;
-        trail.style.strokeDashoffset = (-(len > 0 ? from : from + len)).toFixed(4);
+      const laying = Math.abs(len) > 0.003;
+      trail.classList.toggle('is-on', laying); // off, the last thread fades
+      if (laying) {
+        trailFrom = from;
+        trailLen = len;
+      }
+      // Its thread is plotted afresh as well (a point every 5° round the ring), so it stays
+      // on the ring while the view turns, even the last one as it fades
+      if (trailLen) {
+        const steps = Math.max(2, Math.ceil(Math.abs(trailLen) * 72));
+        let d = '';
+        for (let j = 0; j <= steps; j++) {
+          ringPoint(trailFrom + (trailLen * j) / steps);
+          d += `${j ? 'L' : 'M'}${f(px)} ${f(py)}`;
+        }
+        trail.setAttribute('d', d);
       }
     }
 
@@ -1001,17 +1432,25 @@ const CUBE_CONFIG = {
       pos += move;
       const speed = Math.abs(vel);
       if (speed > 0.004) heading = vel < 0 ? -1 : 1;
+      // the pointer's tilt eases in and out
+      const ease = 1 - Math.exp(-dt * 6);
+      tiltX += (tiltGoalX - tiltX) * ease;
+      tiltY += (tiltGoalY - tiltY) * ease;
+      const level = Math.abs(tiltGoalX - tiltX) + Math.abs(tiltGoalY - tiltY) < 4e-4;
+      aimView(); // before asking which way it faces: that depends on the view
       // turn toward the way it's going, the short way round, rather than flipping at once
       const turn = ((facing(pos, heading) - angle + 540) % 360) - 180;
       angle += turn * (1 - Math.exp(-dt * 14));
       // the legs step with the ground covered, and swing as wide as the pace calls for
       phase += Math.abs(move) * 230;
       stride += (Math.min(1, speed / 0.05) - stride) * (1 - Math.exp(-dt * 10));
-      const done = aim === goal && Math.abs(disp) < 2e-5 && speed < 5e-4 && Math.abs(turn) < 0.2 && stride < 0.01;
+      const done = level && aim === goal && Math.abs(disp) < 2e-5 && speed < 5e-4 && Math.abs(turn) < 0.2 && stride < 0.01;
       if (done) {
         pos = aim;
         vel = 0;
         stride = 0;
+        tiltX = tiltGoalX;
+        tiltY = tiltGoalY;
         if (cruising) {
           cruising = false;
           from = pos; // arrived: the thread it laid fades
@@ -1032,6 +1471,7 @@ const CUBE_CONFIG = {
       vel = 0;
       stride = 0;
       cruising = false;
+      aimView();
       angle = facing(pos, heading);
       draw();
     }
@@ -1041,6 +1481,16 @@ const CUBE_CONFIG = {
       from = pos;
       goal = target;
       cruising = true;
+      wake();
+    }
+
+    // Before the spider has landed, choosing a service still turns the web to it, so the
+    // spider drops onto a web that's already facing the right way
+    function turnTo(target) {
+      if (dropping) return; // it's on its way down to a spot: leave the web as it is
+      if (reduceMotion.matches) { jump(target); return; }
+      goal = target;
+      cruising = false;
       wake();
     }
 
@@ -1079,8 +1529,10 @@ const CUBE_CONFIG = {
         if (pinned()) panel.inert = j !== i; // stacked panels all stay readable
       });
       rollCount(String(i + 1).padStart(2, '0'), dir);
-      // Before it lands, it simply drops onto the right one; pinned, the scroll walks it (scrubTo)
-      if (landed && !pinned()) walkTo(stops[i]);
+      // Before it lands, the web turns and it drops onto the right one; pinned, the scroll
+      // walks it (scrubTo)
+      if (!landed) turnTo(stops[i]);
+      else if (!pinned()) walkTo(stops[i]);
     }
 
     // Pinned, the spider is walked by the scroll itself, so even a short scroll visibly moves
@@ -1165,17 +1617,20 @@ const CUBE_CONFIG = {
       tabs[next].focus({ preventScroll: true });
     });
 
-    // The web leans toward the pointer, and shivers when a point is touched
+    // The web gives under the pointer (the side it's over sinks back a little, on top of the
+    // lean toward the spider), and shivers when a point is touched
     if (finePointer.matches) {
       web.addEventListener('pointermove', (e) => {
         if (reduceMotion.matches) return;
         const r = web.getBoundingClientRect();
-        web.style.setProperty('--rx', `${(((e.clientY - r.top) / r.height - 0.5) * -8).toFixed(2)}deg`);
-        web.style.setProperty('--ry', `${(((e.clientX - r.left) / r.width - 0.5) * 8).toFixed(2)}deg`);
+        tiltGoalX = ((e.clientX - r.left) / r.width - 0.5) * -2 * TILT;
+        tiltGoalY = ((e.clientY - r.top) / r.height - 0.5) * -2 * TILT;
+        wake();
       });
       web.addEventListener('pointerleave', () => {
-        web.style.removeProperty('--rx');
-        web.style.removeProperty('--ry');
+        tiltGoalX = 0;
+        tiltGoalY = 0;
+        if (!reduceMotion.matches) wake();
       });
     }
     tabs.forEach((tab) => tab.addEventListener('pointerenter', () => {
@@ -1184,12 +1639,12 @@ const CUBE_CONFIG = {
         { duration: 700, easing: 'ease-out', id: 'shiver' });
     }));
 
-    // Threads stay about a pixel wide whatever size the web is drawn at, and the spider is
-    // re-placed for the new size
+    // Threads stay about a pixel wide whatever size the web is drawn at, and everything is
+    // plotted again for the new size (this first call is also what draws the web)
     const fit = () => {
       size = web.clientWidth || size;
       silk.style.setProperty('--sw', (600 / (silk.clientWidth || 600)).toFixed(3));
-      if (landed) draw();
+      draw();
     };
     fit();
     if ('ResizeObserver' in window) new ResizeObserver(fit).observe(web);
@@ -1200,12 +1655,16 @@ const CUBE_CONFIG = {
     let introduced = false;
     function land(spot) {
       landed = true;
+      dropping = false;
       pos = aim = goal = from = spot;
       vel = 0;
       heading = 1;
       angle = 0; // it came down facing up; the spring turns it to face along the thread
       spider.classList.add('is-ready');
-      if (reduceMotion.matches) angle = facing(pos, heading);
+      if (reduceMotion.matches) {
+        aimView();
+        angle = facing(pos, heading);
+      }
       draw();
       if (pinned()) onScroll(); // the scroll takes over from here
       else if (stops[current] !== spot) walkTo(stops[current]); // scrolled on while it was dropping
@@ -1219,18 +1678,24 @@ const CUBE_CONFIG = {
       }
       setTimeout(() => {
         const spot = stops[current];
-        const [x, y] = ringPoint(spot);
+        // The web finishes turning to that spot while the spider is on its way down to it
+        dropping = true;
+        goal = spot;
+        cruising = false;
+        wake();
         const top = -300; // the web's top edge
         const t0 = performance.now();
-        drop.setAttribute('x1', f(x));
-        drop.setAttribute('x2', f(x));
         drop.classList.remove('is-gone');
         spider.classList.add('is-ready');
         const step = (now) => {
           const t = Math.min(1, (now - t0) / 1100);
           const e = 1 + 2.7 * (t - 1) ** 3 + 1.7 * (t - 1) ** 2; // overshoots a touch, then settles
-          const cy = top + (y - top) * e;
-          place(x, cy, 0);
+          aimView();
+          ringPoint(spot); // where it will land, as the web looks at this moment
+          const cy = top + (py - top) * e;
+          place(px, cy, 0, pk);
+          drop.setAttribute('x1', f(px));
+          drop.setAttribute('x2', f(px));
           drop.setAttribute('y2', f(cy));
           if (t < 1) {
             requestAnimationFrame(step);
@@ -2335,7 +2800,7 @@ const CUBE_CONFIG = {
   // Then everything further down the page, a few at a time in short separate tasks, so the
   // browser can paint and respond in between (one long start-up task would block both).
   const later = [
-    initScrollEffects, initSpiderMark, initServices, initWorkPreviews, initMarquees,
+    initHeroField, initHeroScroll, initScrollEffects, initSpiderMark, initServices, initWorkPreviews, initMarquees,
     initCursorBadge, initMagnetic, initProcess, initStudio, initSelections, initForm, initCopy
   ];
   const nextTask = (fn) => (window.scheduler?.postTask ? scheduler.postTask(fn, { priority: 'user-visible' }) : setTimeout(fn, 0));
