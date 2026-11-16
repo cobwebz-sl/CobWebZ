@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <!-- Only this site's own files may load. The inline theme script below is allowed by its
+       sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
+       This page lives in /work/, so every link and file path starts from the site root (/). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wren: Product Launch Website Case Study | CobWebZ</title>
+  <meta name="description" content="How CobWebZ designed and built Wren, a concept launch site for a small synthesiser you can play in the browser, with a 3D teardown and a finish picker.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#0c0d10">
+  <link rel="canonical" href="https://www.cobwebz.lk/work/wren">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CobWebZ">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:url" content="https://www.cobwebz.lk/work/wren">
+  <meta property="og:title" content="Wren — a CobWebZ case study">
+  <meta property="og:description" content="How CobWebZ designed and built Wren, a concept launch site for a small synthesiser you can play in the browser, with a 3D teardown and a finish picker.">
+  <meta property="og:image" content="https://www.cobwebz.lk/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Wren — a CobWebZ case study">
+  <meta name="twitter:description" content="How CobWebZ designed and built Wren, a concept launch site for a small synthesiser you can play in the browser, with a 3D teardown and a finish picker.">
+  <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
+  <meta name="twitter:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <!-- Sets the theme before the first paint (saved choice, else the device setting).
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
+
+  <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/variables.css">
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.cobwebz.lk/work/wren#webpage",
+        "url": "https://www.cobwebz.lk/work/wren",
+        "name": "Wren: Product Launch Website Case Study | CobWebZ",
+        "description": "How CobWebZ designed and built Wren, a concept launch site for a small synthesiser you can play in the browser, with a 3D teardown and a finish picker.",
+        "isPartOf": {
+          "@id": "https://www.cobwebz.lk/#website"
+        },
+        "about": {
+          "@id": "https://www.cobwebz.lk/work/wren#project"
+        },
+        "inLanguage": "en",
+        "primaryImageOfPage": "https://www.cobwebz.lk/assets/work/wren-scroll.webp"
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": "https://www.cobwebz.lk/work/wren#project",
+        "name": "Wren",
+        "description": "A launch site for a small eight-voice synthesiser. The instrument on the page really plays: use your mouse, your keyboard or a MIDI controller, then take it apart and choose your finish.",
+        "genre": "Product launch",
+        "creator": {
+          "@id": "https://www.cobwebz.lk/#organization"
+        },
+        "url": "https://supercub-wren.vercel.app",
+        "image": "https://www.cobwebz.lk/assets/work/wren-scroll.webp",
+        "keywords": "Next.js, React, Three.js, Web Audio"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.cobwebz.lk/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Our Work",
+            "item": "https://www.cobwebz.lk/work"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Wren",
+            "item": "https://www.cobwebz.lk/work/wren"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- ============ HEADER / NAVIGATION ============ -->
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a href="/" class="site-header__brand" aria-label="CobWebZ — home">
+        <img src="/assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__brand-name">CobWebZ</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="/#about" class="site-nav__link">About</a></li>
+          <li><a href="/#services" class="site-nav__link">Services</a></li>
+          <li><a href="/work.html" class="site-nav__link is-active">Work</a></li>
+          <li><a href="/#pricing" class="site-nav__link">Pricing</a></li>
+          <li><a href="/#contact" class="site-nav__link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <div class="menu">
+          <button type="button" class="site-header__icon-btn menu-btn-circle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle navigation menu" data-menu-toggle>
+            <span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
+            <ul>
+              <li><a href="/#about">About</a></li>
+              <li><a href="/#services">Services</a></li>
+              <li><a href="/work.html" class="is-active">Work</a></li>
+              <li><a href="/#pricing">Pricing</a></li>
+              <li><a href="/#contact">Contact</a></li>
+            </ul>
+            <div class="menu__extras">
+              <button type="button" class="menu__theme" role="switch" aria-checked="false" data-theme-toggle>
+                <span>Dark mode</span>
+                <span class="menu__switch" aria-hidden="true"></span>
+              </button>
+              <a href="/#contact" class="menu__cta">
+                <span>Start a project</span>
+                <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <button type="button" class="site-header__icon-btn theme-btn" aria-label="Toggle color theme" data-theme-toggle>
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a href="/#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
+          <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ CASE STUDY HEADER ============ -->
+    <section class="hero hero--page" aria-labelledby="page-title">
+      <div class="container-cube hero__inner">
+        <nav aria-label="Breadcrumb" data-hero-step>
+          <ol class="crumbs">
+            <li><a href="/">Home</a></li>
+            <li><a href="/work.html">Work</a></li>
+            <li><span aria-current="page">Wren</span></li>
+          </ol>
+        </nav>
+        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>Concept project · Product launch</p>
+        <h1 id="page-title" class="hero__title" data-split-words>Wren <span class="accent">Play it before you buy it.</span></h1>
+        <p class="hero__lead" data-hero-step>A launch site for a small eight-voice synthesiser. The instrument on the page really plays: use your mouse, your keyboard or a MIDI controller, then take it apart and choose your finish.</p>
+        <div class="hero__actions" data-hero-step>
+          <a href="https://supercub-wren.vercel.app" target="_blank" rel="noopener" class="btn btn--primary btn--lg btn--sheen">View the live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+        <dl class="case-facts" data-hero-step>
+          <div><dt>Type</dt><dd>Product launch</dd></div>
+          <div><dt>Status</dt><dd>Concept, self-initiated</dd></div>
+          <div><dt>Our role</dt><dd>Design, development, 3D and sound</dd></div>
+          <div><dt>Built with</dt><dd>Next.js, React, Three.js, Web Audio</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ PREVIEWS ============ -->
+    <!-- Full-page screenshots: both scroll by themselves while on screen (the desktop one
+         pauses while hovered). -->
+    <section class="section showcase" aria-label="Desktop and mobile previews">
+      <div class="container-cube">
+        <div class="case-previews reveal">
+          <figure>
+            <a href="https://supercub-wren.vercel.app" target="_blank" rel="noopener" class="project__media" tabindex="-1" aria-hidden="true" data-cursor="View">
+              <span class="project__bar"><span class="win__dots"><i></i><i></i><i></i></span><span class="project__tab">Wren</span></span>
+              <span class="project__screen" data-preview><img class="project__scroll" src="/assets/work/wren-scroll.webp" alt="" width="760" height="4762" decoding="async" style="--frames: 11.14"></span>
+            </a>
+            <figcaption>Desktop. Full-page screenshot of the Wren synthesiser launch site; hover to pause it.</figcaption>
+          </figure>
+          <figure>
+            <div class="phone">
+              <span class="phone__screen" data-preview><img class="phone__scroll" src="/assets/work/wren-mobile.webp" alt="" width="480" height="11077" loading="lazy" decoding="async" style="--frames: 10.93"></span>
+            </div>
+            <figcaption>Mobile, 390px wide.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE STORY ============ -->
+    <section class="section" aria-label="Case study">
+      <div class="container-cube">
+        <div class="case-section reveal">
+          <p class="case-section__label">Overview</p>
+          <div class="case-section__body">
+            <h2>A synth you can hear on the page.</h2>
+              <p>Wren W-25 is a fictional 25-key synthesiser with a speaker, a battery and a patch bay built in. Instead of describing how it sounds, the site lets you play it. Its sound engine runs in the browser, and the 3D instrument beside the text plays when you tap its keys.</p>
+          </div>
+        </div>
+        <div class="case-section reveal">
+          <p class="case-section__label">Objective</p>
+          <div class="case-section__body">
+            <h2>Let the product sell itself.</h2>
+              <p>People buy instruments on sound and feel, and both are hard to get across on a screen. Wren puts the instrument in the visitor&#x27;s hands first: six presets, eight knobs and a patch bay to play with, before any specs or prices.</p>
+          </div>
+        </div>
+        <div class="case-section reveal">
+          <p class="case-section__label">Design approach</p>
+          <div class="case-section__body">
+            <h2>Warm metal and wood.</h2>
+              <p>A bone-coloured background and warm near-black, with the rust orange of Wren&#x27;s signature finish. Mona Sans sets the headlines, and Martian Mono gives the labels and specs the look of a printed front panel.</p>
+              <ul class="case-swatches" aria-label="Palette">
+                <li><i style="background: #EEE9E0"></i>#EEE9E0 · Bone</li>
+                <li><i style="background: #161412"></i>#161412 · Ink</li>
+                <li><i style="background: #E0703F"></i>#E0703F · Rufous</li>
+                <li><i style="background: #A3471F"></i>#A3471F · Rust</li>
+                <li><i style="background: #6B645B"></i>#6B645B · Stone</li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="case-section reveal">
+          <p class="case-section__label">Technologies</p>
+          <div class="case-section__body">
+            <h2>What it's built with.</h2>
+            <ul class="case-tech">
+                <li><b>Next.js &amp; React</b><span>The page, the synth&#x27;s controls and the bag as React components</span></li>
+                <li><b>Three.js</b><span>The 3D synth, modelled in Blender, which comes apart layer by layer as you scroll</span></li>
+                <li><b>Web Audio API</b><span>An eight-voice sound engine with oscillators, a filter, envelopes, an LFO and effects</span></li>
+                <li><b>Web MIDI API</b><span>Plug in a MIDI keyboard and play Wren from real keys</span></li>
+                <li><b>Motion &amp; Lenis</b><span>Smooth scrolling and transitions that keep the 3D scenes in step</span></li>
+                <li><b>Tailwind CSS</b><span>Utility styles, compiled to one small stylesheet</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="case-section reveal">
+          <p class="case-section__label">Main features</p>
+          <div class="case-section__body">
+            <h2>What it does.</h2>
+            <div class="case-features">
+                <article class="case-feature">
+                  <h3>Play it here</h3>
+                  <p>Click the keys or type on your keyboard, switch between six presets, or connect a MIDI controller.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Eight knobs, no menus</h3>
+                  <p>Cutoff, resonance, LFO rate, space and the envelope all change the sound as you turn them.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>A working patch bay</h3>
+                  <p>Drag a cable to route the LFO, envelope or a random source to the filter, pitch or volume, and listen.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Taken apart, layer by layer</h3>
+                  <p>Scroll and the 3D synth separates into its eight parts, from the knobs to the wooden cheeks.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Choose your finish</h3>
+                  <p>Four colours, three woods and two knob colours, with the price updating as you choose.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Sound packs to try first</h3>
+                  <p>Preview each pack on the same engine before adding it to the bag.</p>
+                </article>
+            </div>
+            <p class="case-note">Wren is a concept project: a fictional instrument we designed and built ourselves. The synth on the page really plays, but the product, prices, reviews and specifications are made up, and the bag doesn&#x27;t take payments. A live store adds a back end for products and orders, and a payment gateway (see Dynamic Applications under Pricing).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEXT ============ -->
+    <section class="section" aria-labelledby="next-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <h2 id="next-title" class="h-section" data-split-words>Want a site <span class="accent">like this?</span></h2>
+          <p class="section-lead">Start from this design as a template, or tell us what you need and we'll reply with questions or a fixed, written quote.</p>
+          <div class="case-actions">
+            <a href="/?template=Wren&amp;package=Dynamic%20Applications#contact" class="btn btn--primary btn--lg" data-magnetic>Start a project</a>
+            <a href="/#estimate" class="link-arrow">Estimate your price <span aria-hidden="true">→</span></a>
+          </div>
+        </header>
+        <nav class="case-next reveal" aria-label="More case studies">
+          <a href="/work/tempo.html"><span>Previous case study</span><b>Tempo</b></a>
+          <a href="/work/vela-one.html"><span>Next case study</span><b>Vela One</b></a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container-cube footer__inner">
+      <div class="footer__brand">
+        <a href="/" class="footer__logo" aria-label="CobWebZ — home"><img src="/assets/logo.png" alt="" width="104" height="83"></a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
+        <a href="/#contact" class="btn btn--primary">Start a project</a>
+      </div>
+      <nav class="footer__nav" aria-label="Footer">
+        <div class="footer__col">
+          <h2 class="footer__h">Studio</h2>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/#services">Services</a></li>
+            <li><a href="/#process">Process</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="/work.html">Case studies</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Contact</h2>
+          <ul>
+            <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
+            <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Social</h2>
+          <ul>
+            <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank" rel="noopener">GitHub</a></li>
+            <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank" rel="noopener">Instagram</a></li>
+            <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="#main" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+    <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>

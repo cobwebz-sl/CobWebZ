@@ -1841,9 +1841,9 @@ const CUBE_CONFIG = {
   }
 
   /* ---------- Our Work: scroll-down previews ---------- */
-  // Marks each preview frame is-inview while it's on screen; style.css scrolls the home
-  // cards' screenshots then (and the work page's on touch screens), restarting from the
-  // top each time you come back to them.
+  // Marks each preview frame is-inview while it's on screen; style.css scrolls its
+  // screenshot then (home cards, work page and case studies), restarting from the top
+  // each time you come back to it.
   function initWorkPreviews() {
     const frames = $$('[data-preview]');
     if (!frames.length || !('IntersectionObserver' in window)) return;

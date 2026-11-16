@@ -1482,8 +1482,8 @@
   /* Scroll-down preview: a tall screenshot of the whole site, top-aligned in the 16:9 frame,
      scrolled at an even pace (--frames, set on each image, is its height in frames).
      The home cards scroll by themselves while on screen (.is-inview, from script.js), each a
-     beat after the one before, and hold still while hovered. The work page's frames scroll
-     on hover, or by themselves on touch screens, which have no hover. */
+     beat after the one before, and hold still while hovered. The work page's and case
+     studies' frames do the same, a little slower, and pause while hovered too. */
   .work-card__scroll,
   .project__scroll {
     position: absolute;
@@ -1498,15 +1498,10 @@
     animation: preview-scroll calc(var(--frames, 10) * 1s) ease-in-out calc(0.8s + var(--i, 0) * 0.5s) infinite alternate;
   }
   .work-card:is(:hover, :focus-visible) .work-card__scroll { animation-play-state: paused; }
-  .project__media:hover .project__scroll {
-    translate: 0 calc(-100% + 100cqh);
-    transition: translate calc(var(--frames, 10) * 0.75s) cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.2s;
+  .is-inview > .project__scroll {
+    animation: preview-scroll calc(var(--frames, 10) * 1.4s) ease-in-out 0.8s infinite alternate;
   }
-  @media (hover: none) {
-    .is-inview > .project__scroll {
-      animation: preview-scroll calc(var(--frames, 10) * 1.4s) ease-in-out 0.8s infinite alternate;
-    }
-  }
+  .project__media:hover .project__scroll { animation-play-state: paused; }
   @keyframes preview-scroll {
     to { translate: 0 calc(-100% + 100cqh); }
   }
@@ -2558,6 +2553,7 @@
     box-shadow: inset 0 0 0 1px var(--color-line);
     text-wrap: balance;
   }
+  .section-head .work__disclaimer { margin-inline: auto; }
   @media (max-width: 559px) {
     .work__disclaimer { border-radius: var(--radius-control); }
   }

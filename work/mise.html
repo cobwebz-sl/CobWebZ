@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <!-- Only this site's own files may load. The inline theme script below is allowed by its
+       sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
+       This page lives in /work/, so every link and file path starts from the site root (/). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mise: Restaurant Ordering Website Case Study | CobWebZ</title>
+  <meta name="description" content="How CobWebZ designed and built Mise, a concept restaurant where guests scan a QR code, then order and pay from their phone, with its signature dish in 3D.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#0c0d10">
+  <link rel="canonical" href="https://www.cobwebz.lk/work/mise">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CobWebZ">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:url" content="https://www.cobwebz.lk/work/mise">
+  <meta property="og:title" content="Mise — a CobWebZ case study">
+  <meta property="og:description" content="How CobWebZ designed and built Mise, a concept restaurant where guests scan a QR code, then order and pay from their phone, with its signature dish in 3D.">
+  <meta property="og:image" content="https://www.cobwebz.lk/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mise — a CobWebZ case study">
+  <meta name="twitter:description" content="How CobWebZ designed and built Mise, a concept restaurant where guests scan a QR code, then order and pay from their phone, with its signature dish in 3D.">
+  <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
+  <meta name="twitter:image:alt" content="CobWebZ — We build the web and keep it running.">
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <!-- Sets the theme before the first paint (saved choice, else the device setting).
+       Keep it on one line: its hash in the Content-Security-Policy above must match. -->
+  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
+
+  <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/variables.css">
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.cobwebz.lk/work/mise#webpage",
+        "url": "https://www.cobwebz.lk/work/mise",
+        "name": "Mise: Restaurant Ordering Website Case Study | CobWebZ",
+        "description": "How CobWebZ designed and built Mise, a concept restaurant where guests scan a QR code, then order and pay from their phone, with its signature dish in 3D.",
+        "isPartOf": {
+          "@id": "https://www.cobwebz.lk/#website"
+        },
+        "about": {
+          "@id": "https://www.cobwebz.lk/work/mise#project"
+        },
+        "inLanguage": "en",
+        "primaryImageOfPage": "https://www.cobwebz.lk/assets/work/mise-scroll.webp"
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": "https://www.cobwebz.lk/work/mise#project",
+        "name": "Mise",
+        "description": "A neighbourhood kitchen where guests scan the QR code on their table and order and pay from their phone. No app, no login and no waiting to catch someone's eye.",
+        "genre": "Restaurant ordering",
+        "creator": {
+          "@id": "https://www.cobwebz.lk/#organization"
+        },
+        "url": "https://supercub-mise.vercel.app",
+        "image": "https://www.cobwebz.lk/assets/work/mise-scroll.webp",
+        "keywords": "Next.js, React, Three.js"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.cobwebz.lk/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Our Work",
+            "item": "https://www.cobwebz.lk/work"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Mise",
+            "item": "https://www.cobwebz.lk/work/mise"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- ============ HEADER / NAVIGATION ============ -->
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a href="/" class="site-header__brand" aria-label="CobWebZ — home">
+        <img src="/assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__brand-name">CobWebZ</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="/#about" class="site-nav__link">About</a></li>
+          <li><a href="/#services" class="site-nav__link">Services</a></li>
+          <li><a href="/work.html" class="site-nav__link is-active">Work</a></li>
+          <li><a href="/#pricing" class="site-nav__link">Pricing</a></li>
+          <li><a href="/#contact" class="site-nav__link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <div class="menu">
+          <button type="button" class="site-header__icon-btn menu-btn-circle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle navigation menu" data-menu-toggle>
+            <span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="menu__panel" id="site-menu" aria-label="Primary" hidden data-menu>
+            <ul>
+              <li><a href="/#about">About</a></li>
+              <li><a href="/#services">Services</a></li>
+              <li><a href="/work.html" class="is-active">Work</a></li>
+              <li><a href="/#pricing">Pricing</a></li>
+              <li><a href="/#contact">Contact</a></li>
+            </ul>
+            <div class="menu__extras">
+              <button type="button" class="menu__theme" role="switch" aria-checked="false" data-theme-toggle>
+                <span>Dark mode</span>
+                <span class="menu__switch" aria-hidden="true"></span>
+              </button>
+              <a href="/#contact" class="menu__cta">
+                <span>Start a project</span>
+                <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <button type="button" class="site-header__icon-btn theme-btn" aria-label="Toggle color theme" data-theme-toggle>
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a href="/#contact" class="site-header__cta-btn" data-magnetic>
+          <span>Start a project</span>
+          <span class="site-header__cta-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6.5M11.5 4.5V9.5"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ CASE STUDY HEADER ============ -->
+    <section class="hero hero--page" aria-labelledby="page-title">
+      <div class="container-cube hero__inner">
+        <nav aria-label="Breadcrumb" data-hero-step>
+          <ol class="crumbs">
+            <li><a href="/">Home</a></li>
+            <li><a href="/work.html">Work</a></li>
+            <li><span aria-current="page">Mise</span></li>
+          </ol>
+        </nav>
+        <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>Concept project · Restaurant ordering</p>
+        <h1 id="page-title" class="hero__title" data-split-words>Mise <span class="accent">Order from the table.</span></h1>
+        <p class="hero__lead" data-hero-step>A neighbourhood kitchen where guests scan the QR code on their table and order and pay from their phone. No app, no login and no waiting to catch someone&#x27;s eye.</p>
+        <div class="hero__actions" data-hero-step>
+          <a href="https://supercub-mise.vercel.app" target="_blank" rel="noopener" class="btn btn--primary btn--lg btn--sheen">View the live site <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+        <dl class="case-facts" data-hero-step>
+          <div><dt>Type</dt><dd>Restaurant ordering</dd></div>
+          <div><dt>Status</dt><dd>Concept, self-initiated</dd></div>
+          <div><dt>Our role</dt><dd>Design, development and 3D</dd></div>
+          <div><dt>Built with</dt><dd>Next.js, React, Three.js</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ PREVIEWS ============ -->
+    <!-- Full-page screenshots: both scroll by themselves while on screen (the desktop one
+         pauses while hovered). -->
+    <section class="section showcase" aria-label="Desktop and mobile previews">
+      <div class="container-cube">
+        <div class="case-previews reveal">
+          <figure>
+            <a href="https://supercub-mise.vercel.app" target="_blank" rel="noopener" class="project__media" tabindex="-1" aria-hidden="true" data-cursor="View">
+              <span class="project__bar"><span class="win__dots"><i></i><i></i><i></i></span><span class="project__tab">Mise</span></span>
+              <span class="project__screen" data-preview><img class="project__scroll" src="/assets/work/mise-scroll.webp" alt="" width="760" height="3618" decoding="async" style="--frames: 8.46"></span>
+            </a>
+            <figcaption>Desktop. Full-page screenshot of the Mise table-side ordering site; hover to pause it.</figcaption>
+          </figure>
+          <figure>
+            <div class="phone">
+              <span class="phone__screen" data-preview><img class="phone__scroll" src="/assets/work/mise-mobile.webp" alt="" width="480" height="11077" loading="lazy" decoding="async" style="--frames: 10.93"></span>
+            </div>
+            <figcaption>Mobile, 390px wide.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE STORY ============ -->
+    <section class="section" aria-label="Case study">
+      <div class="container-cube">
+        <div class="case-section reveal">
+          <p class="case-section__label">Overview</p>
+          <div class="case-section__body">
+            <h2>The menu comes to you.</h2>
+              <p>Mise is a fictional neighbourhood kitchen in Colombo that cooks over charcoal. Every table has a QR code. Scanning it opens the menu with that table already set, so guests can order, pay and order again without waiting for a server.</p>
+          </div>
+        </div>
+        <div class="case-section reveal">
+          <p class="case-section__label">Objective</p>
+          <div class="case-section__body">
+            <h2>Three taps from hungry to happy.</h2>
+              <p>QR menus are often a PDF that&#x27;s hard to read on a phone. Mise shows what one can be instead: a menu made for the phone, where ordering, paying and following your order all happen on one page, and the place still feels like a restaurant.</p>
+          </div>
+        </div>
+        <div class="case-section reveal">
+          <p class="case-section__label">Design approach</p>
+          <div class="case-section__body">
+            <h2>Warm paper, charcoal and chilli.</h2>
+              <p>A cream, paper-like background and warm black ink keep it feeling like a printed menu. Fraunces, a soft serif, sets the dish names, with Hanken Grotesk for prices and details. Chilli red marks what you can tap, and mustard yellow lights up tonight&#x27;s specials.</p>
+              <ul class="case-swatches" aria-label="Palette">
+                <li><i style="background: #F4EEE4"></i>#F4EEE4 · Paper</li>
+                <li><i style="background: #1D1A16"></i>#1D1A16 · Ink</li>
+                <li><i style="background: #D23B1E"></i>#D23B1E · Chilli</li>
+                <li><i style="background: #F1C04C"></i>#F1C04C · Mustard</li>
+                <li><i style="background: #4B5A2B"></i>#4B5A2B · Olive</li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="case-section reveal">
+          <p class="case-section__label">Technologies</p>
+          <div class="case-section__body">
+            <h2>What it's built with.</h2>
+            <ul class="case-tech">
+                <li><b>Next.js &amp; React</b><span>The menu, bag and checkout as React components, rendered ahead for a fast first load</span></li>
+                <li><b>Three.js</b><span>The signature ramen as a real 3D model that you lift apart by scrolling</span></li>
+                <li><b>Tailwind CSS</b><span>Utility styles, compiled to one small stylesheet</span></li>
+                <li><b>Motion</b><span>Springy transitions for the bag, dish sheets and order status</span></li>
+                <li><b>Lenis</b><span>Smooth scrolling that keeps the 3D scene in step with the page</span></li>
+                <li><b>Vercel</b><span>Hosting on a global network, so the menu opens quickly on any table</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="case-section reveal">
+          <p class="case-section__label">Main features</p>
+          <div class="case-section__body">
+            <h2>What it does.</h2>
+            <div class="case-features">
+                <article class="case-feature">
+                  <h3>Your table, already set</h3>
+                  <p>Scanning the QR code opens the menu with the table number filled in, and a greeting to match.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Tweak it, then add it</h3>
+                  <p>Dishes come with options and a box for kitchen notes, and the bag keeps a running total.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>A menu that follows you</h3>
+                  <p>The category bar tracks your scroll, and dietary filters show vegetarian, vegan, gluten-free or spicy dishes.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Tonight&#x27;s specials</h3>
+                  <p>A carousel of the chef&#x27;s picks, each one a tap away from your bag.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>The signature dish in 3D</h3>
+                  <p>Ramen No. 9 lifts apart as you scroll, showing the broth, egg, chashu and noodles, one layer at a time.</p>
+                </article>
+                <article class="case-feature">
+                  <h3>Pay and follow your order</h3>
+                  <p>A simulated checkout with tipping, then a live status as the order moves from the kitchen to your table.</p>
+                </article>
+            </div>
+            <p class="case-note">Mise is a concept project: a fictional restaurant we designed and built ourselves. Its payments are simulated and nothing is charged. A live restaurant connects it to a payment gateway and a kitchen screen or point-of-sale system (see Dynamic Applications under Pricing).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEXT ============ -->
+    <section class="section" aria-labelledby="next-title">
+      <div class="container-cube">
+        <header class="section-head reveal">
+          <h2 id="next-title" class="h-section" data-split-words>Want a site <span class="accent">like this?</span></h2>
+          <p class="section-lead">Start from this design as a template, or tell us what you need and we'll reply with questions or a fixed, written quote.</p>
+          <div class="case-actions">
+            <a href="/?template=Mise&amp;package=Dynamic%20Applications#contact" class="btn btn--primary btn--lg" data-magnetic>Start a project</a>
+            <a href="/#estimate" class="link-arrow">Estimate your price <span aria-hidden="true">→</span></a>
+          </div>
+        </header>
+        <nav class="case-next reveal" aria-label="More case studies">
+          <a href="/work/black.html"><span>Previous case study</span><b>Black.</b></a>
+          <a href="/work/tempo.html"><span>Next case study</span><b>Tempo</b></a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container-cube footer__inner">
+      <div class="footer__brand">
+        <a href="/" class="footer__logo" aria-label="CobWebZ — home"><img src="/assets/logo.png" alt="" width="104" height="83"></a>
+        <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
+        <a href="/#contact" class="btn btn--primary">Start a project</a>
+      </div>
+      <nav class="footer__nav" aria-label="Footer">
+        <div class="footer__col">
+          <h2 class="footer__h">Studio</h2>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/#services">Services</a></li>
+            <li><a href="/#process">Process</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h2 class="footer__h">Work</h2>
+          <ul>
+            <li><a href="/work.html">Case studies</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Contact</h2>
+          <ul>
+            <li data-config-item="contact.email"><a href="#" data-config-link="contact.email"></a></li>
+            <li data-config-item="contact.phone"><a href="#" data-config-link="contact.phone"></a></li>
+            <li data-config-item="contact.whatsapp"><a href="#" data-config-link="contact.whatsapp" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div class="footer__col" data-config-block>
+          <h2 class="footer__h">Social</h2>
+          <ul>
+            <li data-config-item="social.github"><a href="#" data-config-link="social.github" target="_blank" rel="noopener">GitHub</a></li>
+            <li data-config-item="social.linkedin"><a href="#" data-config-link="social.linkedin" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li data-config-item="social.instagram"><a href="#" data-config-link="social.instagram" target="_blank" rel="noopener">Instagram</a></li>
+            <li data-config-item="social.facebook"><a href="#" data-config-link="social.facebook" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span data-year>2026</span> CobWebZ. All rights reserved.</p>
+        <a href="#main" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+    <p class="footer__word" aria-hidden="true" data-split-letters data-reveal>CobWebZ</p>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>
