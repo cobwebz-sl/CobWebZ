@@ -1935,6 +1935,7 @@ const CUBE_CONFIG = {
     const picked = est.options.filter((o) => o.input.checked && !o.input.disabled);
     const hosting = est.hosting.find((h) => h.input.checked && !h.input.disabled) || null;
     const domain = est.domain && est.domain.input.checked ? est.domain : null;
+    const priced = domain ? [...picked, domain] : picked; // everything that can carry a price
     const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
     return {
       type,
@@ -1946,9 +1947,9 @@ const CUBE_CONFIG = {
       picked,
       hosting,
       domain,
-      once: (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly)),
-      monthly: sum(picked.filter((o) => o.monthly)),
-      from: Boolean(type && type.from) || picked.some((o) => o.from),
+      once: (type && !custom ? type.price : 0) + pagesCost + sum(priced.filter((o) => !o.monthly)),
+      monthly: sum(priced.filter((o) => o.monthly)),
+      from: Boolean(type && type.from) || priced.some((o) => o.from),
       any: Boolean(type || picked.length || hosting || domain)
     };
   }
