@@ -28,12 +28,14 @@
   <link rel="stylesheet" href="/style.css">
   <style>
     .notfound { min-height: 100svh; }
+    /* The big "404" above the headline, sized like the homepage's brand name */
     .notfound__code {
-      margin: 0 0 18px;
-      font-family: var(--font-mono);
-      font-size: clamp(18px, 2.4vw, 24px);
-      letter-spacing: 0.1em;
-      color: var(--color-muted);
+      margin: 0;
+      font-size: clamp(120px, 26vw, 300px);
+      font-weight: 500;
+      line-height: 0.85;
+      letter-spacing: -0.065em;
+      color: var(--color-ink);
     }
     .notfound .hero__lead { margin-inline: auto; }
     .notfound .hero__actions { justify-content: center; }
@@ -143,7 +145,7 @@
 
     <section class="hero notfound" aria-labelledby="notfound-title">
       <div class="container-cube hero__inner">
-        <p class="notfound__code" data-hero-step>Error 404</p>
+        <p class="notfound__code" data-hero-step><span class="sr-only">Error </span>404</p>
         <h1 id="notfound-title" class="hero__title" data-split-words>Nothing here <span class="accent">but cobwebs.</span></h1>
         <p class="hero__lead" data-hero-step>The page you asked for doesn't exist or has moved.</p>
         <div class="hero__actions" data-hero-step>
