@@ -40,6 +40,7 @@ const CUBE_CONFIG = {
   social: {
     instagram: 'https://www.instagram.com/cobwebz_sl/', // full URLs only
     facebook: 'https://www.facebook.com/profile.php?id=61596432720722',
+    tiktok: 'https://www.tiktok.com/@cobwebz.lk',
     linkedin: '',
     github: ''
   },
