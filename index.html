@@ -10,7 +10,7 @@
        console prints the new hash to paste here. connect-src lists the two form services
        script.js can send enquiries to ('self' also covers the live speed and security checks,
        which only ever ask this site). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-ZAtwIe8V18SoL1jdv3CaVGjSnErZihpW4vZt5xxUusQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- SEO: the title and description are what Google shows in its results. Keep the title
@@ -45,8 +45,11 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <!-- The site is dark first (<html data-theme="dark">); this switches to light before the
        first paint only for visitors who have chosen light, so they never see a dark flash.
+       It also sets data-season="christmas" (and the light theme, which the season keeps)
+       through December (Sri Lanka time), or on any day
+       with ?christmas in the address (the Christmas look: the end of style.css).
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');var r=document.documentElement,x=new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search),l=x;if(x)r.dataset.season='christmas';try{l=l||localStorage.getItem('theme')==='light'}catch(e){}if(l){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}</script>
 
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="variables.css">
@@ -98,7 +101,7 @@
         "currenciesAccepted": "LKR",
         "sameAs": [
           "https://www.facebook.com/profile.php?id=61596432720722",
-          "https://www.instagram.com/cobwebz_sl/",
+          "https://www.instagram.com/cobwebz.lk/",
           "https://www.tiktok.com/@cobwebz.lk"
         ],
         "knowsAbout": ["Web design", "Web development", "UI/UX design", "Django", "Python", "PHP", "Docker", "Cloudflare", "Technical SEO", "Web performance", "Web security", "Server management"],
@@ -220,7 +223,10 @@
   <header class="site-header" data-header>
     <div class="site-header__inner">
       <a href="#overview" class="site-header__brand" aria-label="CobWebZ — back to top">
-        <img src="assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__mark">
+          <img src="assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+          <img src="assets/xmas-hat.svg" alt="" class="xmas-hat xmas-hat--mark" width="146" height="128" loading="lazy">
+        </span>
         <span class="site-header__brand-name">CobWebZ</span>
       </a>
 
@@ -329,6 +335,9 @@
     <section class="hero hero--home" id="overview" aria-labelledby="hero-title">
 
       <div class="container-cube hero__inner">
+        <!-- Shown only while CUBE_CONFIG.offer (script.js) is running: a link down to the offer -->
+        <a href="#offer" class="offer-pill offer-pill--hero" data-offer-banner="short" hidden><svg class="offer-pill__gift" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,72H180.92c.39-.33.79-.65,1.17-1A29.53,29.53,0,0,0,192,49.57,32.62,32.62,0,0,0,158.44,16,29.53,29.53,0,0,0,137,25.91a54.94,54.94,0,0,0-9,14.48,54.94,54.94,0,0,0-9-14.48A29.53,29.53,0,0,0,97.56,16,32.62,32.62,0,0,0,64,49.57,29.53,29.53,0,0,0,73.91,71c.38.33.78.65,1.17,1H40A16,16,0,0,0,24,88v32a16,16,0,0,0,16,16v64a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V136a16,16,0,0,0,16-16V88A16,16,0,0,0,216,72ZM149,36.51a13.69,13.69,0,0,1,10-4.5h.49A16.62,16.62,0,0,1,176,49.08a13.69,13.69,0,0,1-4.5,10c-9.49,8.4-25.24,11.36-35,12.4C137.7,60.89,141,45.5,149,36.51Zm-64.09.36A16.63,16.63,0,0,1,96.59,32h.49a13.69,13.69,0,0,1,10,4.5c8.39,9.48,11.35,25.2,12.39,34.92-9.72-1-25.44-4-34.92-12.39a13.69,13.69,0,0,1-4.5-10A16.6,16.6,0,0,1,84.87,36.87ZM40,88h80v32H40Zm16,48h64v64H56Zm144,64H136V136h64Zm16-80H136V88h80v32Z"/></svg><span data-offer-text></span><span class="offer-pill__arrow"
+            aria-hidden="true">→</span></a>
         <h1 id="hero-title" class="hero__title">
           <span class="hero__brand" data-hero-brand>CobWebZ</span>
           <span class="hero__tagline" data-split-words>We build the web <span class="accent">and keep it
@@ -341,6 +350,9 @@
         </div>
       </div>
 
+      <!-- December only (style.css, "Christmas season"): trees and gifts in the hero's corners -->
+      <div class="xmas-scene xmas-scene--hero-l xmas-deco" aria-hidden="true"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/gift-green.svg" alt="" class="xmas-scene__gift xmas-scene__gift--small" loading="lazy"></div>
+      <div class="xmas-scene xmas-scene--hero-r xmas-deco" aria-hidden="true"><img src="assets/gift-pearl.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree xmas-scene__tree--small" loading="lazy"></div>
       <a href="#about" class="scroll-cue" aria-label="Scroll to About us"><i aria-hidden="true"></i></a>
     </section>
 
@@ -385,6 +397,8 @@
                   d="M423 318 C440 328 449 345 448 368 C447 388 441 400 433 410" />
                 <path class="spider__body" fill-rule="evenodd"
                   d="M347 244 A40 40 0 0 1 427 244 L427 318 A40 40 0 0 1 347 318 ZM373 249 A14 20 0 1 0 401 249 A14 20 0 1 0 373 249 ZM374 318 A13 15 0 1 0 400 318 A13 15 0 1 0 374 318 Z" />
+                <!-- Its Santa hat, December only (style.css, "Christmas season") -->
+                <image class="xmas-hat spider__hat" href="assets/xmas-hat.svg" x="334" y="100" width="146" height="128" />
               </g>
             </svg>
             <p class="about__hint" aria-hidden="true">Drag the spider</p>
@@ -394,6 +408,52 @@
     </section>
 
     <!-- ============ OUR SERVICES ============ -->
+    <!-- ============ CHRISTMAS OFFER ============ -->
+    <!-- Shown only while CUBE_CONFIG.offer (script.js) is running. initOffer() writes the
+         percentage, dates, WhatsApp link and days left from that config, so next year's offer
+         needs no edits here. Laid out like the campaign posts; the hanging baubles are CSS
+         (style.css, "The Christmas offer section"). Each bauble's sizes: --x/--size/--len on
+         wide screens, the -sm versions on phones. -->
+    <section class="section offer" id="offer" aria-labelledby="offer-title" data-offer-section hidden>
+      <div class="container-cube">
+        <div class="offer-panel reveal">
+          <div class="offer-panel__baubles" aria-hidden="true">
+            <span class="bauble bauble--blue"
+              style="--x-lg: 6%; --size-lg: 70px; --len-lg: 70px; --x-sm: 6%; --size-sm: 44px; --len-sm: 30px; --t: 7s; --d: -2s"><i></i></span>
+            <span class="bauble bauble--pearl"
+              style="--x-lg: 30%; --size-lg: 170px; --len-lg: 110px; --x-sm: 34%; --size-sm: 92px; --len-sm: 46px; --t: 9s; --d: -5s"><i></i></span>
+            <span class="bauble bauble--rose"
+              style="--x-lg: 72%; --size-lg: 112px; --len-lg: 250px; --x-sm: 76%; --size-sm: 56px; --len-sm: 96px; --t: 8s"><i></i></span>
+            <span class="bauble bauble--red"
+              style="--x-lg: 56%; --size-lg: 58px; --len-lg: 40px; --x-sm: 22%; --size-sm: 34px; --len-sm: 70px; --t: 6.5s; --d: -3s"><i></i></span>
+            <span class="bauble bauble--green"
+              style="--x-lg: 90%; --size-lg: 64px; --len-lg: 120px; --x-sm: 60%; --size-sm: 38px; --len-sm: 20px; --t: 7.5s; --d: -1s"><i></i></span>
+          </div>
+          <div class="offer-panel__body">
+            <p class="badge"><span class="badge__dot" aria-hidden="true"></span><span data-offer-badge>Christmas offer</span></p>
+            <h2 id="offer-title" class="offer-panel__title">
+              <span class="offer-panel__big"><span data-offer-percent>10</span><span class="offer-panel__pct">%</span></span>
+              <span class="offer-panel__line">off your new website.</span>
+            </h2>
+            <p class="offer-panel__lead" data-offer-lead></p>
+            <p class="offer-panel__note">It covers one-time work: your website package, extra pages and one-time add-ons.
+              Every project still starts with a short call and a fixed, written quote.</p>
+            <div class="offer-panel__actions">
+              <a href="#contact" class="btn btn--primary btn--lg" data-offer-whatsapp>Start a project <span
+                  aria-hidden="true">→</span></a>
+              <a href="#estimate" class="btn btn--ghost btn--lg">Build your estimate</a>
+            </div>
+          </div>
+          <div class="xmas-scene xmas-scene--offer xmas-deco" aria-hidden="true"><img src="assets/gift-green.svg" alt="" class="xmas-scene__gift xmas-scene__gift--small" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree xmas-scene__tree--small" loading="lazy"><img src="assets/gift-pearl.svg" alt="" class="xmas-scene__gift" loading="lazy"></div>
+          <div class="offer-panel__foot">
+            <span class="offer-panel__left"><span class="badge__dot" aria-hidden="true"></span><span
+                data-offer-countdown></span></span>
+            <span data-offer-ends></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section services" id="services" aria-labelledby="services-title">
       <div class="container-cube">
         <header class="section-head services__head reveal">
@@ -838,6 +898,9 @@
             pricing.</h2>
           <p class="section-lead">Every project starts with a discovery call and a fixed, written quote. Prices below
             are starting points.</p>
+          <!-- Shown only while CUBE_CONFIG.offer (script.js) is running; script.js writes its text -->
+          <p class="offer-pill" data-offer-banner hidden><svg class="offer-pill__gift" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,72H180.92c.39-.33.79-.65,1.17-1A29.53,29.53,0,0,0,192,49.57,32.62,32.62,0,0,0,158.44,16,29.53,29.53,0,0,0,137,25.91a54.94,54.94,0,0,0-9,14.48,54.94,54.94,0,0,0-9-14.48A29.53,29.53,0,0,0,97.56,16,32.62,32.62,0,0,0,64,49.57,29.53,29.53,0,0,0,73.91,71c.38.33.78.65,1.17,1H40A16,16,0,0,0,24,88v32a16,16,0,0,0,16,16v64a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V136a16,16,0,0,0,16-16V88A16,16,0,0,0,216,72ZM149,36.51a13.69,13.69,0,0,1,10-4.5h.49A16.62,16.62,0,0,1,176,49.08a13.69,13.69,0,0,1-4.5,10c-9.49,8.4-25.24,11.36-35,12.4C137.7,60.89,141,45.5,149,36.51Zm-64.09.36A16.63,16.63,0,0,1,96.59,32h.49a13.69,13.69,0,0,1,10,4.5c8.39,9.48,11.35,25.2,12.39,34.92-9.72-1-25.44-4-34.92-12.39a13.69,13.69,0,0,1-4.5-10A16.6,16.6,0,0,1,84.87,36.87ZM40,88h80v32H40Zm16,48h64v64H56Zm144,64H136V136h64Zm16-80H136V88h80v32Z"/></svg><span
+              data-offer-text></span></p>
         </header>
 
         <div class="price-grid">
@@ -860,6 +923,7 @@
           </article>
 
           <article class="card price price--featured reveal" data-package="Dynamic Applications">
+            <img src="assets/gift-red.svg" alt="" class="price__gift xmas-deco" loading="lazy">
             <h3 class="price__name">Dynamic Applications</h3>
             <p class="price__desc">Full-stack apps with a database, user accounts and an API.</p>
             <p class="price__price"><span class="price__currency">LKR</span> <span class="price__amount">100,000+</span>
@@ -909,6 +973,8 @@
             <h3 id="estimator-title" class="estimator__title">Build your estimate</h3>
             <p class="estimator__lead">Choose what your project needs and see an itemised starting price in LKR. It's
               an estimate, not a quote: your fixed, written quote follows a short discovery call.</p>
+            <p class="offer-pill" data-offer-banner hidden><svg class="offer-pill__gift" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,72H180.92c.39-.33.79-.65,1.17-1A29.53,29.53,0,0,0,192,49.57,32.62,32.62,0,0,0,158.44,16,29.53,29.53,0,0,0,137,25.91a54.94,54.94,0,0,0-9,14.48,54.94,54.94,0,0,0-9-14.48A29.53,29.53,0,0,0,97.56,16,32.62,32.62,0,0,0,64,49.57,29.53,29.53,0,0,0,73.91,71c.38.33.78.65,1.17,1H40A16,16,0,0,0,24,88v32a16,16,0,0,0,16,16v64a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V136a16,16,0,0,0,16-16V88A16,16,0,0,0,216,72ZM149,36.51a13.69,13.69,0,0,1,10-4.5h.49A16.62,16.62,0,0,1,176,49.08a13.69,13.69,0,0,1-4.5,10c-9.49,8.4-25.24,11.36-35,12.4C137.7,60.89,141,45.5,149,36.51Zm-64.09.36A16.63,16.63,0,0,1,96.59,32h.49a13.69,13.69,0,0,1,10,4.5c8.39,9.48,11.35,25.2,12.39,34.92-9.72-1-25.44-4-34.92-12.39a13.69,13.69,0,0,1-4.5-10A16.6,16.6,0,0,1,84.87,36.87ZM40,88h80v32H40Zm16,48h64v64H56Zm144,64H136V136h64Zm16-80H136V88h80v32Z"/></svg><span
+              data-offer-text></span></p>
           </header>
 
           <div class="estimator__layout">
@@ -1012,6 +1078,9 @@
               <div class="est-sum__top">
                 <div>
                   <p id="est-summary-title" class="eyebrow">Your estimate</p>
+                  <!-- With an offer running: the one-time price before it, struck out -->
+                  <p class="est-sum__was" data-estimate-was hidden><s><span class="sr-only">Was </span><span
+                        data-estimate-full></span></s><span class="offer-tag" data-offer-tag></span></p>
                   <p class="est-sum__total"><b data-estimate-total>—</b> <span data-estimate-note>Choose a website type
                       to start</span></p>
                   <p class="est-sum__monthly" data-estimate-monthly hidden></p>
@@ -1345,10 +1414,13 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
+    <!-- December only (style.css, "Christmas season"): trees and gifts on the footer's floor -->
+    <div class="xmas-scene xmas-scene--footer xmas-deco" aria-hidden="true"><img src="assets/gift-green.svg" alt="" class="xmas-scene__gift xmas-scene__gift--small" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree xmas-scene__tree--small" loading="lazy"><img src="assets/gift-pearl.svg" alt="" class="xmas-scene__gift" loading="lazy"></div>
     <div class="container-cube footer__inner">
       <div class="footer__brand">
         <a href="#overview" class="footer__logo" aria-label="CobWebZ — back to top">
           <img src="assets/logo.png" alt="" width="104" height="83">
+          <img src="assets/xmas-hat.svg" alt="" class="xmas-hat xmas-hat--logo" width="146" height="128" loading="lazy">
         </a>
         <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working
           with clients at home and abroad.</p>

@@ -67,6 +67,10 @@
   --color-good: #4f7a61;
   --color-danger: #b4533f;
 
+  /* Sale offers (CUBE_CONFIG.offer in script.js): the offer badges and the discount line */
+  --color-offer: #97492f;          /* deep rose gold: 5.4:1 or better on white, canvas and its tint */
+  --color-offer-soft: #f7ebe6;
+
   /* Typography */
   --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -113,6 +117,9 @@
   --color-nav: #b4b7be;
   --color-word: #1c1f25;
   --hero-glow: rgba(255, 255, 255, 0.045);
+
+  --color-offer: #e9b6a4;          /* 8.8:1 or better on every dark surface */
+  --color-offer-soft: #2b201d;
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 40px -10px rgba(0, 0, 0, 0.6);
   --shadow-soft: 0 20px 40px -10px rgba(0, 0, 0, 0.4);

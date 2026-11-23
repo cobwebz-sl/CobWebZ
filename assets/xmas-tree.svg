@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 132">
+  <!-- A snowy Christmas tree for the December theme (style.css, "Christmas season"):
+       three tiers of evergreen with snow along their hems, a few baubles and a gold star. -->
+  <defs>
+    <linearGradient id="t" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#3a9a69"/><stop offset=".5" stop-color="#24744d"/><stop offset="1" stop-color="#175a3b"/>
+    </linearGradient>
+    <linearGradient id="s" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe6ee"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="50" cy="127" rx="36" ry="4" fill="#0a0a0a" opacity=".1"/>
+  <rect x="44" y="106" width="12" height="20" rx="2" fill="#8a5a3c"/>
+  <path d="M50 50 87 107Q50 116 13 107Z" fill="url(#t)"/>
+  <path d="M15 105Q22 101 29 105Q36 101 43 105Q50 101 57 105Q64 101 71 105Q78 101 85 105Q50 114 15 105Z" fill="url(#s)"/>
+  <path d="M50 30 77 80Q50 88 23 80Z" fill="url(#t)"/>
+  <path d="M25 78Q31 74 37 78Q43 74 50 78Q57 74 63 78Q69 74 75 78Q50 86 25 78Z" fill="url(#s)"/>
+  <path d="M50 12 67 52Q50 58 33 52Z" fill="url(#t)"/>
+  <path d="M35 50Q42 46 50 50Q58 46 65 50Q50 56 35 50Z" fill="url(#s)"/>
+  <circle cx="40" cy="66" r="3.6" fill="#d0424c"/><circle cx="60" cy="92" r="4" fill="#d0424c"/>
+  <circle cx="58" cy="64" r="3.2" fill="#e2b04a"/><circle cx="33" cy="94" r="3.6" fill="#e2b04a"/>
+  <circle cx="47" cy="40" r="2.8" fill="#7f9acb"/><circle cx="73" cy="98" r="3" fill="#7f9acb"/>
+  <path d="M50 1.5 52.9 7.8 59.8 8.5 54.6 13.1 56.1 19.9 50 16.4 43.9 19.9 45.4 13.1 40.2 8.5 47.1 7.8Z" fill="#e8b84a" stroke="#c9962c" stroke-width=".8" stroke-linejoin="round"/>
+</svg>

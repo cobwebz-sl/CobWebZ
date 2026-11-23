@@ -6,7 +6,7 @@
        jsDelivr (pinned and integrity-checked, as on the homepage). The inline theme script
        below is allowed by its sha256 hash: if you change it, Chrome's console prints the new
        hash to paste here. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-ZAtwIe8V18SoL1jdv3CaVGjSnErZihpW4vZt5xxUusQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Web Design Portfolio: Our Work | CobWebZ, Sri Lanka</title>
@@ -34,8 +34,11 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <!-- Sets the theme before the first paint: dark unless the visitor has chosen light.
+       It also sets data-season="christmas" (and the light theme, which the season keeps)
+       through December (Sri Lanka time), or on any day
+       with ?christmas in the address (the Christmas look: the end of style.css).
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');var r=document.documentElement,x=new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search),l=x;if(x)r.dataset.season='christmas';try{l=l||localStorage.getItem('theme')==='light'}catch(e){}if(l){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}</script>
 
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="variables.css">
@@ -89,7 +92,10 @@
   <header class="site-header" data-header>
     <div class="site-header__inner">
       <a href="./#overview" class="site-header__brand" aria-label="CobWebZ — home">
-        <img src="assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__mark">
+          <img src="assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+          <img src="assets/xmas-hat.svg" alt="" class="xmas-hat xmas-hat--mark" width="146" height="128" loading="lazy">
+        </span>
         <span class="site-header__brand-name">CobWebZ</span>
       </a>
 
@@ -179,10 +185,15 @@
     <section class="hero hero--page" aria-labelledby="page-title">
 
       <div class="container-cube hero__inner">
+        <!-- Shown only while CUBE_CONFIG.offer (script.js) is running: a link to the offer on the homepage -->
+        <a href="index.html#offer" class="offer-pill offer-pill--hero offer-pill--page" data-offer-banner="short" hidden><svg class="offer-pill__gift" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,72H180.92c.39-.33.79-.65,1.17-1A29.53,29.53,0,0,0,192,49.57,32.62,32.62,0,0,0,158.44,16,29.53,29.53,0,0,0,137,25.91a54.94,54.94,0,0,0-9,14.48,54.94,54.94,0,0,0-9-14.48A29.53,29.53,0,0,0,97.56,16,32.62,32.62,0,0,0,64,49.57,29.53,29.53,0,0,0,73.91,71c.38.33.78.65,1.17,1H40A16,16,0,0,0,24,88v32a16,16,0,0,0,16,16v64a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V136a16,16,0,0,0,16-16V88A16,16,0,0,0,216,72ZM149,36.51a13.69,13.69,0,0,1,10-4.5h.49A16.62,16.62,0,0,1,176,49.08a13.69,13.69,0,0,1-4.5,10c-9.49,8.4-25.24,11.36-35,12.4C137.7,60.89,141,45.5,149,36.51Zm-64.09.36A16.63,16.63,0,0,1,96.59,32h.49a13.69,13.69,0,0,1,10,4.5c8.39,9.48,11.35,25.2,12.39,34.92-9.72-1-25.44-4-34.92-12.39a13.69,13.69,0,0,1-4.5-10A16.6,16.6,0,0,1,84.87,36.87ZM40,88h80v32H40Zm16,48h64v64H56Zm144,64H136V136h64Zm16-80H136V88h80v32Z"/></svg><span data-offer-text></span><span class="offer-pill__arrow"
+            aria-hidden="true">→</span></a>
         <p class="badge" data-hero-step><span class="badge__dot" aria-hidden="true"></span>Client sites &amp; concepts</p>
         <h1 id="page-title" class="hero__title" data-split-words>Our work. <span class="accent">Open one and click around.</span></h1>
         <p class="hero__lead" data-hero-step>Live sites we've built for real businesses, and concept sites we designed and built ourselves to show what's possible. Every one is online, so open it and try it for yourself.</p>
       </div>
+      <div class="xmas-scene xmas-scene--hero-l xmas-deco" aria-hidden="true"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/gift-green.svg" alt="" class="xmas-scene__gift xmas-scene__gift--small" loading="lazy"></div>
+      <div class="xmas-scene xmas-scene--hero-r xmas-deco" aria-hidden="true"><img src="assets/gift-pearl.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree xmas-scene__tree--small" loading="lazy"></div>
     </section>
 
     <!-- To add a site: copy an <article> into the right section, point both links at the site, and put a
@@ -439,10 +450,13 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
+    <!-- December only (style.css, "Christmas season"): trees and gifts on the footer's floor -->
+    <div class="xmas-scene xmas-scene--footer xmas-deco" aria-hidden="true"><img src="assets/gift-green.svg" alt="" class="xmas-scene__gift xmas-scene__gift--small" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree xmas-scene__tree--small" loading="lazy"><img src="assets/gift-pearl.svg" alt="" class="xmas-scene__gift" loading="lazy"></div>
     <div class="container-cube footer__inner">
       <div class="footer__brand">
         <a href="./" class="footer__logo" aria-label="CobWebZ — home">
           <img src="assets/logo.png" alt="" width="104" height="83">
+          <img src="assets/xmas-hat.svg" alt="" class="xmas-hat xmas-hat--logo" width="146" height="128" loading="lazy">
         </a>
         <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working with clients at home and abroad.</p>
         <a href="./#contact" class="btn btn--primary">Start a project</a>

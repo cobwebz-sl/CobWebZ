@@ -38,11 +38,26 @@ const CUBE_CONFIG = {
   testimonials: [],
 
   social: {
-    instagram: 'https://www.instagram.com/cobwebz_sl/', // full URLs only
+    instagram: 'https://www.instagram.com/cobwebz.lk/', // full URLs only
     facebook: 'https://www.facebook.com/profile.php?id=61596432720722',
     tiktok: 'https://www.tiktok.com/@cobwebz.lk',
     linkedin: '',
     github: ''
+  },
+
+  /* A sale: percent off one-time work (website packages, extra pages and one-time add-ons;
+     monthly plans keep their price) from the first day to the last, both included, in Sri
+     Lanka time. While it runs, the Pricing cards and the estimator show the original price
+     struck out beside the price after the offer, badges announce it, and the enquiry carries
+     both. Outside the dates nothing changes. To preview it on your own computer before it
+     starts, open the page from localhost or 127.0.0.1 with ?christmas at the end of the
+     address. Set percent to 0 to switch it off. */
+  offer: {
+    name: 'Christmas offer',
+    tag: 'Christmas', // the short label on the "−10% Christmas" tag
+    percent: 10,
+    from: '2026-12-01',
+    to: '2026-12-10'
   },
 
   /* Enquiry delivery. With contact.whatsapp set, the form opens WhatsApp with the
@@ -264,7 +279,8 @@ const CUBE_CONFIG = {
   function initTheme() {
     const toggles = $$('[data-theme-toggle]');
     const meta = $('meta[name="theme-color"]');
-    const preferred = () => (storage.get('theme') === 'light' ? 'light' : 'dark');
+    const preferred = () => (document.documentElement.dataset.season === 'christmas'
+      || storage.get('theme') === 'light' ? 'light' : 'dark');
     if (!toggles.length) {
       document.documentElement.dataset.theme = preferred();
       return;
@@ -282,6 +298,15 @@ const CUBE_CONFIG = {
         if (toggle.getAttribute('role') === 'switch') toggle.setAttribute('aria-checked', String(t === 'dark'));
       });
       if (meta) meta.setAttribute('content', t === 'dark' ? '#0c0d10' : '#f0f1f3'); // browser UI colour
+    }
+
+    // In the Christmas season (data-season, set in <head>) the site is light only, like the
+    // campaign posts: the toggles step aside, and the visitor's own choice is left stored
+    // untouched for January
+    if (document.documentElement.dataset.season === 'christmas') {
+      apply('light');
+      toggles.forEach((toggle) => { toggle.hidden = true; });
+      return;
     }
 
     apply(preferred());
@@ -480,11 +505,40 @@ const CUBE_CONFIG = {
     if (reduceMotion.matches) return;
 
     const narrow = window.matchMedia('(max-width: 760px)');
-    // The dots take their tone from the page's own ink, so they suit either theme
+    // In the Christmas season (data-season, set in each page's <head>) the same dots fall as
+    // snow: the same count and canvas, only their colour, size and direction change
+    const snow = document.documentElement.dataset.season === 'christmas';
+    // The dots take their tone from the page's own ink, so they suit either theme. Snow is
+    // white; on the light theme each flake gets a fine grey rim, or white on the pale canvas
+    // would not show (as in the campaign posts)
+    const light = () => document.documentElement.dataset.theme === 'light';
     const tone = () => {
+      if (snow) return '#ffffff';
       const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim();
       return ink || '#8a8d93';
     };
+    const rim = () => (snow && light() ? { width: 1, color: { value: '#bcc4cf' }, opacity: 0.9 } : { width: 0 });
+    // Among the round flakes, about one in three is a real six-armed snowflake (an image:
+    // assets/snowflake.svg, or the frosty snowflake-light.svg on the light theme), larger and
+    // slowly turning as it falls. The circle is listed twice to weight the pick.
+    const shape = () => (snow
+      ? {
+        type: ['circle', 'circle', 'image'],
+        options: {
+          image: {
+            src: light() ? 'assets/snowflake-light.svg' : 'assets/snowflake.svg',
+            width: 24,
+            height: 24,
+            particles: {
+              size: { value: { min: 6, max: 13 } },
+              opacity: { value: { min: 0.6, max: 1 } },
+              stroke: { width: 0 },
+              rotate: { value: { min: 0, max: 360 }, direction: 'random', animation: { enable: true, speed: 4, sync: false } }
+            }
+          }
+        }
+      }
+      : { type: 'circle' });
     const options = () => ({
       fpsLimit: 60,
       detectRetina: true,
@@ -495,11 +549,14 @@ const CUBE_CONFIG = {
         // barely a handful of dots
         number: { value: narrow.matches ? 26 : 64, density: { enable: false } },
         color: { value: tone() },
-        shape: { type: 'circle' },
-        opacity: { value: narrow.matches ? 0.34 : 0.45 },
-        size: { value: { min: 1, max: 2.2 } },
+        stroke: rim(),
+        shape: shape(),
+        opacity: { value: snow ? { min: 0.3, max: 0.9 } : narrow.matches ? 0.34 : 0.45 },
+        size: { value: snow ? { min: 1, max: 3.6 } : { min: 1, max: 2.2 } },
         links: { enable: false }, // no joining lines: drifting dots on their own
-        move: { enable: true, speed: 0.45, direction: 'none', straight: false, random: false, outModes: { default: 'out' } }
+        move: snow
+          ? { enable: true, speed: { min: 0.5, max: 1.4 }, direction: 'bottom', straight: false, random: false, outModes: { default: 'out' } }
+          : { enable: true, speed: 0.45, direction: 'none', straight: false, random: false, outModes: { default: 'out' } }
       },
       interactivity: {
         detectsOn: 'window', // so the canvas itself can stay out of the way of the buttons
@@ -536,6 +593,8 @@ const CUBE_CONFIG = {
     new MutationObserver(() => {
       if (!heroNet) return;
       heroNet.options.particles.color.value = tone();
+      heroNet.options.particles.stroke = rim();
+      heroNet.options.particles.shape = shape();
       heroNet.refresh();
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
@@ -1242,7 +1301,11 @@ const CUBE_CONFIG = {
           `<path class="services__leg" style="--o: ${775 - x}px ${y}px; --s: ${-swing}deg" d="${mirror(d)}"/>`;
       }).join('') +
       '<path class="services__body" fill-rule="evenodd" d="M347 244A40 40 0 0 1 427 244L427 318A40 40 0 0 1 347 318Z' +
-      'M373 249A14 20 0 1 0 401 249A14 20 0 1 0 373 249ZM374 318A13 15 0 1 0 400 318A13 15 0 1 0 374 318Z"/></svg>';
+      'M373 249A14 20 0 1 0 401 249A14 20 0 1 0 373 249ZM374 318A13 15 0 1 0 400 318A13 15 0 1 0 374 318Z"/>' +
+      // its Santa hat, in December (assets/xmas-hat.svg, drawn in this same space)
+      (document.documentElement.dataset.season === 'christmas'
+        ? '<image class="xmas-hat" href="assets/xmas-hat.svg" x="334" y="100" width="146" height="128"/>' : '') +
+      '</svg>';
 
     // A point on the walked ring, p = 0…1 of the way round from angle 0 (clockwise on screen),
     // as it looks now: like project(), it leaves where that is in px, py and its size in pk.
@@ -1900,6 +1963,44 @@ const CUBE_CONFIG = {
     return m ? Number(m[0].replace(/,/g, '')) : null;
   };
   const fmtLKR = (n) => `LKR ${n.toLocaleString('en-US')}`;
+
+  // The sale in CUBE_CONFIG.offer, or null when it isn't running. Its dates are Sri Lanka
+  // days (UTC+5:30), whatever the visitor's own clock says. ?christmas previews it, but only
+  // on this computer (localhost, 127.0.0.1 or a file), so no visitor can switch it on early.
+  const offer = (() => {
+    const o = CUBE_CONFIG.offer || {};
+    const percent = Number(o.percent) || 0;
+    const start = Date.parse(`${o.from}T00:00:00+05:30`);
+    const end = Date.parse(`${o.to}T00:00:00+05:30`) + 864e5; // midnight after the last day
+    if (!(percent > 0 && percent < 100) || Number.isNaN(start) || Number.isNaN(end)) return null;
+    const now = Date.now();
+    const local = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+    const preview = local && /[?&]christmas\b/.test(location.search);
+    if (!(preview || (now >= start && now < end))) return null;
+    const day = (ms, opts) => new Date(ms).toLocaleDateString('en-GB', { ...opts, timeZone: 'Asia/Colombo' });
+    const last = end - 1;
+    const long = { day: 'numeric', month: 'long' };
+    const sameMonth = day(start, { month: 'long' }) === day(last, { month: 'long' });
+    // Dates stay on one line: non-breaking spaces, and word joiners around the dash, which
+    // browsers would otherwise break after
+    const keep = (t) => t.replace(/ /g, '\u00a0').replace(/–/g, '\u2060–\u2060');
+    const range = (opts) => keep(sameMonth
+      ? `${day(start, { day: 'numeric' })}–${day(last, opts)}`
+      : `${day(start, opts)} – ${day(last, opts)}`);
+    return {
+      name: o.name || 'Offer',
+      tag: o.tag || '',
+      percent,
+      dates: range(long), // "1–10 December"
+      short: range({ day: 'numeric', month: 'short' }), // "1–10 Dec"
+      first: keep(day(start, long)), // "1 December"
+      lastDay: keep(day(last, long)), // "10 December"
+      // Sri Lanka days left, today included; null in a preview before it starts
+      daysLeft: now < start ? null : Math.ceil((end - now) / 864e5),
+      off: (n) => Math.round((n * percent) / 100) // how much comes off n
+    };
+  })();
+
   const MAX_PAGES = 40;
   const est = {
     root: $('[data-estimator]'),
@@ -1935,6 +2036,8 @@ const CUBE_CONFIG = {
     const picked = est.options.filter((o) => o.input.checked && !o.input.disabled);
     const hosting = est.hosting.find((h) => h.input.checked && !h.input.disabled) || null;
     const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
+    const onceFull = (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly));
+    const discount = offer && onceFull ? offer.off(onceFull) : 0; // the offer covers one-time work only
     return {
       type,
       custom,
@@ -1944,14 +2047,16 @@ const CUBE_CONFIG = {
       pagesCost,
       picked,
       hosting,
-      once: (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly)),
+      onceFull, // one-time total before the offer
+      discount,
+      once: onceFull - discount, // one-time total to pay
       monthly: sum(picked.filter((o) => o.monthly)),
       from: Boolean(type && type.from) || picked.some((o) => o.from),
       any: Boolean(type || picked.length || hosting)
     };
   }
 
-  // [label, price] rows: the breakdown, the form's copy and the enquiry message
+  // [label, price, class?] rows: the breakdown, the form's copy and the enquiry message
   function estimateLines(e) {
     const rows = [];
     if (e.type) rows.push([e.type.name, e.type.priceText]);
@@ -1963,24 +2068,33 @@ const CUBE_CONFIG = {
     }
     e.picked.forEach((o) => rows.push([o.name, o.priceText]));
     if (e.hosting) rows.push([`Hosting: ${e.hosting.name}`, e.hosting.priceText]);
+    if (e.discount) {
+      rows.push([`${offer.name}: ${offer.percent}% off one-time work`, `− ${fmtLKR(e.discount)}`, 'is-offer']);
+    }
     return rows;
   }
 
-  // One line for the total, e.g. "LKR 55,000+ one-time + LKR 5,000 / mo"
+  // One line for the total, e.g. "LKR 55,000+ one-time + LKR 5,000 / mo", or with an offer
+  // running "LKR 49,500+ one-time, with the Christmas offer (10% off, was LKR 55,000+) + …"
   function estimateText(e) {
     const parts = [];
+    const plus = e.from ? '+' : '';
     if (e.custom) parts.push('Custom retainer (quoted after a discovery call)');
-    if (e.once) parts.push(`${fmtLKR(e.once)}${e.from ? '+' : ''} one-time`);
+    if (e.once) {
+      parts.push(`${fmtLKR(e.once)}${plus} one-time${e.discount
+        ? `, with the ${offer.name} (${offer.percent}% off, was ${fmtLKR(e.onceFull)}${plus})` : ''}`);
+    }
     if (e.monthly) parts.push(`${fmtLKR(e.monthly)} / mo`);
     return parts.join(' + ');
   }
 
-  const listRows = (ul, rows) => ul.replaceChildren(...rows.map(([name, price]) => {
+  const listRows = (ul, rows) => ul.replaceChildren(...rows.map(([name, price, cls]) => {
     const li = document.createElement('li');
     const n = document.createElement('span');
     const p = document.createElement('span');
     n.textContent = name;
     p.textContent = price;
+    if (cls) li.className = cls;
     li.append(n, p);
     return li;
   }));
@@ -2057,6 +2171,13 @@ const CUBE_CONFIG = {
     if (monthlyEl) {
       monthlyEl.hidden = !(e.monthly && (e.once || e.custom));
       monthlyEl.textContent = `plus ${fmtLKR(e.monthly)} / month`;
+    }
+    // With an offer running: the one-time total before it, struck out above the total after it
+    const wasEl = $('[data-estimate-was]', est.root);
+    if (wasEl) {
+      wasEl.hidden = !e.discount;
+      const full = $('[data-estimate-full]', wasEl);
+      if (full && e.discount) full.textContent = `${fmtLKR(e.onceFull)}${e.from ? '+' : ''}`;
     }
     const rows = estimateLines(e);
     const lines = $('[data-estimate-lines]', est.root);
@@ -2135,6 +2256,77 @@ const CUBE_CONFIG = {
       if (field && !field.hidden) setTimeout(() => flash($('.estimate-box', field)), 450);
     });
     updateEstimate();
+  }
+
+  // Everything the offer shows, while it runs: the badges (hero, Pricing, estimator), each
+  // Pricing card's price after the offer with the original struck out below it, and the
+  // Christmas offer section after About. Runs after initSelections, so the enquiry form's
+  // plan list keeps the cards' original prices.
+  function initOffer() {
+    if (!offer) return;
+    // "Christmas offer: 10% off one-time work, 1–10 December", or in the hero
+    // (data-offer-banner="short") "Christmas offer · 10% off · 1–10 Dec"
+    $$('[data-offer-banner]').forEach((el) => {
+      const text = $('[data-offer-text]', el);
+      if (text) {
+        const save = document.createElement('b');
+        save.className = 'offer-grad';
+        save.textContent = `${offer.percent}% off`;
+        if (el.dataset.offerBanner === 'short') text.replaceChildren(`${offer.name} · `, save, ` · ${offer.short}`);
+        else text.replaceChildren(`${offer.name}: `, save, ` one-time work, ${offer.dates}`);
+      }
+      el.hidden = false;
+    });
+    $$('[data-offer-tag]').forEach((el) => { el.textContent = `−${offer.percent}% ${offer.tag}`.trim(); });
+    $$('.price').forEach((card) => {
+      const amount = $('.price__amount', card);
+      const note = $('.price__note', card);
+      const text = amount ? amount.textContent.trim() : '';
+      const full = lkr(text);
+      if (!full || !note) return; // "Custom" has no price to take anything off
+      const plus = text.endsWith('+') ? '+' : '';
+      const was = document.createElement('s');
+      const hint = document.createElement('span');
+      was.className = 'price__was';
+      hint.className = 'sr-only';
+      hint.textContent = 'Was ';
+      was.append(hint, `LKR ${text}`);
+      note.prepend(was, ' · ');
+      amount.textContent = `${(full - offer.off(full)).toLocaleString('en-US')}${plus}`;
+    });
+
+    const section = $('[data-offer-section]');
+    if (!section) return;
+    const set = (sel, text) => { const el = $(sel, section); if (el) el.textContent = text; };
+    set('[data-offer-badge]', `${offer.name} · ${offer.short}`);
+    set('[data-offer-lead]',
+      `Book between ${offer.first} and ${offer.lastDay} and save ${offer.percent}% on a custom website for your business.`);
+    set('[data-offer-ends]', `Offer ends ${offer.lastDay}`);
+    set('[data-offer-countdown]', offer.daysLeft === null ? `Starts ${offer.first}`
+      : offer.daysLeft > 1 ? `${offer.daysLeft} days left` : 'Last day today');
+    // The first button opens WhatsApp with a first line already written
+    const wa = $('[data-offer-whatsapp]', section);
+    const digits = (CUBE_CONFIG.contact.whatsapp || '').replace(/\D/g, '');
+    if (wa && digits) {
+      const hello = `Hi CobWebZ, I'd like to start a website with the ${offer.name} (${offer.percent}% off).`;
+      const local = digits.startsWith('94') ? `0${digits.slice(2)}` : `+${digits}`;
+      wa.href = `https://wa.me/${digits}?text=${encodeURIComponent(hello)}`;
+      wa.target = '_blank';
+      wa.rel = 'noopener';
+      wa.firstChild.textContent = `WhatsApp ${local.replace(/^(\d{3})(\d{3})(\d+)$/, '$1 $2 $3')} `;
+    }
+    const big = $('[data-offer-percent]', section);
+    if (big) big.textContent = String(offer.percent);
+    // While the section is on screen, the five baubles that roam behind the page step back
+    // (style.css, .is-offer-view), so the panel's own three hang on their own like the posts
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach((en) => document.documentElement.classList.toggle('is-offer-view', en.isIntersecting));
+      }, { rootMargin: '-25% 0px -25% 0px' }).observe(section);
+    }
+    section.hidden = false;
+    // The page just grew, so the scroll-driven animations measure it again
+    if (window.ScrollTrigger) requestAnimationFrame(() => window.ScrollTrigger.refresh());
   }
 
   function initSelections() {
@@ -2773,7 +2965,7 @@ const CUBE_CONFIG = {
   // browser can paint and respond in between (one long start-up task would block both).
   const later = [
     initHeroField, initHeroScroll, initScrollEffects, initSpiderMark, initServices, initWorkPreviews, initMarquees,
-    initCursorBadge, initMagnetic, initProcess, initStudio, initSelections, initForm, initCopy
+    initCursorBadge, initMagnetic, initProcess, initStudio, initSelections, initOffer, initForm, initCopy
   ];
   const nextTask = (fn) => (window.scheduler?.postTask ? scheduler.postTask(fn, { priority: 'user-visible' }) : setTimeout(fn, 0));
   const runLater = () => {

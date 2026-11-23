@@ -212,16 +212,13 @@
     box-shadow: var(--shadow-pill);
   }
   .site-header__brand-logo {
+    display: block;
     width: 24px;
     height: 24px;
     object-fit: contain;
-    transition: transform 0.35s var(--ease-out);
   }
   [data-theme="dark"] .site-header__brand-logo {
     filter: invert(1);
-  }
-  .site-header__brand:hover .site-header__brand-logo {
-    transform: rotate(-10deg) scale(1.08);
   }
   .site-header__brand-name {
     font-family: var(--font-sans);
@@ -4179,5 +4176,452 @@
 
   @media (prefers-reduced-motion: reduce) {
     .ok-roll__d i { transition: none; }
+  }
+
+  /* ---------- Sale offer (CUBE_CONFIG.offer in script.js) ---------- */
+  /* Everything here stays hidden until script.js finds the offer running, so outside its
+     dates the page is exactly as it always is. It uses the brand's own dusty blue and rose
+     gold, like the rest of the site. */
+
+  /* The badge: in the hero (a link down to the offer), under the Pricing heading and under
+     the estimator's heading. The same pill as .badge, with the saving in the brand gradient. */
+  .offer-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 34px;
+    margin-top: 20px;
+    padding: 6px 15px 6px 13px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-pill);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--color-ink);
+    text-align: left;
+  }
+  .offer-pill .badge__dot { flex: none; }
+  .offer-pill__arrow { transition: translate 0.3s var(--ease-out); }
+  a.offer-pill { transition: box-shadow 0.3s var(--ease-out); }
+  a.offer-pill:hover { box-shadow: var(--shadow-pill), 0 14px 30px -14px rgba(0, 0, 0, 0.3); }
+  a.offer-pill:hover .offer-pill__arrow { translate: 3px 0; }
+  .offer-pill--hero { margin: 0 0 6px; animation: offer-in 0.8s var(--ease-out) both; }
+  .offer-pill--page { margin-bottom: 16px; } /* above the page's own badge (work.html) */
+  @keyframes offer-in {
+    from { opacity: 0; translate: 0 10px; }
+  }
+
+  /* "10% off": the brand gradient as text (adapted from Originkit's Gradient Text). The deep
+     ends of the pair on light surfaces and the light ends on dark ones keep it at 4.5:1. */
+  .offer-grad {
+    font-weight: 600;
+    background-image: linear-gradient(90deg, #4d6894, var(--color-rose-gold-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  [data-theme='dark'] .offer-grad {
+    background-image: linear-gradient(90deg, var(--color-dusty-blue), var(--color-rose-gold));
+  }
+
+  /* The small "−10% Christmas" tag beside a struck-out price */
+  .offer-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--radius-chip);
+    background: var(--color-offer-soft);
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--color-offer);
+    white-space: nowrap;
+  }
+
+  /* Was / now. The original price, struck out, sits just above the price after the offer */
+  .est-sum__was {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--color-body);
+  }
+  .est-sum__was + .est-sum__total { margin-top: 2px; }
+  .est-sum__was s,
+  .price__was {
+    text-decoration-thickness: 1px;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-body);
+  }
+  .est-sum__lines li.is-offer > :first-child,
+  .est-sum__lines li.is-offer > :last-child,
+  .estimate-box__lines li.is-offer > :first-child,
+  .estimate-box__lines li.is-offer > :last-child { color: var(--color-offer); }
+
+  /* ---------- Baubles ---------- */
+  /* Glossy Christmas baubles in the brand's colours: dusty blue, pearl and rose gold, each
+     with a silver cap and a fine string. Used by the offer section below and, in December,
+     by the five spheres behind the page. --ball is the glass, --glow the light it casts. */
+  .bauble--blue {
+    --ball: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 16%),
+      radial-gradient(circle at 34% 28%, #e3ebf7 0, #a9bde0 20%, #7f9acb 50%, #556fa3 100%);
+    --glow: rgba(91, 120, 166, 0.42);
+  }
+  .bauble--pearl {
+    --ball: radial-gradient(circle at 30% 22%, #ffffff 0, rgba(255, 255, 255, 0) 18%),
+      radial-gradient(circle at 34% 28%, #ffffff 0, #f6f7f9 30%, #e2e5ea 66%, #c6cad2 100%);
+    --glow: rgba(40, 50, 70, 0.2);
+  }
+  .bauble--rose {
+    --ball: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 16%),
+      radial-gradient(circle at 34% 28%, #fde9df 0, #edbba7 20%, #d18a70 54%, #a65b43 100%);
+    --glow: rgba(176, 102, 79, 0.4);
+  }
+  :root { --bauble-string: rgba(10, 10, 10, 0.2); --bauble-cap: linear-gradient(90deg, #a3a8b1, #eef0f3 45%, #b3b8c0); }
+  [data-theme='dark'] { --bauble-string: rgba(255, 255, 255, 0.2); }
+
+  /* ---------- The Christmas offer section ---------- */
+  /* Laid out like the campaign posts: a faint grid, baubles hanging from the top edge, the
+     saving set huge with its % in the brand gradient, then the line, two buttons and a
+     footer row with the countdown. The panel has no fill, so the page's snow drifts across
+     it. */
+  .offer-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(28px, 5vw, 64px);
+    border-radius: var(--radius-card);
+    box-shadow: inset 0 0 0 1px var(--color-line);
+  }
+  .offer-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-ink) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 5%, transparent) 1px, transparent 1px);
+    background-size: 88px 88px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 65% 30%, #000 35%, transparent 90%);
+    mask-image: radial-gradient(ellipse 90% 80% at 65% 30%, #000 35%, transparent 90%);
+  }
+  .offer-panel__body { position: relative; max-width: 660px; }
+  .offer-panel__title { display: block; margin-top: 26px; color: var(--color-ink); }
+  .offer-panel__big {
+    display: flex;
+    align-items: flex-start;
+    font-size: clamp(116px, 19vw, 256px);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.065em;
+    margin-left: -0.04em; /* the 1's side bearing, so it lines up with the badge */
+  }
+  .offer-panel__pct {
+    padding-right: 0.06em; /* room for the glyph's overhang, or the clip trims it */
+    background-image: linear-gradient(135deg, var(--color-dusty-blue-deep), var(--color-rose-gold), var(--color-dusty-blue-deep));
+    background-size: 220% 220%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: offer-sheen 9s ease-in-out infinite alternate;
+  }
+  [data-theme='dark'] .offer-panel__pct {
+    background-image: linear-gradient(135deg, var(--color-dusty-blue), var(--color-rose-gold), var(--color-dusty-blue));
+  }
+  @keyframes offer-sheen {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
+  }
+  .offer-panel__line {
+    display: block;
+    margin-top: 14px;
+    font-size: clamp(38px, 5.6vw, 78px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+  .offer-panel__lead {
+    max-width: 34em;
+    margin-top: 24px;
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.5;
+    color: var(--color-body);
+  }
+  .offer-panel__note { max-width: 40em; margin-top: 10px; font-size: 14px; color: var(--color-subtle); }
+  .offer-panel__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .offer-panel__foot {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: clamp(40px, 6vw, 72px);
+    padding-top: 18px;
+    border-top: 1px solid var(--color-line-strong);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    color: var(--color-subtle);
+  }
+  .offer-panel__left { display: inline-flex; align-items: center; gap: 10px; color: var(--color-ink); }
+
+  /* The hanging baubles: each is its string, cap and ball, swinging a couple of degrees from
+     the top of its string. Only rotate moves, which the compositor carries on its own. */
+  .offer-panel__baubles {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(46%, 540px);
+    height: 100%;
+    pointer-events: none;
+  }
+  .bauble {
+    --x: var(--x-lg);
+    --size: var(--size-lg);
+    --len: var(--len-lg);
+    position: absolute;
+    top: 0;
+    left: var(--x);
+    width: var(--size);
+    height: calc(var(--len) + var(--size) * 1.1);
+    transform-origin: 50% 0;
+    animation: bauble-sway var(--t, 8s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  .bauble::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    height: var(--len);
+    background: var(--bauble-string);
+  }
+  .bauble i {
+    position: absolute;
+    top: calc(var(--len) - 2px);
+    left: 50%;
+    width: calc(var(--size) * 0.2);
+    height: calc(var(--size) * 0.13);
+    translate: -50% 0;
+    border-radius: 4px 4px 2px 2px;
+    background: var(--bauble-cap);
+  }
+  .bauble::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--len) + var(--size) * 0.09);
+    left: 0;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: var(--ball);
+    box-shadow: inset -8px -12px 28px -10px rgba(0, 0, 0, 0.16), 0 26px 44px -16px var(--glow);
+  }
+  @keyframes bauble-sway {
+    from { rotate: -2.4deg; }
+    to { rotate: 2.4deg; }
+  }
+  @media (max-width: 760px) {
+    .offer-panel { padding-top: 170px; }
+    .offer-panel__baubles { width: 70%; height: 190px; }
+    .bauble { --x: var(--x-sm); --size: var(--size-sm); --len: var(--len-sm); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bauble, .offer-panel__pct, .offer-pill--hero { animation: none; }
+  }
+
+  /* ---------- Christmas season ([data-season="christmas"], set in each page's <head>) ---------- */
+  /* The five glass spheres behind the page become baubles hanging on strings from the top of
+     the screen (the string rides with its sphere as it roams). They are opaque now, so the
+     frosting, the one costly part of them, is switched off. The drifting dots turn to snow
+     in script.js (initHeroField). */
+  [data-season='christmas'] .hero-field__orb {
+    background: var(--ball);
+    box-shadow: inset -10px -14px 30px -10px rgba(0, 0, 0, 0.16), 0 26px 50px -20px var(--glow);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition: opacity 0.6s var(--ease-out);
+  }
+  /* Over the offer section they step back, so its own baubles hang alone (script.js) */
+  .is-offer-view .hero-field__orb { opacity: 0; }
+  [data-season='christmas'] .hero-field__orb::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + var(--size) * 0.1);
+    left: calc(50% - 0.5px);
+    width: 1px;
+    height: 160vh;
+    background: linear-gradient(to top, var(--bauble-string) 40%, transparent);
+  }
+  [data-season='christmas'] .hero-field__orb::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% - var(--size) * 0.03);
+    left: 50%;
+    width: 20%;
+    height: 13%;
+    translate: -50% 0;
+    border-radius: 4px 4px 2px 2px;
+    background: var(--bauble-cap);
+  }
+  [data-season='christmas'] .hero-field__orb:nth-child(2) {
+    --ball: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 16%),
+      radial-gradient(circle at 34% 28%, #e3ebf7 0, #a9bde0 20%, #7f9acb 50%, #556fa3 100%);
+    --glow: rgba(91, 120, 166, 0.42);
+  }
+  [data-season='christmas'] .hero-field__orb:nth-child(6) {
+    --ball: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 16%),
+      radial-gradient(circle at 34% 28%, #fde9df 0, #edbba7 20%, #d18a70 54%, #a65b43 100%);
+    --glow: rgba(176, 102, 79, 0.4);
+  }
+  [data-season='christmas'] .hero-field__orb:nth-child(4) {
+    --ball: radial-gradient(circle at 30% 22%, #ffffff 0, rgba(255, 255, 255, 0) 18%),
+      radial-gradient(circle at 34% 28%, #ffffff 0, #f6f7f9 30%, #e2e5ea 66%, #c6cad2 100%);
+    --glow: rgba(40, 50, 70, 0.2);
+  }
+
+  /* Snow lying on the cards and buttons: a drift along the top edge and a little pile in
+     each bottom corner (three inline SVGs, so no extra requests). A pseudo-element carries
+     all three as backgrounds, outside the content and taking no pointer events. Cards and
+     buttons that already use that pseudo-element, or clip to their edges (the homepage's
+     work cards, the sheen button, the FAQ rows, the offer panel), are left as they are. */
+  [data-season='christmas'] {
+    --snow-cap-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -2 400 26' preserveAspectRatio='none'%3E%3Cpath d='M0 24C6 16 14 13 24 14C34 7 50 6 60 11C72 4 92 4 102 10C114 5 130 6 138 11C150 3 172 3 182 10C194 6 210 6 220 12C232 5 252 4 262 10C274 5 292 6 300 11C312 4 332 5 342 11C354 7 370 8 378 13C388 13 396 17 400 24Z' fill='%23a9b7c6' transform='translate%280 -1.8%29'/%3E%3Cpath d='M0 24C6 16 14 13 24 14C34 7 50 6 60 11C72 4 92 4 102 10C114 5 130 6 138 11C150 3 172 3 182 10C194 6 210 6 220 12C232 5 252 4 262 10C274 5 292 6 300 11C312 4 332 5 342 11C354 7 370 8 378 13C388 13 396 17 400 24Z' fill='%23ffffff'/%3E%3C/svg%3E");
+    --snow-cap-btn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -2 120 16' preserveAspectRatio='none'%3E%3Cpath d='M0 14C4 8 10 6 16 7C22 2 34 2 40 6C48 1 62 1 70 6C78 2 92 2 98 7C106 5 114 8 120 14Z' fill='%23a9b7c6' transform='translate%280 -1.8%29'/%3E%3Cpath d='M0 14C4 8 10 6 16 7C22 2 34 2 40 6C48 1 62 1 70 6C78 2 92 2 98 7C106 5 114 8 120 14Z' fill='%23ffffff'/%3E%3C/svg%3E");
+    --snow-pile-l: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -2 40 18' preserveAspectRatio='none'%3E%3Cpath d='M0 16C0 8 6 3 14 5C22 1 32 6 36 12C38 14 40 16 40 16Z' fill='%23a9b7c6' transform='translate%280 -1.8%29'/%3E%3Cpath d='M0 16C0 8 6 3 14 5C22 1 32 6 36 12C38 14 40 16 40 16Z' fill='%23ffffff'/%3E%3C/svg%3E");
+    --snow-pile-r: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -2 40 18' preserveAspectRatio='none'%3E%3Cpath d='M40 16C40 8 34 3 26 5C18 1 8 6 4 12C2 14 0 16 0 16Z' fill='%23a9b7c6' transform='translate%280 -1.8%29'/%3E%3Cpath d='M40 16C40 8 34 3 26 5C18 1 8 6 4 12C2 14 0 16 0 16Z' fill='%23ffffff'/%3E%3C/svg%3E");
+  }
+  [data-season='christmas'] :is(.card, .est-step, .project),
+  [data-season='christmas'] .btn:not(.btn--sheen) { position: relative; }
+  [data-season='christmas'] :is(.card, .est-step, .estimator__summary, .project)::before {
+    content: '';
+    position: absolute;
+    inset: -12px 0 -6px;
+    z-index: 1;
+    pointer-events: none;
+    /* the drift rests on the flat part of the top edge (inside the rounded corners); the
+       piles sit half over the bottom corners */
+    background:
+      var(--snow-cap-card) top center / calc(100% - 48px) 13px no-repeat,
+      var(--snow-pile-l) left 4px bottom / 30px 12px no-repeat,
+      var(--snow-pile-r) right 4px bottom / 30px 12px no-repeat;
+  }
+  [data-season='christmas'] .btn:not(.btn--sheen)::before {
+    content: '';
+    position: absolute;
+    inset: -8px 0 -4px;
+    pointer-events: none;
+    background:
+      var(--snow-cap-btn) top center / calc(100% - 36px) 9px no-repeat,
+      var(--snow-pile-l) left 6px bottom / 14px 7px no-repeat,
+      var(--snow-pile-r) right 6px bottom / 14px 7px no-repeat;
+  }
+
+  /* ---------- Red and green: the Christmas colours, beside the brand's own ---------- */
+  .bauble--red,
+  [data-season='christmas'] .hero-field__orb:nth-child(3) {
+    --ball: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 16%),
+      radial-gradient(circle at 34% 28%, #f8c9cc 0, #e0626b 22%, #c8414b 55%, #8f2731 100%);
+    --glow: rgba(200, 65, 75, 0.4);
+  }
+  .bauble--green,
+  [data-season='christmas'] .hero-field__orb:nth-child(5) {
+    --ball: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0) 16%),
+      radial-gradient(circle at 34% 28%, #c4ecd5 0, #4fae7d 22%, #2f8a5e 55%, #175a3b 100%);
+    --glow: rgba(47, 138, 94, 0.38);
+  }
+  /* The saving reads red to green: the big % in the offer section and "10% off" in the
+     badges (both at 4.5:1 or better on the light page) */
+  [data-season='christmas'] .offer-panel__pct {
+    /* a crisp split, green over red, as red mixed into green turns brown */
+    background-image: linear-gradient(135deg, #23704a 50%, #c8414b 50%);
+    background-size: 100% 100%;
+    animation: none;
+  }
+  [data-season='christmas'] .offer-grad { background-image: linear-gradient(90deg, #b3303a, #23704a); }
+  /* Phosphor's gift icon leads the offer badges */
+  .offer-pill__gift { flex: none; width: 15px; height: 15px; color: #c8414b; }
+
+  /* Trees and gifts (assets/xmas-tree.svg, gift-*.svg): little scenes standing on the
+     floor of the hero's corners, the offer panel and the footer, and a gift on the featured
+     price card. Pictures only: hidden from screen readers, no pointer events, December only. */
+  .xmas-scene {
+    position: absolute;
+    z-index: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .xmas-scene img { display: block; height: auto; }
+  .xmas-scene__tree { width: 104px; }
+  .xmas-scene__tree--small { width: 72px; }
+  .xmas-scene__gift { width: 48px; margin-inline: -4px; }
+  .xmas-scene__gift--small { width: 38px; }
+  .xmas-scene--hero-l { left: clamp(16px, 5vw, 80px); bottom: 28px; }
+  .xmas-scene--hero-r { right: clamp(16px, 5vw, 80px); bottom: 28px; }
+  @media (min-width: 761px) {
+    .hero .xmas-scene__tree { width: 148px; }
+    .hero .xmas-scene__tree--small { width: 104px; }
+    .hero .xmas-scene__gift { width: 66px; }
+    .hero .xmas-scene__gift--small { width: 52px; }
+  }
+  .xmas-scene--offer { right: clamp(24px, 4vw, 56px); bottom: 74px; }
+  .footer > .xmas-scene--footer { right: clamp(16px, 6vw, 96px); bottom: 0; z-index: 1; }
+  .footer > .xmas-scene--footer .xmas-scene__tree { width: 92px; }
+  .footer > .xmas-scene--footer .xmas-scene__tree--small { width: 64px; }
+  .price__gift {
+    position: absolute;
+    top: -30px;
+    right: 22px;
+    z-index: 2;
+    width: 62px;
+    rotate: 8deg;
+    pointer-events: none;
+  }
+  @media (max-width: 760px) {
+    .xmas-scene__tree { width: 70px; }
+    .xmas-scene__tree--small { width: 50px; }
+    .xmas-scene__gift { width: 34px; }
+    .xmas-scene__gift--small { width: 28px; }
+    .xmas-scene--hero-r, .xmas-scene--offer { display: none; }
+    .xmas-scene--hero-l { bottom: 20px; }
+  }
+
+  /* The spider's Santa hat (assets/xmas-hat.svg). Drawn in the spider's own coordinates, so
+     inside the About and Services spiders it is placed at x 334, y 100 like the art; over the
+     two logo images it is placed by percentages measured from where the art sits in each
+     PNG. Small logos get it a little larger, from its brim, so it still reads as a hat. */
+  :root:not([data-season='christmas']) :is(.xmas-hat, .xmas-deco) { display: none !important; }
+  .site-header__mark {
+    position: relative;
+    display: block;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .site-header__brand:hover .site-header__mark { transform: rotate(-10deg) scale(1.08); }
+  .xmas-hat--mark,
+  .footer__logo .xmas-hat--logo {
+    position: absolute;
+    display: block;
+    height: auto;
+    transform-origin: 37% 87.5%;
+    pointer-events: none;
+  }
+  .xmas-hat--mark { left: 42.4%; top: 30.9%; width: 18.9%; scale: 1.9; }
+  .footer__logo { position: relative; }
+  .footer__logo .xmas-hat--logo { left: 43.3%; top: 14.7%; width: 17.85%; scale: 1.15; }
+  /* The dark theme inverts the black logo artwork; the hat keeps its own colours */
+  [data-theme='dark'] .footer__logo .xmas-hat { filter: none; }
+  .spider__hat { transform-origin: 387.5px 281px; }
+  .js .spider .spider__hat {
+    opacity: clamp(0, (var(--p, 0) - 0.40) * 6, 1);
+    transform: scale(clamp(0.3, (var(--p, 0) - 0.40) * 3.5 + 0.3, 1));
   }
 }

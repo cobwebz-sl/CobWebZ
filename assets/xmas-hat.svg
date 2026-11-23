@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="334 100 146 128">
+  <!-- The spider's Santa hat, worn in December (style.css, "Christmas season").
+       Drawn in the spider artwork's own coordinates (the 775 × 490 space of the About
+       spider), so its brim sits on the head at y 204 wherever it is placed. -->
+  <path d="M352 212C354 170 378 132 414 118C436 110 454 120 458 138C446 131 433 135 427 147C433 168 433 190 430 212Z" fill="#c8414b"/>
+  <path d="M414 118C436 110 454 120 458 138C446 131 433 135 427 147C431 166 432 186 430 204C421 176 411 146 414 118Z" fill="#9e2d36" opacity=".55"/>
+  <path d="M364 194C368 166 384 142 404 130" fill="none" stroke="#ec8a90" stroke-width="7" stroke-linecap="round" opacity=".55"/>
+  <rect x="340" y="196" width="98" height="30" rx="15" fill="#fbfbfc" stroke="#cfd3da" stroke-width="3"/>
+  <circle cx="459" cy="140" r="17" fill="#fbfbfc" stroke="#cfd3da" stroke-width="3"/>
+</svg>

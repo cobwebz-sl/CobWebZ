@@ -6,7 +6,7 @@
   <!-- Same policy as the homepage: only this site's own files, plus the background's particle
        library from jsDelivr (pinned and integrity-checked). The inline theme script is
        allowed by its hash. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-sKjWSAn/cPAvf5P3L8whTESQab6LkxthV+h+E3E+Veo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-ZAtwIe8V18SoL1jdv3CaVGjSnErZihpW4vZt5xxUusQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found — CobWebZ</title>
@@ -19,8 +19,11 @@
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <!-- Dark first: switches to light before the first paint only for visitors who chose it.
+       It also sets data-season="christmas" (and the light theme, which the season keeps)
+       through December (Sri Lanka time), or on any day
+       with ?christmas in the address (the Christmas look: the end of style.css).
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');var r=document.documentElement,x=new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search),l=x;if(x)r.dataset.season='christmas';try{l=l||localStorage.getItem('theme')==='light'}catch(e){}if(l){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}</script>
 
   <!-- Absolute paths throughout: a missing URL can be at any depth, e.g. /pizza/menu -->
   <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -51,7 +54,10 @@
   <header class="site-header" data-header>
     <div class="site-header__inner">
       <a href="/" class="site-header__brand" aria-label="CobWebZ — home">
-        <img src="/assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+        <span class="site-header__mark">
+          <img src="/assets/logo-mark.png" alt="" class="site-header__brand-logo" width="24" height="24">
+          <img src="/assets/xmas-hat.svg" alt="" class="xmas-hat xmas-hat--mark" width="146" height="128" loading="lazy">
+        </span>
         <span class="site-header__brand-name">CobWebZ</span>
       </a>
 
@@ -166,6 +172,7 @@
       <div class="footer__brand">
         <a href="/" class="footer__logo" aria-label="CobWebZ — home">
           <img src="/assets/logo.png" alt="" width="104" height="83">
+          <img src="/assets/xmas-hat.svg" alt="" class="xmas-hat xmas-hat--logo" width="146" height="128" loading="lazy">
         </a>
         <p class="footer__tagline">Web design, development and infrastructure studio in Colombo, Sri Lanka. Working
           with clients at home and abroad.</p>
