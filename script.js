@@ -1905,7 +1905,6 @@ const CUBE_CONFIG = {
     types: [],
     options: [],
     hosting: [],
-    domain: null,
     pages: null,
     pagePrice: 0,
     lastTotal: ''
@@ -1934,8 +1933,6 @@ const CUBE_CONFIG = {
     const pagesCost = extraPages * est.pagePrice;
     const picked = est.options.filter((o) => o.input.checked && !o.input.disabled);
     const hosting = est.hosting.find((h) => h.input.checked && !h.input.disabled) || null;
-    const domain = est.domain && est.domain.input.checked ? est.domain : null;
-    const priced = domain ? [...picked, domain] : picked; // everything that can carry a price
     const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
     return {
       type,
@@ -1946,11 +1943,10 @@ const CUBE_CONFIG = {
       pagesCost,
       picked,
       hosting,
-      domain,
-      once: (type && !custom ? type.price : 0) + pagesCost + sum(priced.filter((o) => !o.monthly)),
-      monthly: sum(priced.filter((o) => o.monthly)),
-      from: Boolean(type && type.from) || priced.some((o) => o.from),
-      any: Boolean(type || picked.length || hosting || domain)
+      once: (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly)),
+      monthly: sum(picked.filter((o) => o.monthly)),
+      from: Boolean(type && type.from) || picked.some((o) => o.from),
+      any: Boolean(type || picked.length || hosting)
     };
   }
 
@@ -1966,7 +1962,6 @@ const CUBE_CONFIG = {
     }
     e.picked.forEach((o) => rows.push([o.name, o.priceText]));
     if (e.hosting) rows.push([`Hosting: ${e.hosting.name}`, e.hosting.priceText]);
-    if (e.domain) rows.push([e.domain.name, e.domain.priceText]);
     return rows;
   }
 
@@ -2097,7 +2092,6 @@ const CUBE_CONFIG = {
   function resetEstimate() {
     est.types.forEach((t) => { t.input.checked = false; });
     [...est.options, ...est.hosting].forEach((o) => { o.input.checked = false; });
-    if (est.domain) est.domain.input.checked = false;
     if (est.pages) est.pages.value = '5';
     setSelect(packageSelect, '', { quiet: true });
     updateEstimate();
@@ -2108,8 +2102,6 @@ const CUBE_CONFIG = {
     est.types = $$('[data-est-type]', est.root).map(readOption);
     est.options = $$('[data-est-option]', est.root).map(readOption);
     est.hosting = $$('[data-est-hosting]', est.root).map(readOption);
-    const domain = $('[data-est-domain]', est.root);
-    est.domain = domain ? readOption(domain) : null;
     est.pages = $('[data-est-pages]', est.root);
     est.pagePrice = lkr(flatText($('[data-est-page-price]', est.root))) || 0;
 
