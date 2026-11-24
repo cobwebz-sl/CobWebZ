@@ -2032,7 +2032,9 @@ const CUBE_CONFIG = {
     const pages = est.pages ? Math.max(1, Math.min(MAX_PAGES, parseInt(est.pages.value, 10) || 1)) : 0;
     const extraPages = included ? Math.max(0, pages - included) : 0;
     const pagesCost = extraPages * est.pagePrice;
-    const picked = est.options.filter((o) => o.input.checked && !o.input.disabled);
+    // Hosting is locked on (disabled but checked) for a web application, so it still counts
+    const picked = est.options.filter((o) => o.input.checked
+      && (!o.input.disabled || o.input.hasAttribute('data-est-hosting')));
     const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
     const onceFull = (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly));
     const discount = offer && onceFull ? offer.off(onceFull) : 0; // the offer covers one-time work only
@@ -2057,13 +2059,20 @@ const CUBE_CONFIG = {
   function estimateLines(e) {
     const rows = [];
     if (e.type) rows.push([e.type.name, e.type.priceText]);
-    if (e.type && e.included) {
-      rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'} (${e.included} included)`,
-        e.extraPages ? `${e.extraPages} × ${fmtLKR(est.pagePrice)}` : 'Included']);
-    } else if (e.custom) {
-      rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'}`, 'Scoped on a call']);
+    // What the type's price is made of (the hidden [data-est-includes] lists in index.html)
+    if (e.type && e.type.includes.length) {
+      rows.push(['Included', '', 'is-group']);
+      e.type.includes.forEach(([name, price]) => rows.push([name, price, 'is-note']));
     }
-    e.picked.forEach((o) => rows.push([o.name, o.priceText]));
+    if (e.custom) rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'}`, 'Scoped on a call']);
+    // Everything chosen on top. Free static hosting is already listed under Included.
+    const addOns = e.picked.filter((o) => o.price !== null || o.monthly);
+    if (e.extraPages || addOns.length) rows.push(['Add-ons', '', 'is-group']);
+    if (e.extraPages) {
+      rows.push([`${e.extraPages} extra page${e.extraPages === 1 ? '' : 's'} × ${fmtLKR(est.pagePrice)}`,
+        fmtLKR(e.pagesCost)]);
+    }
+    addOns.forEach((o) => rows.push([o.name, o.priceText]));
     if (e.discount) {
       rows.push([`${offer.name}: ${offer.percent}% off one-time work`, `− ${fmtLKR(e.discount)}`, 'is-offer']);
     }
@@ -2098,6 +2107,32 @@ const CUBE_CONFIG = {
   let announceTimer = 0;
   function updateEstimate() {
     if (!est.root) return;
+
+    // A web application runs on a server, so its hosting is added and locked on. Static sites
+    // are hosted free on Cloudflare, and Managed Infrastructure covers hosting itself.
+    const chosen = est.types.find((t) => t.input.checked);
+    // Static sites get it too, priced "Free", so the estimate shows what hosting costs either way.
+    const needsHosting = Boolean(chosen && chosen.input.value === 'Web Application');
+    const freeHosting = Boolean(chosen && chosen.input.value === 'Static Website');
+    est.options.filter((o) => o.input.hasAttribute('data-est-hosting')).forEach((o) => {
+      o.paid ||= { priceText: o.priceText, price: o.price, monthly: o.monthly, from: o.from };
+      // A web application's first 3 months of hosting are in its price; the monthly fee starts after
+      Object.assign(o, freeHosting ? { priceText: 'Free', price: null, monthly: false, from: false, name: 'Hosting' }
+        : { ...o.paid, name: needsHosting ? 'Hosting, from month 4' : 'Hosting' });
+      const priceEl = $('.est-option__price', o.label);
+      if (priceEl && priceEl.textContent !== o.priceText) priceEl.textContent = o.priceText;
+      o.input.checked = needsHosting || freeHosting;
+      o.input.disabled = true;
+    });
+    const hostingHint = $('[data-est-hosting-hint]', est.root);
+    if (hostingHint) {
+      hostingHint.textContent = needsHosting
+        ? 'Web applications run on a server: the first 3 months of hosting are included, then it\'s LKR 5,000 a month.'
+        : freeHosting ? 'Static sites are hosted free on Cloudflare.'
+          : chosen ? 'Hosting is part of the Managed Infrastructure plan.'
+            : 'Hosting is added automatically: free for a static website; for a web application, 3 months free, then LKR 5,000 a month.';
+    }
+
     const e = getEstimate();
 
     // The retainer already covers basic maintenance
@@ -2114,7 +2149,7 @@ const CUBE_CONFIG = {
     if (note) {
       const price = fmtLKR(est.pagePrice);
       if (!e.type) {
-        note.innerHTML = 'Static sites include up to 5 pages and web apps 5 to 7 core layouts. Each extra page is <b></b>.';
+        note.innerHTML = 'Static sites and web apps both include 5 pages. Each extra page is <b></b>.';
         $('b', note).textContent = `${price} / page`;
       } else if (e.custom) {
         note.textContent = 'Retainers are scoped on a call, so pages aren\'t priced here. We\'ll still note how many you have.';
@@ -2159,7 +2194,7 @@ const CUBE_CONFIG = {
     const monthlyEl = $('[data-estimate-monthly]', est.root);
     if (monthlyEl) {
       monthlyEl.hidden = !(e.monthly && (e.once || e.custom));
-      monthlyEl.textContent = `plus ${fmtLKR(e.monthly)} / month`;
+      monthlyEl.textContent = `plus ${fmtLKR(e.monthly)} / month${needsHosting ? ' (hosting starts in month 4)' : ''}`;
     }
     // With an offer running: the one-time total before it, struck out above the total after it
     const wasEl = $('[data-estimate-was]', est.root);
@@ -2193,6 +2228,85 @@ const CUBE_CONFIG = {
       const sumEl = $('[data-estimate-sum]', field);
       if (sumEl) sumEl.textContent = said || 'Quoted after a call';
     }
+    const pdfBtn = $('[data-estimate-pdf]', est.root);
+    if (pdfBtn) pdfBtn.hidden = !e.any;
+  }
+
+  /* "Download PDF": this estimate as an A4 PDF with the logo. The writer (estimate-pdf.js) is
+     only fetched on the first click. The client's name, business and email are included when
+     they've already been typed into the enquiry form. */
+  let pdfWriter = null;
+  const loadPdfWriter = () => (pdfWriter ||= new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'estimate-pdf.js';
+    script.onload = () => (window.CobwebzEstimatePdf ? resolve(window.CobwebzEstimatePdf) : reject(new Error('no writer')));
+    script.onerror = () => { pdfWriter = null; reject(new Error('estimate-pdf.js did not load')); };
+    document.head.append(script);
+  }));
+
+  function estimatePdfData(e) {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const number = `CW-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+    const { email, phone } = CUBE_CONFIG.contact;
+    const field = (id) => ($(`#${id}`)?.value || '').trim();
+    const to = [field('f-name'), field('f-business'), field('f-email')].filter(Boolean);
+    const plus = e.from ? '+' : '';
+    const hosting = est.options.find((o) => o.input.hasAttribute('data-est-hosting'));
+    const totals = [];
+    if (e.custom) totals.push(['Managed Infrastructure', 'Custom', 'Quoted after a discovery call']);
+    if (e.once) {
+      totals.push([`One-time total${e.from ? ', starting at' : ''}`, `${fmtLKR(e.once)}${plus}`,
+        e.discount ? `Includes the ${offer.name}: ${offer.percent}% off (was ${fmtLKR(e.onceFull)}${plus})` : '']);
+    }
+    if (e.monthly) {
+      const lateHosting = hosting && hosting.input.checked && hosting.name !== 'Hosting';
+      totals.push(['Monthly', `${fmtLKR(e.monthly)} / mo`, lateHosting ? 'Hosting starts in month 4' : '']);
+    }
+    return {
+      number,
+      date: now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+      from: ['CobWebZ', 'Colombo, Sri Lanka', email, phone, 'www.cobwebz.lk'].filter(Boolean),
+      to: to.length ? to : null,
+      rows: estimateLines(e),
+      totals,
+      notes: [
+        'This is a starting estimate, not a quote. Every project starts with a short discovery call, and your fixed, written quote follows it.',
+        'Prices are in Sri Lankan rupees (LKR). A "+" marks a starting price. Third-party fees, such as payment gateways, are billed by their providers.',
+        `To go ahead or ask a question, message or call us on ${phone}, or email ${email}, quoting estimate ${number}.`
+      ],
+      footer: ['CobWebZ', 'www.cobwebz.lk', email, phone].filter(Boolean).join('  ·  '),
+      logo: 'assets/logo.png'
+    };
+  }
+
+  async function downloadEstimatePdf(btn) {
+    const e = getEstimate();
+    if (!e.any || btn.getAttribute('aria-busy') === 'true') return;
+    const label = $('[data-estimate-pdf-label]', btn) || btn;
+    const status = $('[data-estimate-status]', est.root);
+    btn.setAttribute('aria-busy', 'true');
+    label.textContent = 'Preparing PDF…';
+    try {
+      const writer = await loadPdfWriter();
+      const data = estimatePdfData(e);
+      const blob = await writer.make(data);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `CobWebZ-estimate-${data.number}.pdf`;
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      label.textContent = 'Download PDF';
+      if (status) status.textContent = 'Your estimate PDF has been downloaded.';
+    } catch {
+      label.textContent = 'Couldn\'t make the PDF. Try again';
+      if (status) status.textContent = 'The estimate PDF couldn\'t be created. Please try again.';
+    } finally {
+      btn.removeAttribute('aria-busy');
+    }
   }
 
   function setType(value) {
@@ -2210,7 +2324,11 @@ const CUBE_CONFIG = {
 
   function initEstimator() {
     if (!est.root) return;
-    est.types = $$('[data-est-type]', est.root).map(readOption);
+    est.types = $$('[data-est-type]', est.root).map((input) => ({
+      ...readOption(input),
+      includes: $$(`[data-est-includes="${input.value}"] li`, est.root)
+        .map((li) => [...li.children].map((cell) => flatText(cell)))
+    }));
     est.options = $$('[data-est-option]', est.root).map(readOption);
     est.pages = $('[data-est-pages]', est.root);
     est.pagePrice = lkr(flatText($('[data-est-page-price]', est.root))) || 0;
@@ -2227,9 +2345,18 @@ const CUBE_CONFIG = {
       updateEstimate();
     }));
     $('[data-estimate-reset]', est.root)?.addEventListener('click', resetEstimate);
+    const pdfBtn = $('[data-estimate-pdf]', est.root);
+    pdfBtn?.addEventListener('click', () => downloadEstimatePdf(pdfBtn));
 
     // Narrow screens: the breakdown opens and closes under the total
     const summary = $('[data-estimate]', est.root);
+    // Wide screens: style.css pins the card by its height (--est-sum-h), so a tall breakdown
+    // shows in full and its buttons stay reachable
+    if (summary && 'ResizeObserver' in window) {
+      new ResizeObserver(([entry]) => {
+        summary.style.setProperty('--est-sum-h', `${Math.ceil(entry.borderBoxSize?.[0]?.blockSize ?? summary.offsetHeight)}px`);
+      }).observe(summary);
+    }
     const toggle = $('[data-estimate-toggle]', est.root);
     toggle?.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') !== 'true';
@@ -2427,20 +2554,29 @@ const CUBE_CONFIG = {
       const e = getEstimate();
       if (e.type) data.package = `${e.type.input.value} — ${e.type.priceText}`;
       const rows = estimateLines(e);
-      if (rows.length) data.estimate_items = rows.map(([name, price]) => `${name} — ${price}`).join('\n');
+      if (rows.length) {
+        data.estimate_items = rows.map(([name, price, cls]) => (cls === 'is-group' ? `${name}:`
+          : cls === 'is-note' ? `  ${name} — ${price}` : `${name} — ${price}`)).join('\n');
+      }
       if (e.any) data.estimate = estimateText(e) || 'Quoted after a call';
+      // For the WhatsApp message: just the plan and the add-ons' names, no prices or breakdown
+      data.plan = e.type ? `${e.type.name}${e.custom ? ' (custom)' : ''}` : '';
+      data.addons = [
+        ...(e.extraPages ? [`${e.extraPages} extra page${e.extraPages === 1 ? '' : 's'}`] : []),
+        ...e.picked.filter((o) => o.price !== null || o.monthly)
+          .map((o) => (o.input.hasAttribute('data-est-hosting') ? 'Hosting' : o.name))
+      ].join('\n');
       return data;
     }
 
+    // The WhatsApp (or email app) message. Form services get the full itemised estimate instead.
     function summary(data) {
       return [
         `Name: ${data.name}`,
         `Email: ${data.email}`,
         `Business: ${data.business || '—'}`,
-        `Plan: ${data.package || 'Not sure yet'}`,
-        ...(data.estimate_items ? ['Estimate details:', ...data.estimate_items.split('\n').map((line) => `• ${line}`)] : []),
-        ...(data.estimate ? [`Estimated total: ${data.estimate} (an estimate, not a quote)`] : []),
-        `Budget (LKR): ${data.budget || 'Prefer not to say'}`,
+        `Plan: ${data.plan || 'Not sure yet'}`,
+        ...(data.addons ? ['Add-ons:', ...data.addons.split('\n').map((name) => `• ${name}`)] : []),
         `Timeline: ${data.timeline || 'No fixed date'}`,
         ...(data.message ? ['', data.message] : [])
       ].join('\n');

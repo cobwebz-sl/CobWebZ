@@ -1773,6 +1773,19 @@
     transition: box-shadow 0.3s var(--ease-out);
   }
   .price__name { font-size: 17px; letter-spacing: -0.01em; }
+  .price__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .price__tag {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-pill);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
   .price__desc { margin-top: 6px; font-size: 14px; line-height: 1.55; }
   @media (min-width: 900px) {
     .price__desc { min-height: 3.1em; }
@@ -3562,6 +3575,9 @@
   .est-option input:focus-visible + .est-option__box { outline: 2px solid var(--color-dusty-blue-deep); outline-offset: 2px; }
   .est-option:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
   .est-option:has(input:disabled) input { cursor: not-allowed; }
+  /* Locked on: web app hosting is part of the package, so it reads as chosen, not greyed out */
+  .est-option:has(input:disabled:checked) { opacity: 1; cursor: default; }
+  .est-option:has(input:disabled:checked) input { cursor: default; }
 
   /* The running estimate. Narrow screens: a bar stuck to the bottom of the screen while the
      steps are in view, its breakdown behind Details. Wide: a card beside the steps. */
@@ -3575,7 +3591,14 @@
     box-shadow: 0 0 0 1px var(--color-line), 0 24px 48px -16px rgba(0, 0, 0, 0.24);
   }
   @media (min-width: 960px) {
-    .estimator__summary { top: calc(var(--header-h) + 16px); bottom: auto; padding: 24px; }
+    /* Pinned beside the steps, always shown in full (no scrolling inside it). When it's taller
+       than the screen, it scrolls with the page until its bottom (the buttons) is in view, then
+       stays put there. --est-sum-h is the card's height, kept up to date by script.js. */
+    .estimator__summary {
+      top: min(calc(var(--header-h) + 16px), calc(100svh - var(--est-sum-h, 0px) - 16px));
+      bottom: auto;
+      padding: 24px;
+    }
   }
   .est-sum__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .est-sum__total {
@@ -3627,8 +3650,10 @@
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
-  .est-sum__lines li.is-note > :first-child { color: var(--color-body); }
-  .est-sum__lines li.is-group {
+  .est-sum__lines li.is-note > :first-child,
+  .estimate-box__lines li.is-note > :first-child { color: var(--color-body); }
+  .est-sum__lines li.is-group,
+  .estimate-box__lines li.is-group {
     padding-top: 6px;
     font-family: var(--font-mono);
     font-size: 10.5px;
@@ -3636,9 +3661,12 @@
     text-transform: uppercase;
     color: var(--color-subtle);
   }
-  .est-sum__lines li.is-group > * { color: inherit !important; }
+  .est-sum__lines li.is-group > *,
+  .estimate-box__lines li.is-group > * { color: inherit !important; }
   .est-sum__lines .is-empty { color: var(--color-subtle); }
   .est-sum__fine { margin-top: 14px; font-size: 12.5px; line-height: 1.55; }
+  .est-sum__pdf { gap: 8px; margin-top: 12px; }
+  .est-sum__pdf[aria-busy='true'] { opacity: 0.6; cursor: progress; }
   .est-sum__actions { display: flex; gap: 8px; margin-top: 16px; }
   .est-sum__actions .btn--primary { flex: 1; }
   @media (max-width: 959px) {
