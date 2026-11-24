@@ -273,18 +273,14 @@ const CUBE_CONFIG = {
     .slice(0, max);
 
   // Two toggles: the sun/moon button in the header, and the switch in the menu that stands
-  // in for it on phones. The site is dark first: every visitor starts in dark mode (the
-  // <html> tag carries data-theme="dark", so even without JavaScript) until they pick light,
-  // which is remembered; the inline script in <head> applies that choice before first paint.
+  // in for it on phones. Dark is the default: every visitor starts in dark mode (the <html>
+  // tag carries data-theme="dark", so even without JavaScript), Christmas included, until they
+  // pick light, which is remembered; the inline script in <head> applies that choice before
+  // the first paint.
   function initTheme() {
     const toggles = $$('[data-theme-toggle]');
     const meta = $('meta[name="theme-color"]');
-    const preferred = () => (document.documentElement.dataset.season === 'christmas'
-      || storage.get('theme') === 'light' ? 'light' : 'dark');
-    if (!toggles.length) {
-      document.documentElement.dataset.theme = preferred();
-      return;
-    }
+    const preferred = () => (storage.get('theme') === 'light' ? 'light' : 'dark');
 
     function apply(t) {
       document.documentElement.dataset.theme = t;
@@ -298,15 +294,6 @@ const CUBE_CONFIG = {
         if (toggle.getAttribute('role') === 'switch') toggle.setAttribute('aria-checked', String(t === 'dark'));
       });
       if (meta) meta.setAttribute('content', t === 'dark' ? '#0c0d10' : '#f0f1f3'); // browser UI colour
-    }
-
-    // In the Christmas season (data-season, set in <head>) the site is light only, like the
-    // campaign posts: the toggles step aside, and the visitor's own choice is left stored
-    // untouched for January
-    if (document.documentElement.dataset.season === 'christmas') {
-      apply('light');
-      toggles.forEach((toggle) => { toggle.hidden = true; });
-      return;
     }
 
     apply(preferred());
@@ -2116,9 +2103,7 @@ const CUBE_CONFIG = {
     const freeHosting = Boolean(chosen && chosen.input.value === 'Static Website');
     est.options.filter((o) => o.input.hasAttribute('data-est-hosting')).forEach((o) => {
       o.paid ||= { priceText: o.priceText, price: o.price, monthly: o.monthly, from: o.from };
-      // A web application's first 3 months of hosting are in its price; the monthly fee starts after
-      Object.assign(o, freeHosting ? { priceText: 'Free', price: null, monthly: false, from: false, name: 'Hosting' }
-        : { ...o.paid, name: needsHosting ? 'Hosting, from month 4' : 'Hosting' });
+      Object.assign(o, freeHosting ? { priceText: 'Free', price: null, monthly: false, from: false } : o.paid);
       const priceEl = $('.est-option__price', o.label);
       if (priceEl && priceEl.textContent !== o.priceText) priceEl.textContent = o.priceText;
       o.input.checked = needsHosting || freeHosting;
@@ -2127,10 +2112,10 @@ const CUBE_CONFIG = {
     const hostingHint = $('[data-est-hosting-hint]', est.root);
     if (hostingHint) {
       hostingHint.textContent = needsHosting
-        ? 'Web applications run on a server: the first 3 months of hosting are included, then it\'s LKR 5,000 a month.'
+        ? 'Web applications run on a server, so hosting is added automatically.'
         : freeHosting ? 'Static sites are hosted free on Cloudflare.'
           : chosen ? 'Hosting is part of the Managed Infrastructure plan.'
-            : 'Hosting is added automatically: free for a static website; for a web application, 3 months free, then LKR 5,000 a month.';
+            : 'Hosting is added automatically: free for a static website, LKR 5,000 a month for a web application.';
     }
 
     const e = getEstimate();
@@ -2194,7 +2179,7 @@ const CUBE_CONFIG = {
     const monthlyEl = $('[data-estimate-monthly]', est.root);
     if (monthlyEl) {
       monthlyEl.hidden = !(e.monthly && (e.once || e.custom));
-      monthlyEl.textContent = `plus ${fmtLKR(e.monthly)} / month${needsHosting ? ' (hosting starts in month 4)' : ''}`;
+      monthlyEl.textContent = `plus ${fmtLKR(e.monthly)} / month`;
     }
     // With an offer running: the one-time total before it, struck out above the total after it
     const wasEl = $('[data-estimate-was]', est.root);
@@ -2252,17 +2237,13 @@ const CUBE_CONFIG = {
     const field = (id) => ($(`#${id}`)?.value || '').trim();
     const to = [field('f-name'), field('f-business'), field('f-email')].filter(Boolean);
     const plus = e.from ? '+' : '';
-    const hosting = est.options.find((o) => o.input.hasAttribute('data-est-hosting'));
     const totals = [];
     if (e.custom) totals.push(['Managed Infrastructure', 'Custom', 'Quoted after a discovery call']);
     if (e.once) {
       totals.push([`One-time total${e.from ? ', starting at' : ''}`, `${fmtLKR(e.once)}${plus}`,
         e.discount ? `Includes the ${offer.name}: ${offer.percent}% off (was ${fmtLKR(e.onceFull)}${plus})` : '']);
     }
-    if (e.monthly) {
-      const lateHosting = hosting && hosting.input.checked && hosting.name !== 'Hosting';
-      totals.push(['Monthly', `${fmtLKR(e.monthly)} / mo`, lateHosting ? 'Hosting starts in month 4' : '']);
-    }
+    if (e.monthly) totals.push(['Monthly', `${fmtLKR(e.monthly)} / mo`, '']);
     return {
       number,
       date: now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -2399,14 +2380,20 @@ const CUBE_CONFIG = {
       const text = amount ? amount.textContent.trim() : '';
       const full = lkr(text);
       if (!full || !note) return; // "Custom" has no price to take anything off
+      // The original price, large and struck through, on its own line above the offer price
       const plus = text.endsWith('+') ? '+' : '';
+      const line = document.createElement('p');
       const was = document.createElement('s');
       const hint = document.createElement('span');
-      was.className = 'price__was';
+      const tag = document.createElement('span');
+      line.className = 'price__orig';
       hint.className = 'sr-only';
       hint.textContent = 'Was ';
       was.append(hint, `LKR ${text}`);
-      note.prepend(was, ' · ');
+      tag.className = 'offer-tag';
+      tag.textContent = `−${offer.percent}% ${offer.tag}`.trim();
+      line.append(tag, was);
+      $('.price__price', card)?.before(line);
       amount.textContent = `${(full - offer.off(full)).toLocaleString('en-US')}${plus}`;
     });
 
@@ -2566,6 +2553,8 @@ const CUBE_CONFIG = {
         ...e.picked.filter((o) => o.price !== null || o.monthly)
           .map((o) => (o.input.hasAttribute('data-est-hosting') ? 'Hosting' : o.name))
       ].join('\n');
+      // ...and the total, add-ons included, e.g. "LKR 123,000+ one-time + LKR 10,000 / mo"
+      data.total = e.any ? estimateText(e) || 'Quoted after a call' : '';
       return data;
     }
 
@@ -2577,6 +2566,7 @@ const CUBE_CONFIG = {
         `Business: ${data.business || '—'}`,
         `Plan: ${data.plan || 'Not sure yet'}`,
         ...(data.addons ? ['Add-ons:', ...data.addons.split('\n').map((name) => `• ${name}`)] : []),
+        ...(data.total ? [`Estimated total: ${data.total}`] : []),
         `Timeline: ${data.timeline || 'No fixed date'}`,
         ...(data.message ? ['', data.message] : [])
       ].join('\n');
@@ -2721,6 +2711,7 @@ const CUBE_CONFIG = {
     const glow = $('.process__glow', pin);
     const guide = $('.process__guide', pin);
     const tip = $('.process__tip', pin);
+    const sleigh = $('.process__sleigh-turn', pin); // December: Santa's team, turned to the curve
     const grad = $('#process-grad', pin);
     if (!steps.length || nodes.some((n) => !n) || !ink || !tip) return;
     const svgs = $$('svg.process__line', pin);
@@ -2874,6 +2865,14 @@ const CUBE_CONFIG = {
       const [x, y] = pointAt(l);
       tip.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
       tip.classList.toggle('is-on', v > 0.002 && v < 0.998);
+      if (sleigh) {
+        // Faces the way the line runs (from a point just behind the tip), within a gentle tilt,
+        // and stays parked at the end once the line is drawn
+        const [bx, by] = pointAt(Math.max(0, l - 24));
+        const deg = x === bx && y === by ? 0 : Math.max(-32, Math.min(32, (Math.atan2(y - by, x - bx) * 180) / Math.PI));
+        sleigh.setAttribute('transform', `rotate(${deg.toFixed(1)}) scale(1.25)`);
+        tip.classList.toggle('has-sleigh', v > 0.002);
+      }
       steps.forEach((step, i) => step.classList.toggle('is-reached', l >= at[i] - 1));
     }
 

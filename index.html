@@ -10,14 +10,14 @@
        console prints the new hash to paste here. connect-src lists the two form services
        script.js can send enquiries to ('self' also covers the live speed and security checks,
        which only ever ask this site). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-ZAtwIe8V18SoL1jdv3CaVGjSnErZihpW4vZt5xxUusQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-DzH0VmQFu+CEtQMYlTFZGCCVv+K+IidqICmOBBJ8zO4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://formspree.io; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- SEO: the title and description are what Google shows in its results. Keep the title
        under ~60 characters and the description under ~155, or Google cuts them off. -->
   <title>Web Design &amp; Development in Colombo, Sri Lanka | CobWebZ</title>
   <meta name="description"
-    content="CobWebZ: web design and development in Colombo, Sri Lanka. Websites from LKR 40,000, .lk or .com domain included. Django and PHP web apps, and hosting.">
+    content="Web design and development in Colombo, Sri Lanka. Websites from LKR 40,000 with free hosting and a domain. Django and PHP web apps from LKR 100,000.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#0c0d10">
   <!-- SEO: the site's public address. Search for "www.cobwebz.lk" across the project
@@ -29,7 +29,7 @@
   <meta property="og:url" content="https://www.cobwebz.lk/">
   <meta property="og:title" content="CobWebZ — Web Design &amp; Development in Sri Lanka">
   <meta property="og:description"
-    content="We build the web and keep it running. Websites and web apps with a domain included, plus hosting, security and server management from Colombo, Sri Lanka.">
+    content="We build the web and keep it running. Websites with free hosting and a domain included, web apps, and hosting, security and server management from Colombo, Sri Lanka.">
   <meta property="og:image" content="https://www.cobwebz.lk/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -37,19 +37,18 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CobWebZ — Web Design &amp; Development in Sri Lanka">
   <meta name="twitter:description"
-    content="We build the web and keep it running. Websites and web apps with a domain included, plus hosting, security and server management from Colombo, Sri Lanka.">
+    content="We build the web and keep it running. Websites with free hosting and a domain included, web apps, and hosting, security and server management from Colombo, Sri Lanka.">
   <meta name="twitter:image" content="https://www.cobwebz.lk/assets/og-image.png">
   <meta name="twitter:image:alt" content="CobWebZ — We build the web and keep it running.">
   <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <!-- The site is dark first (<html data-theme="dark">); this switches to light before the
-       first paint only for visitors who have chosen light, so they never see a dark flash.
-       It also sets data-season="christmas" (and the light theme, which the season keeps)
-       through December (Sri Lanka time), or on any day
-       with ?christmas in the address (the Christmas look: the end of style.css).
+  <!-- Dark is the default (<html data-theme="dark">). This switches to light before the first
+       paint only for visitors who have chosen light with the theme button, so they never see a
+       dark flash. It also marks JavaScript as on and sets data-season="christmas" through December
+       (Sri Lanka time), or on any day with ?christmas in the address (the end of style.css).
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');var r=document.documentElement,x=new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search),l=x;if(x)r.dataset.season='christmas';try{l=l||localStorage.getItem('theme')==='light'}catch(e){}if(l){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}</script>
+  <script>document.documentElement.classList.add('js');var r=document.documentElement;if(new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search))r.dataset.season='christmas';try{if(localStorage.getItem('theme')==='light'){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
 
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="variables.css">
@@ -76,7 +75,7 @@
         "logo": "https://www.cobwebz.lk/assets/logo.png",
         "image": "https://www.cobwebz.lk/assets/og-image.png",
         "slogan": "We build the web and keep it running.",
-        "description": "Web design and development studio in Colombo, Sri Lanka. Static websites and full-stack Python, Django and PHP applications with a .lk or .com domain included, plus Docker and Cloudflare deployment, security scanning and server management.",
+        "description": "Web design and development studio in Colombo, Sri Lanka. Static websites with free Cloudflare hosting and full-stack Python, Django and PHP applications, both with a .lk or .com domain included, plus Docker deployment, web hosting, security scanning and server management.",
         "email": "cobwebzsl@gmail.com",
         "telephone": "+94 71 907 0320",
         "address": {
@@ -115,7 +114,7 @@
               "priceCurrency": "LKR",
               "price": "40000",
               "priceSpecification": { "@type": "PriceSpecification", "minPrice": "40000", "priceCurrency": "LKR" },
-              "itemOffered": { "@type": "Service", "name": "Static Website", "description": "Fast, secure frontends for sites that don't need a server: up to 5 pages, hosting, a domain name, SSL, contact form and basic SEO." }
+              "itemOffered": { "@type": "Service", "name": "Static Website", "description": "Fast, secure websites with no server needed: up to 5 custom pages, responsive design, a .lk or .com domain with SSL for the first year, basic SEO and speed optimisation, a contact form and Google Maps, free Cloudflare hosting, 2 design revisions and 14 days of support." }
             },
             {
               "@type": "Offer",
@@ -123,12 +122,20 @@
               "priceCurrency": "LKR",
               "price": "100000",
               "priceSpecification": { "@type": "PriceSpecification", "minPrice": "100000", "priceCurrency": "LKR" },
-              "itemOffered": { "@type": "Service", "name": "Web Application", "description": "Full-stack apps in Python/Django or PHP with MySQL: up to 5 pages, an admin dashboard, staging and live environments, and a domain name with SSL. Includes 3 months of hosting, then LKR 5,000 a month." }
+              "itemOffered": { "@type": "Service", "name": "Web Application", "description": "Full-stack platforms in Python/Django or PHP with MySQL: up to 5 pages, an admin dashboard, a core feature module, user accounts, security hardening, Docker staging and live environments, a .lk or .com domain with SSL for the first year, 2 revisions with admin training and 30 days of support. Hosting is LKR 5,000 a month." }
             },
             {
               "@type": "Offer",
               "url": "https://www.cobwebz.lk/#pricing",
-              "itemOffered": { "@type": "Service", "name": "Managed Infrastructure", "description": "Monthly infrastructure, security and support: Docker Swarm, Nginx and Apache, vulnerability scanning, monitoring, backups and patching." }
+              "itemOffered": { "@type": "Service", "name": "Managed Infrastructure", "description": "We run, secure and support your infrastructure: Docker-based hosting, security scanning, monitoring and backups, and priority support. Monthly, quoted to fit." }
+            },
+            {
+              "@type": "Offer",
+              "url": "https://www.cobwebz.lk/#pricing",
+              "priceCurrency": "LKR",
+              "price": "5000",
+              "priceSpecification": { "@type": "UnitPriceSpecification", "price": "5000", "priceCurrency": "LKR", "unitText": "month" },
+              "itemOffered": { "@type": "Service", "name": "Web Application Hosting", "description": "Server hosting for a CobWebZ web application, billed monthly from launch." }
             }
           ]
         }
@@ -146,7 +153,7 @@
         "@id": "https://www.cobwebz.lk/#webpage",
         "url": "https://www.cobwebz.lk/",
         "name": "Web Design & Development in Colombo, Sri Lanka | CobWebZ",
-        "description": "CobWebZ: web design and development in Colombo, Sri Lanka. Websites from LKR 40,000, .lk or .com domain included. Django and PHP web apps, and hosting.",
+        "description": "Web design and development in Colombo, Sri Lanka. Websites from LKR 40,000 with free hosting and a domain. Django and PHP web apps from LKR 100,000.",
         "isPartOf": { "@id": "https://www.cobwebz.lk/#website" },
         "about": { "@id": "https://www.cobwebz.lk/#organization" },
         "primaryImageOfPage": "https://www.cobwebz.lk/assets/og-image.png",
@@ -155,7 +162,12 @@
           {
             "@type": "Question",
             "name": "How much does a website cost in Sri Lanka?",
-            "acceptedAnswer": { "@type": "Answer", "text": "At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application of up to five pages, with a database and an admin dashboard, starts at LKR 100,000. Both are one-time prices and include a .lk or .com domain name with SSL. Web applications include 3 months of hosting, then hosting is LKR 5,000 a month. Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts with a discovery call and a fixed, written quote. Use the estimator under Pricing for an itemised starting price." }
+            "acceptedAnswer": { "@type": "Answer", "text": "At CobWebZ, a static website starts at LKR 40,000 and a full-stack web application at LKR 100,000. Both are one-time prices for up to five pages, with custom responsive design and a .lk or .com domain with SSL for the first year. Static sites are hosted free on Cloudflare; web applications need a server, and hosting is LKR 5,000 a month. Managed Infrastructure (hosting, security and support) is a monthly plan, quoted to fit. Every project starts with a discovery call and a fixed, written quote. Use the estimator under Pricing for an itemised starting price, and download it as a PDF." }
+          },
+          {
+            "@type": "Question",
+            "name": "What's included in the price of a website?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A static website (LKR 40,000) includes five pages, custom responsive design, a .lk or .com domain with SSL for the first year, basic SEO and speed optimisation, a contact form and Google Maps, Cloudflare hosting set up for free, 2 design revisions and 14 days of support. A web application (LKR 100,000) includes five pages or dynamic templates, a Django or PHP backend with a MySQL database, an admin dashboard, one core feature module, user login and accounts, custom responsive design, a domain with SSL for the first year, security hardening, Docker staging and live deployment, basic SEO, a contact form and Google Maps, 2 revisions with admin training, and 30 days of support. Its hosting is LKR 5,000 a month. The estimator under Pricing lists every item with its price." }
           },
           {
             "@type": "Question",
@@ -175,17 +187,17 @@
           {
             "@type": "Question",
             "name": "Will my website show up on Google?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Every static site we build comes with basic SEO set up: page titles, meta descriptions and image alt text, on fast, mobile-friendly code. The Advanced Technical SEO & Analytics add-on (from LKR 5,000, one-time) goes further. No one can honestly promise a #1 ranking, but a fast, well-built site gives you the best start." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Every website and web application we build comes with basic SEO set up: page titles, meta descriptions and image alt text, on fast, mobile-friendly code. The Advanced Technical SEO & Analytics add-on (from LKR 5,000, one-time) goes further. No one can honestly promise a #1 ranking, but a fast, well-built site gives you the best start." }
           },
           {
             "@type": "Question",
             "name": "Are hosting and a domain name included?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, a domain name is included. The Static Website and Web Application packages both come with a domain, such as a .lk or .com address, registered and connected for you with SSL, so your site loads securely over HTTPS. If you already own a domain, we connect that one instead. Static sites also include free-tier hosting on Cloudflare or GitHub Pages. Web applications need a server, so they come with 3 months of hosting, then LKR 5,000 a month. Other third-party fees, such as payment gateways, are billed by their providers." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Static Website and Web Application packages both include a domain name, such as a .lk or .com address, registered and connected for you with SSL for the first year, so your site loads securely over HTTPS. If you already own a domain, we connect that one instead. Static sites are hosted free on Cloudflare, and we set that up for you. Web applications need a server, so hosting is added at LKR 5,000 a month. Other third-party fees, such as payment gateways, are billed by their providers." }
           },
           {
             "@type": "Question",
             "name": "Can you build an online store?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or PHP with a MySQL database and an admin dashboard for your products. Online payments are added with Payment Gateway Setup, from LKR 20,000. For an example, see the MUTE store concept under Our Work." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A store with products, a cart and orders is a web application, built in Python/Django or PHP with a MySQL database and an admin dashboard for your products. Online payments are added with Payment Gateway Setup, from LKR 20,000. For an example, see the MUTE store concept under Our Work." }
           },
           {
             "@type": "Question",
@@ -195,12 +207,12 @@
           {
             "@type": "Question",
             "name": "How do you keep websites secure?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Every site is served over HTTPS. Web applications come with secure logins and password handling, and built-in protection against common attacks such as SQL injection and cross-site request forgery (CSRF). For ongoing protection, the Managed Infrastructure plan adds automated vulnerability scanning, monitoring, backups and patching." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Every site is served over HTTPS. Web applications come with security hardening, secure logins and password handling, and built-in protection against common attacks such as SQL injection and cross-site request forgery (CSRF). For ongoing protection, the Managed Infrastructure plan adds automated vulnerability scanning, monitoring, backups and patching." }
           },
           {
             "@type": "Question",
             "name": "Who looks after the website once it's live?",
-            "acceptedAnswer": { "@type": "Answer", "text": "That's up to you. Web applications include an admin dashboard so your team can manage content. If you'd rather hand it over, the Basic Maintenance Plan (LKR 5,000 a month) covers updates, backups and uptime, and the Content Management Retainer (LKR 5,000 a month) covers four content updates or posts. Larger systems can move to the Managed Infrastructure plan for full hosting, security scanning and priority support." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Every package includes support after launch: 14 days for a static website and 30 days for a web application, which also comes with training on its admin dashboard so your team can manage content. After that, it's up to you. The Basic Maintenance Plan (LKR 5,000 a month) covers updates, backups and uptime, and the Content Management Retainer (LKR 5,000 a month) covers four content updates or posts. Larger systems can move to the Managed Infrastructure plan for full hosting, security scanning and priority support." }
           },
           {
             "@type": "Question",
@@ -350,9 +362,6 @@
         </div>
       </div>
 
-      <!-- December only (style.css, "Christmas season"): trees and gifts in the hero's corners -->
-      <div class="xmas-scene xmas-scene--hero-l xmas-deco" aria-hidden="true"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/gift-green.svg" alt="" class="xmas-scene__gift xmas-scene__gift--small" loading="lazy"></div>
-      <div class="xmas-scene xmas-scene--hero-r xmas-deco" aria-hidden="true"><img src="assets/gift-pearl.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/gift-red.svg" alt="" class="xmas-scene__gift" loading="lazy"><img src="assets/xmas-tree.svg" alt="" class="xmas-scene__tree xmas-scene__tree--small" loading="lazy"></div>
       <a href="#about" class="scroll-cue" aria-label="Scroll to About us"><i aria-hidden="true"></i></a>
     </section>
 
@@ -662,6 +671,66 @@
           <path class="process__guide" />
           <path class="process__ink" pathLength="1" />
           <g class="process__tip">
+            <!-- December only: Santa's sleigh and two reindeer ride the tip of the line, and the
+                 tip itself becomes Rudolph's red nose. Drawn facing right with that nose at 0,0;
+                 script.js (initProcess) turns the team to follow the curve. -->
+            <g class="process__sleigh xmas-deco">
+              <g class="process__sleigh-turn">
+                <!-- reins and traces -->
+                <path d="M-139 -12 Q-74 -9 -10 -1" fill="none" stroke="#e2b04a" stroke-width="0.9" opacity="0.85" />
+                <path d="M-124 4 Q-112 13 -100 14 M-72 13 L-44 13" fill="none" stroke="#e2b04a" stroke-width="1.3" />
+                <!-- sleigh: runner, body, trim -->
+                <path d="M-188 22 H-134 Q-121 22 -117 11 M-174 14 V22 M-142 14 V22" fill="none" stroke="#e2b04a"
+                  stroke-width="2.2" stroke-linecap="round" />
+                <path d="M-184 -4 H-148 Q-134 -4 -130 -13 Q-127 -20 -120 -18 Q-124 -10 -126 -1 Q-130 14 -152 14 H-178 Q-186 14 -184 -4 Z"
+                  fill="#c8414b" />
+                <path d="M-182 8 H-137" stroke="#e2b04a" stroke-width="1.6" />
+                <!-- the sack, with a present peeking out -->
+                <rect x="-185" y="-25" width="8" height="7" rx="1" fill="#d9525b" />
+                <ellipse cx="-177" cy="-11" rx="8" ry="10" fill="#2f8a5e" />
+                <path d="M-182 -19 H-172" stroke="#23704a" stroke-width="2" stroke-linecap="round" />
+                <!-- Santa -->
+                <ellipse cx="-159" cy="-6" rx="10" ry="9" fill="#c8414b" />
+                <rect x="-169" y="-3" width="20" height="3" fill="#1d1a1a" />
+                <rect x="-161" y="-3.5" width="4" height="4" rx="0.8" fill="#e2b04a" />
+                <path d="M-153 -8 L-141 -12" stroke="#c8414b" stroke-width="5" stroke-linecap="round" />
+                <circle cx="-139" cy="-12" r="2.7" fill="#2f8a5e" />
+                <circle cx="-157" cy="-20" r="5.5" fill="#f2c4a0" />
+                <path d="M-162.5 -20 Q-162 -9.5 -156 -9 Q-150.5 -10.5 -151.5 -19.5 Z" fill="#f7f3ee" />
+                <circle cx="-154.5" cy="-21" r="0.85" fill="#1d1a1a" />
+                <path d="M-162.5 -22.5 L-151.5 -22.5 L-161 -33.5 Z" fill="#c8414b" />
+                <rect x="-163.5" y="-24.5" width="13" height="3.2" rx="1.6" fill="#f7f3ee" />
+                <circle cx="-161.5" cy="-33.5" r="2.1" fill="#f7f3ee" />
+                <!-- two reindeer: the second one, then the lead (whose nose is the tip) -->
+                <g transform="translate(-58 4)">
+                  <path d="M-12 -5 L-15 -15 M-14 -10 L-19 -13 M-15 -15 L-12 -19 M-10 -5 L-9 -14 M-9.5 -10 L-6 -12"
+                    fill="none" stroke="#d9b58c" stroke-width="1.8" stroke-linecap="round" />
+                  <path d="M-38 16 L-47 21 M-36 17 L-44 25 L-48 24 M-20 16 L-12 22 L-8 21 M-22 17 L-17 25"
+                    fill="none" stroke="#6e4630" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M-15 -1 L-9 4 L-16 14 L-24 9 Z" fill="#9b6a46" />
+                  <ellipse cx="-30" cy="12" rx="14" ry="7" fill="#9b6a46" />
+                  <ellipse cx="-29" cy="15" rx="9" ry="3" fill="#c79a72" />
+                  <circle cx="-44" cy="9" r="2" fill="#f3eadf" />
+                  <ellipse cx="-8" cy="0" rx="8" ry="5" fill="#9b6a46" />
+                  <circle cx="-9" cy="-2" r="1" fill="#1d1a1a" />
+                  <path d="M-17 3 L-21 12" stroke="#c8414b" stroke-width="3" stroke-linecap="round" />
+                  <circle cx="-20" cy="9" r="1.6" fill="#e2b04a" />
+                  <circle cx="0" cy="0" r="2.2" fill="#3b2418" />
+                </g>
+                <path d="M-12 -5 L-15 -15 M-14 -10 L-19 -13 M-15 -15 L-12 -19 M-10 -5 L-9 -14 M-9.5 -10 L-6 -12"
+                  fill="none" stroke="#d9b58c" stroke-width="1.8" stroke-linecap="round" />
+                <path d="M-38 16 L-47 21 M-36 17 L-44 25 L-48 24 M-20 16 L-12 22 L-8 21 M-22 17 L-17 25" fill="none"
+                  stroke="#6e4630" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M-15 -1 L-9 4 L-16 14 L-24 9 Z" fill="#9b6a46" />
+                <ellipse cx="-30" cy="12" rx="14" ry="7" fill="#9b6a46" />
+                <ellipse cx="-29" cy="15" rx="9" ry="3" fill="#c79a72" />
+                <circle cx="-44" cy="9" r="2" fill="#f3eadf" />
+                <ellipse cx="-8" cy="0" rx="8" ry="5" fill="#9b6a46" />
+                <circle cx="-9" cy="-2" r="1" fill="#1d1a1a" />
+                <path d="M-17 3 L-21 12" stroke="#c8414b" stroke-width="3" stroke-linecap="round" />
+                <circle cx="-20" cy="9" r="1.6" fill="#e2b04a" />
+              </g>
+            </g>
             <circle class="process__tip-halo" r="13" />
             <circle class="process__tip-core" r="4.5" />
           </g>
@@ -931,7 +1000,7 @@
             <p class="price__desc">Full-stack platforms with a database.</p>
             <p class="price__price"><span class="price__currency">LKR</span> <span class="price__amount">100,000+</span>
             </p>
-            <p class="price__note">One-time · 3 months’ hosting free, then LKR 5,000 / mo</p>
+            <p class="price__note">One-time · hosting LKR 5,000 / mo</p>
             <ul class="price__list">
               <li>Django / PHP + MySQL backend</li>
               <li>5 pages included</li>
@@ -1020,7 +1089,7 @@
                   <li><span>Custom design + responsive layout</span><span>LKR 5,000</span></li>
                   <li><span>Domain (.lk or .com) + SSL, first year</span><span>LKR 5,000</span></li>
                   <li><span>Basic SEO + speed optimisation</span><span>LKR 2,000</span></li>
-                  <li><span>Contact form, WhatsApp button, Google Maps</span><span>LKR 2,000</span></li>
+                  <li><span>Contact form + Google Maps</span><span>LKR 2,000</span></li>
                   <li><span>Hosting setup on Cloudflare</span><span>LKR 1,000</span></li>
                   <li><span>Hosting (Cloudflare)</span><span>Free</span></li>
                   <li><span>2 design revisions</span><span>Free</span></li>
@@ -1036,8 +1105,7 @@
                   <li><span>Domain (.lk or .com) + SSL, first year</span><span>LKR 5,000</span></li>
                   <li><span>Security hardening</span><span>LKR 2,500</span></li>
                   <li><span>Staging + live deployment (Docker)</span><span>LKR 2,500</span></li>
-                  <li><span>3 months of hosting (worth LKR 15,000)</span><span>Free</span></li>
-                  <li><span>Basic SEO, contact form, WhatsApp, Maps</span><span>Free</span></li>
+                  <li><span>Basic SEO, contact form, Google Maps</span><span>Free</span></li>
                   <li><span>2 revisions + admin training</span><span>Free</span></li>
                   <li><span>30 days of support after launch</span><span>Free</span></li>
                 </ul>
@@ -1064,8 +1132,8 @@
                 </legend>
                 <div class="est-options">
                   <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Interactive 3D models</span><span class="est-option__price">Starting at LKR 15,000</span></label>
-                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Advanced scroll animations (GSAP)</span><span class="est-option__price">Starting at LKR 3,000</span></label>
-                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">System-synced dark mode toggle</span><span class="est-option__price">LKR 3,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Advanced scroll animations (GSAP)</span><span class="est-option__price">Starting at LKR 4,000</span></label>
+                  <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">System-synced dark mode toggle</span><span class="est-option__price">LKR 4,000</span></label>
                   <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Advanced technical SEO &amp; analytics dashboard</span><span class="est-option__price">Starting at LKR 5,000</span></label>
                 </div>
               </fieldset>
@@ -1090,7 +1158,7 @@
                   <label class="est-option"><input type="checkbox" data-est-option><span class="est-option__box" aria-hidden="true"></span><span class="est-option__name">Content management retainer (4 updates or posts)</span><span class="est-option__price">LKR 5,000 / mo</span></label>
                 </div>
                 <p class="est-step__hint" data-est-hosting-hint>Hosting is added automatically: free for a static
-                  website; for a web application, 3 months free, then LKR 5,000 a month.</p>
+                  website, LKR 5,000 a month for a web application.</p>
                 <p class="est-step__hint" data-est-care-hint hidden>Monitoring, backups and patching are part of the
                   Managed Infrastructure plan.</p>
               </fieldset>
@@ -1172,12 +1240,26 @@
           <details class="faq__item" name="faq" open>
             <summary class="faq__q">How much does a website cost in Sri Lanka?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>At CobWebZ, a static website of up to five pages starts at LKR 40,000, and a full-stack web application
-                of up to five pages, with a database and an admin dashboard, starts at LKR 100,000. Both are one-time
-                prices and include a .lk or .com domain name with SSL. Web applications include 3 months of hosting, then
-                hosting is LKR 5,000 a month. Ongoing infrastructure, security and support is a monthly retainer, quoted to fit. Every project starts
-                with a discovery call and a fixed, written quote. Use the <a href="#estimate">estimator under
-                  Pricing</a> for an itemised starting price.</p>
+              <p>At CobWebZ, a static website starts at LKR 40,000 and a full-stack web application at LKR 100,000. Both
+                are one-time prices for up to five pages, with custom responsive design and a .lk or .com domain with
+                SSL for the first year. Static sites are hosted free on Cloudflare; web applications need a server, and
+                hosting is LKR 5,000 a month. Managed Infrastructure (hosting, security and support) is a monthly plan,
+                quoted to fit. Every project starts with a discovery call and a fixed, written quote. Use the <a
+                href="#estimate">estimator under Pricing</a> for an itemised starting price, and download it as a PDF.</p>
+            </div>
+          </details>
+
+          <details class="faq__item" name="faq">
+            <summary class="faq__q">What's included in the price of a website?<span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a">
+              <p>A static website (LKR 40,000) includes five pages, custom responsive design, a .lk or .com domain with
+                SSL for the first year, basic SEO and speed optimisation, a contact form and Google Maps, Cloudflare
+                hosting set up for free, 2 design revisions and 14 days of support. A web application (LKR 100,000)
+                includes five pages or dynamic templates, a Django or PHP backend with a MySQL database, an admin
+                dashboard, one core feature module, user login and accounts, custom responsive design, a domain with SSL
+                for the first year, security hardening, Docker staging and live deployment, basic SEO, a contact form
+                and Google Maps, 2 revisions with admin training, and 30 days of support. Its hosting is LKR 5,000 a
+                month. The <a href="#estimate">estimator under Pricing</a> lists every item with its price.</p>
             </div>
           </details>
 
@@ -1214,31 +1296,30 @@
           <details class="faq__item" name="faq">
             <summary class="faq__q">Will my website show up on Google?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>Every static site we build comes with basic SEO set up: page titles, meta descriptions and image alt
-                text, on fast, mobile-friendly code. The Advanced Technical SEO &amp; Analytics add-on (from LKR 5,000,
-                one-time) goes further. No one can honestly promise a #1 ranking, but a fast, well-built site gives you
-                the best start.</p>
+              <p>Every website and web application we build comes with basic SEO set up: page titles, meta descriptions
+                and image alt text, on fast, mobile-friendly code. The Advanced Technical SEO &amp; Analytics add-on
+                (from LKR 5,000, one-time) goes further. No one can honestly promise a #1 ranking, but a fast,
+                well-built site gives you the best start.</p>
             </div>
           </details>
 
           <details class="faq__item" name="faq">
             <summary class="faq__q">Are hosting and a domain name included?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>Yes, a domain name is included. The Static Website and Web Application packages both come
-                with a domain, such as a .lk or .com address, registered and connected for you with SSL, so your site loads
-                securely over HTTPS. If you already own a domain, we connect that one instead. Static sites also include
-                free-tier hosting on Cloudflare or GitHub Pages. Web applications need a server, so they come with 3 months of
-                hosting, then LKR 5,000 a month. Other third-party fees, such as payment gateways, are billed by their providers.</p>
+              <p>Yes. The Static Website and Web Application packages both include a domain name, such as a .lk or .com
+                address, registered and connected for you with SSL for the first year, so your site loads securely over
+                HTTPS. If you already own a domain, we connect that one instead. Static sites are hosted free on
+                Cloudflare, and we set that up for you. Web applications need a server, so hosting is added at LKR 5,000
+                a month. Other third-party fees, such as payment gateways, are billed by their providers.</p>
             </div>
           </details>
 
           <details class="faq__item" name="faq">
             <summary class="faq__q">Can you build an online store?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>Yes. A store with products, a cart and orders is a dynamic web application, built in Python/Django or
-                PHP with a MySQL database and an admin dashboard for your products. Online payments are added with
-                Payment Gateway Setup, from LKR 20,000. For an example, see the MUTE store concept under
-                <a href="#work">Our Work</a>.</p>
+              <p>Yes. A store with products, a cart and orders is a web application, built in Python/Django or PHP with a
+                MySQL database and an admin dashboard for your products. Online payments are added with Payment Gateway
+                Setup, from LKR 20,000. For an example, see the MUTE store concept under <a href="#work">Our Work</a>.</p>
             </div>
           </details>
 
@@ -1255,18 +1336,19 @@
           <details class="faq__item" name="faq">
             <summary class="faq__q">How do you keep websites secure?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>Every site is served over HTTPS. Web applications come with secure logins and password handling, and
-                built-in protection against common attacks such as SQL injection and cross-site request forgery (CSRF).
-                For ongoing protection, the Managed Infrastructure plan adds automated vulnerability scanning, monitoring,
-                backups and patching.</p>
+              <p>Every site is served over HTTPS. Web applications come with security hardening, secure logins and
+                password handling, and built-in protection against common attacks such as SQL injection and cross-site
+                request forgery (CSRF). For ongoing protection, the Managed Infrastructure plan adds automated
+                vulnerability scanning, monitoring, backups and patching.</p>
             </div>
           </details>
 
           <details class="faq__item" name="faq">
             <summary class="faq__q">Who looks after the website once it's live?<span class="faq__icon" aria-hidden="true"></span></summary>
             <div class="faq__a">
-              <p>That's up to you. Web applications include an admin dashboard so your team can manage content. If
-                you'd rather hand it over, the Basic Maintenance Plan (LKR 5,000 a month) covers updates, backups and
+              <p>Every package includes support after launch: 14 days for a static website and 30 days for a web
+                application, which also comes with training on its admin dashboard so your team can manage content.
+                After that, it's up to you. The Basic Maintenance Plan (LKR 5,000 a month) covers updates, backups and
                 uptime, and the Content Management Retainer (LKR 5,000 a month) covers four content updates or posts.
                 Larger systems can move to the Managed Infrastructure plan for full hosting, security scanning and
                 priority support.</p>

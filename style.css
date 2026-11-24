@@ -2670,7 +2670,7 @@
     overflow: visible;
     pointer-events: none;
   }
-  .process__line path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .process__line > path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .process__guide { stroke: var(--color-line-strong); stroke-width: 1.5; stroke-dasharray: 1 7; }
   .process__ink { stroke: url(#process-grad); stroke-width: 2.5; }
   .js .process__ink,
@@ -4284,6 +4284,27 @@
     font-variant-numeric: tabular-nums;
     color: var(--color-body);
   }
+  /* Pricing cards during an offer: the original price, large and struck through, above the
+     offer price (script.js adds this line) */
+  .price__orig {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .price__orig s {
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-body);
+    text-decoration-line: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--xmas-red, var(--color-offer));
+  }
+  .price__orig + .price__price { margin-top: 10px; }
   .est-sum__lines li.is-offer > :first-child,
   .est-sum__lines li.is-offer > :last-child,
   .estimate-box__lines li.is-offer > :first-child,
@@ -4590,14 +4611,6 @@
   .xmas-scene__tree--small { width: 72px; }
   .xmas-scene__gift { width: 48px; margin-inline: -4px; }
   .xmas-scene__gift--small { width: 38px; }
-  .xmas-scene--hero-l { left: clamp(16px, 5vw, 80px); bottom: 28px; }
-  .xmas-scene--hero-r { right: clamp(16px, 5vw, 80px); bottom: 28px; }
-  @media (min-width: 761px) {
-    .hero .xmas-scene__tree { width: 148px; }
-    .hero .xmas-scene__tree--small { width: 104px; }
-    .hero .xmas-scene__gift { width: 66px; }
-    .hero .xmas-scene__gift--small { width: 52px; }
-  }
   .xmas-scene--offer { right: clamp(24px, 4vw, 56px); bottom: 74px; }
   .footer > .xmas-scene--footer { right: clamp(16px, 6vw, 96px); bottom: 0; z-index: 1; }
   .footer > .xmas-scene--footer .xmas-scene__tree { width: 92px; }
@@ -4616,8 +4629,7 @@
     .xmas-scene__tree--small { width: 50px; }
     .xmas-scene__gift { width: 34px; }
     .xmas-scene__gift--small { width: 28px; }
-    .xmas-scene--hero-r, .xmas-scene--offer { display: none; }
-    .xmas-scene--hero-l { bottom: 20px; }
+    .xmas-scene--offer { display: none; }
   }
 
   /* The spider's Santa hat (assets/xmas-hat.svg). Drawn in the spider's own coordinates, so
@@ -4652,4 +4664,40 @@
     opacity: clamp(0, (var(--p, 0) - 0.40) * 6, 1);
     transform: scale(clamp(0.3, (var(--p, 0) - 0.40) * 3.5 + 0.3, 1));
   }
+
+  /* Red and green touches through the site (December only). Colour changes only: nothing
+     new moves. Brighter shades on the dark theme so they keep their contrast. */
+  [data-season='christmas'] { --xmas-red: #b3303a; --xmas-green: #23704a; }
+  [data-season='christmas'][data-theme='dark'] { --xmas-red: #e45a63; --xmas-green: #45ad74; }
+  [data-season='christmas'] ::selection { background: color-mix(in srgb, var(--xmas-red) 30%, transparent); }
+  /* The muted word in each section heading ("How we work.", "transparent pricing") */
+  [data-season='christmas'] .h-section .accent { color: var(--xmas-red); }
+  [data-season='christmas'] .badge__dot { background: linear-gradient(135deg, var(--xmas-red) 50%, var(--xmas-green) 50%); }
+  /* The reading-progress line along the top, as a candy cane */
+  [data-season='christmas'] .progress span {
+    background: repeating-linear-gradient(115deg, var(--xmas-red) 0 10px, #f7f3ee 10px 16px,
+      var(--xmas-green) 16px 26px, #f7f3ee 26px 32px);
+  }
+  [data-season='christmas'] .progress { height: 3px; }
+  /* "How we work": the line runs green to red, and its glowing tip is Rudolph's nose */
+  [data-season='christmas'] .process__stop-a { stop-color: var(--xmas-green); }
+  [data-season='christmas'] .process__stop-b { stop-color: var(--xmas-red); }
+  [data-season='christmas'] .process__glow { stroke: var(--xmas-red); }
+  [data-season='christmas'] .process__tip-core { fill: #e0414b; stroke: #ff8a8f; }
+  [data-season='christmas'] .process__tip-halo { fill: rgba(224, 65, 75, 0.35); }
+  /* Santa's team rides the tip on wide screens, where the line runs left to right, and
+     stays parked at the end once it's drawn */
+  [data-season='christmas'] .process__tip.has-sleigh { opacity: 1; }
+  .process__sleigh { filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25)); }
+  @media (max-width: 1099px) {
+    .process__sleigh { display: none; }
+  }
+  /* Card glows and the FAQ rows' moving highlight */
+  [data-season='christmas'] .ok-glow { --glow-head: var(--xmas-green); }
+  [data-season='christmas'] .faq__item::after { --glow-head: var(--xmas-red); }
+
+  /* The offer panel: its trees and gifts stand on the line above the dates (not over them),
+     and the end date reads clearly */
+  .xmas-scene--offer { bottom: calc(clamp(28px, 5vw, 64px) + 39px); }
+  [data-season='christmas'] [data-offer-ends] { color: var(--xmas-red); font-weight: 600; }
 }

@@ -5,7 +5,7 @@
   <!-- Only this site's own files may load. The inline theme script below is allowed by its
        sha256 hash: if you change it, Chrome's console prints the new hash to paste here.
        This page lives in /work/, so every link and file path starts from the site root (/). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZAtwIe8V18SoL1jdv3CaVGjSnErZihpW4vZt5xxUusQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-DzH0VmQFu+CEtQMYlTFZGCCVv+K+IidqICmOBBJ8zO4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Black.: Creative Portfolio Website Case Study | CobWebZ</title>
@@ -31,12 +31,12 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon.png">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <!-- Sets the theme before the first paint (saved choice, else the device setting).
-       It also sets data-season="christmas" (and the light theme, which the season keeps)
-       through December (Sri Lanka time), or on any day
-       with ?christmas in the address (the Christmas look: the end of style.css).
+  <!-- Dark is the default (<html data-theme="dark">). This switches to light before the first
+       paint only for visitors who have chosen light with the theme button, so they never see a
+       dark flash. It also marks JavaScript as on and sets data-season="christmas" through December
+       (Sri Lanka time), or on any day with ?christmas in the address (the end of style.css).
        Keep it on one line: its hash in the Content-Security-Policy above must match. -->
-  <script>document.documentElement.classList.add('js');var r=document.documentElement,x=new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search),l=x;if(x)r.dataset.season='christmas';try{l=l||localStorage.getItem('theme')==='light'}catch(e){}if(l){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}</script>
+  <script>document.documentElement.classList.add('js');var r=document.documentElement;if(new Date(Date.now()+198e5).getUTCMonth()===11||/[?&]christmas\b/.test(location.search))r.dataset.season='christmas';try{if(localStorage.getItem('theme')==='light'){r.dataset.theme='light';document.querySelector('meta[name="theme-color"]').content='#f0f1f3'}}catch(e){}</script>
 
   <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/variables.css">
