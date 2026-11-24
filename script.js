@@ -2006,7 +2006,6 @@ const CUBE_CONFIG = {
     root: $('[data-estimator]'),
     types: [],
     options: [],
-    hosting: [],
     pages: null,
     pagePrice: 0,
     lastTotal: ''
@@ -2034,7 +2033,6 @@ const CUBE_CONFIG = {
     const extraPages = included ? Math.max(0, pages - included) : 0;
     const pagesCost = extraPages * est.pagePrice;
     const picked = est.options.filter((o) => o.input.checked && !o.input.disabled);
-    const hosting = est.hosting.find((h) => h.input.checked && !h.input.disabled) || null;
     const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
     const onceFull = (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly));
     const discount = offer && onceFull ? offer.off(onceFull) : 0; // the offer covers one-time work only
@@ -2046,13 +2044,12 @@ const CUBE_CONFIG = {
       extraPages,
       pagesCost,
       picked,
-      hosting,
       onceFull, // one-time total before the offer
       discount,
       once: onceFull - discount, // one-time total to pay
       monthly: sum(picked.filter((o) => o.monthly)),
       from: Boolean(type && type.from) || picked.some((o) => o.from),
-      any: Boolean(type || picked.length || hosting)
+      any: Boolean(type || picked.length)
     };
   }
 
@@ -2067,7 +2064,6 @@ const CUBE_CONFIG = {
       rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'}`, 'Scoped on a call']);
     }
     e.picked.forEach((o) => rows.push([o.name, o.priceText]));
-    if (e.hosting) rows.push([`Hosting: ${e.hosting.name}`, e.hosting.priceText]);
     if (e.discount) {
       rows.push([`${offer.name}: ${offer.percent}% off one-time work`, `− ${fmtLKR(e.discount)}`, 'is-offer']);
     }
@@ -2103,15 +2099,8 @@ const CUBE_CONFIG = {
   function updateEstimate() {
     if (!est.root) return;
     const e = getEstimate();
-    const typeValue = e.type ? e.type.input.value : '';
 
-    // Choices that depend on the website type: free hosting only for static sites, and the
-    // retainer already covers basic maintenance
-    est.hosting.forEach((h) => {
-      const only = h.input.dataset.only;
-      h.input.disabled = Boolean(only && typeValue && only !== typeValue);
-      if (h.input.disabled) h.input.checked = false;
-    });
+    // The retainer already covers basic maintenance
     const isRetainer = e.custom;
     est.options.filter((o) => o.input.hasAttribute('data-est-care')).forEach((o) => {
       o.input.disabled = isRetainer;
@@ -2213,7 +2202,7 @@ const CUBE_CONFIG = {
 
   function resetEstimate() {
     est.types.forEach((t) => { t.input.checked = false; });
-    [...est.options, ...est.hosting].forEach((o) => { o.input.checked = false; });
+    est.options.forEach((o) => { o.input.checked = false; });
     if (est.pages) est.pages.value = '5';
     setSelect(packageSelect, '', { quiet: true });
     updateEstimate();
@@ -2223,7 +2212,6 @@ const CUBE_CONFIG = {
     if (!est.root) return;
     est.types = $$('[data-est-type]', est.root).map(readOption);
     est.options = $$('[data-est-option]', est.root).map(readOption);
-    est.hosting = $$('[data-est-hosting]', est.root).map(readOption);
     est.pages = $('[data-est-pages]', est.root);
     est.pagePrice = lkr(flatText($('[data-est-page-price]', est.root))) || 0;
 
