@@ -3567,6 +3567,8 @@
   .est-option--radio .est-option__box::before { inset: 4px; border-radius: 50%; -webkit-mask: none; mask: none; }
   .est-option__name { font-size: 14px; line-height: 1.45; color: var(--color-ink); }
   .est-option__price { font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; color: var(--color-body); }
+  /* A short "who it's for" line under the price; not part of the estimate text */
+  .est-option__hint { grid-column: 2; font-size: 12px; line-height: 1.4; color: var(--color-subtle); }
   .est-option:hover { box-shadow: inset 0 0 0 1px var(--color-line-strong); }
   .est-option:has(input:checked) { background: var(--color-surface); box-shadow: inset 0 0 0 1.5px var(--color-ink); }
   .est-option input:checked + .est-option__box { background: var(--color-ink); border-color: var(--color-ink); }
@@ -3622,6 +3624,49 @@
     40% { translate: 0 -3px; }
   }
   .est-sum__monthly { margin-top: 4px; font-size: 13.5px; color: var(--color-ink); }
+  /* "You save LKR 20,000": the package's saving, right under the total */
+  .est-sum__save {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-control);
+    background: var(--color-save-soft);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-save) 35%, transparent);
+    color: var(--color-save);
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .est-sum__save-icon { flex: none; }
+  .est-sum__save b { display: block; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .est-sum__save-vs { display: block; font-size: 12px; }
+  .est-sum__save-vs s { text-decoration-thickness: 1px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .est-sum__save:not([hidden]) { animation: est-save-in 0.35s var(--ease-out); }
+    @keyframes est-save-in { from { opacity: 0; transform: translateY(4px); } }
+  }
+
+  /* "Why the Business website is good value", above the breakdown */
+  .est-sum__tip {
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--color-surface-soft);
+    box-shadow: inset 0 0 0 1px var(--color-line-strong);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-body);
+  }
+  .est-sum__tip b { font-weight: 600; color: var(--color-ink); }
+  .est-sum__tip-btn {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
   .est-sum__toggle {
     flex: none;
     height: 32px;
@@ -3678,6 +3723,9 @@
       overscroll-behavior: contain;
     }
     .est-sum__actions { margin-top: 12px; }
+    /* In the bottom bar the saving is one line; the "worth" detail shows when it's expanded */
+    .est-sum__save { margin-top: 8px; padding: 7px 12px; }
+    .estimator__summary:not(.is-expanded) .est-sum__save-vs { display: none; }
   }
   @media (min-width: 960px) {
     .est-sum__toggle { display: none; }

@@ -3,4 +3,17 @@
 User-agent: *
 Allow: /
 
+# AI search and assistant crawlers are welcome too, so CobWebZ can be found and quoted in
+# AI answers (ChatGPT, Claude, Perplexity, Gemini). Cloudflare can block these on its own
+# (Security → Bots → "Block AI bots"), which overrides this file: keep that switched off.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://www.cobwebz.lk/sitemap.xml

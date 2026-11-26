@@ -1,0 +1,55 @@
+# CobWebZ
+
+> CobWebZ is a web design and development studio in Colombo, Sri Lanka. We design and hand-code fast, secure, search-ready websites and web applications for businesses in Sri Lanka and abroad, and keep them running after launch. Every project starts with a discovery call and a fixed, written quote. Prices are in Sri Lankan rupees (LKR).
+
+## Packages (one-time prices)
+
+- Static Website, LKR 40,000: best for portfolios and landing pages. Up to 5 custom pages, responsive design, basic SEO, contact form with Google Maps, free WhatsApp contact form, .lk or .com domain with SSL for the first year, free Cloudflare hosting, 2 design revisions, 14 days of support.
+- Business Website, LKR 70,000: best for growing businesses. Up to 8 pages, a content editor with a blog or news section, a product catalogue with WhatsApp ordering, advanced animations, advanced SEO and analytics, free WhatsApp contact form, domain with SSL for the first year, free Cloudflare hosting, 2 design revisions, 1 month of support. Worth LKR 95,000 at add-on prices.
+- Web Application, LKR 120,000: best for online stores, bookings and member areas. Python/Django or PHP with MySQL, 5 pages, admin dashboard, one core feature (such as bookings or a store), customer accounts, security hardening, staging and live deployment, free WhatsApp contact form, domain with SSL for the first year, 2 revisions with admin training, 30 days of support. Hosting is LKR 5,000 a month.
+
+## Add-ons
+
+- Extra page: LKR 5,000 per page
+- Advanced animations: LKR 5,000 (included in the Business Website)
+- Advanced technical SEO and analytics dashboard: from LKR 5,000 (included in the Business Website)
+- Product catalogue with WhatsApp ordering: LKR 10,000 (included in the Business Website)
+- Logo / mini brand kit (logo, colours and fonts): LKR 7,500
+- Google reviews section: LKR 3,000
+- Copywriting: LKR 2,000 per page
+- Interactive 3D models: from LKR 15,000
+- Dark mode toggle: LKR 4,000
+- Payment gateway setup: from LKR 20,000
+- Multilingual support (for example English, Sinhala and Tamil): from LKR 3,000
+- Legacy data migration: from LKR 10,000
+- Google Business Profile and Maps setup: LKR 5,000
+- Business email setup (Google Workspace): LKR 3,000, plus Google's own monthly fee per user
+- Extra design revision round: LKR 3,000
+- Rush delivery: plus 25% of one-time work
+- Audit of an existing website (speed, SEO and security): LKR 10,000
+
+## Monthly plans
+
+- Web application hosting: LKR 5,000 a month (static and business websites are hosted free)
+- Basic maintenance plan (updates, backups, uptime): LKR 5,000 a month
+- Content management retainer (4 updates or posts): LKR 5,000 a month
+
+## How we build
+
+- Static and business websites: semantic HTML, modern CSS and JavaScript, hosted on Cloudflare
+- Web applications: Python/Django or PHP with MySQL, deployed with Docker, Nginx or Apache on Linux servers
+- Every site is responsive, tested on phones, tablets and desktops, checked with Lighthouse, and served over HTTPS with security headers
+- No page builders or third-party themes
+
+## Contact
+
+- Website: https://www.cobwebz.lk/
+- WhatsApp and phone: +94 71 907 0320
+- Email: cobwebzsl@gmail.com
+- Based in Colombo, Sri Lanka; works with clients across Sri Lanka and abroad
+
+## Key pages
+
+- [Home, services, pricing, estimator and FAQ](https://www.cobwebz.lk/)
+- [Pricing and estimator](https://www.cobwebz.lk/#pricing)
+- [Our work: concept sites and case studies](https://www.cobwebz.lk/work)

@@ -19,7 +19,9 @@
     rule: [0.89, 0.898, 0.91],
     band: [0.955, 0.96, 0.968],
     accent: [0.357, 0.471, 0.651], // dusty blue, from variables.css
-    offer: [0.592, 0.286, 0.184]
+    offer: [0.592, 0.286, 0.184],
+    save: [0.184, 0.42, 0.29], // --color-save, from variables.css
+    saveSoft: [0.902, 0.949, 0.918]
   };
 
   /* ---------- Text: WinAnsi encoding and Helvetica character widths ---------- */
@@ -207,13 +209,16 @@
     y -= 14;
     const boxX = PAGE_W - M - 270;
     rule(boxX, PAGE_W - M, y, COLOR.ink, 1);
-    data.totals.forEach(([name, value, note]) => {
+    // A total with tone 'save' (the package's saving) sits on a green band
+    data.totals.forEach(([name, value, note, tone]) => {
       y -= 20;
-      text(boxX + 10, y, name, { size: 10, color: COLOR.body });
-      text(PAGE_W - M - 10, y, value, { size: 13, bold: true, align: 'right' });
+      const save = tone === 'save';
+      if (save) band(boxX, y + 15, PAGE_W - M - boxX, note ? 36 : 23, COLOR.saveSoft);
+      text(boxX + 10, y, name, { size: 10, bold: save, color: save ? COLOR.save : COLOR.body });
+      text(PAGE_W - M - 10, y, value, { size: 13, bold: true, align: 'right', ...(save ? { color: COLOR.save } : {}) });
       if (note) {
         y -= 13;
-        text(PAGE_W - M - 10, y, note, { size: 8.5, color: COLOR.body, align: 'right' });
+        text(PAGE_W - M - 10, y, note, { size: 8.5, color: save ? COLOR.save : COLOR.body, align: 'right' });
       }
       y -= 6;
     });

@@ -71,6 +71,10 @@
   --color-offer: #97492f;          /* deep rose gold: 5.4:1 or better on white, canvas and its tint */
   --color-offer-soft: #f7ebe6;
 
+  /* Savings in the estimator ("You save LKR 20,000"): 5.4:1 or better on its tint and white */
+  --color-save: #2f6b4a;
+  --color-save-soft: #e6f2ea;
+
   /* Typography */
   --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -120,6 +124,8 @@
 
   --color-offer: #e9b6a4;          /* 8.8:1 or better on every dark surface */
   --color-offer-soft: #2b201d;
+  --color-save: #8fd4a9;           /* 9:1 or better on its tint and every dark surface */
+  --color-save-soft: #16261d;
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 40px -10px rgba(0, 0, 0, 0.6);
   --shadow-soft: 0 20px 40px -10px rgba(0, 0, 0, 0.4);

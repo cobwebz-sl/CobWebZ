@@ -1995,20 +1995,25 @@ const CUBE_CONFIG = {
     options: [],
     pages: null,
     pagePrice: 0,
+    autoPages: 5, // the page count a package last set (5 is the default in index.html)
     lastTotal: ''
   };
 
   function readOption(input) {
     const label = input.closest('label');
     const priceText = flatText($('.est-option__price, .est-choice__price', label));
+    // data-est-percent: priced as a share of the one-time total (e.g. rush delivery)
+    const percent = Number(input.dataset.estPercent) || 0;
     return {
       input,
       label,
       name: flatText($('.est-option__name, .est-choice__name', label)),
       priceText,
-      price: lkr(priceText), // null when the price is words, not a number
+      price: percent ? null : lkr(priceText), // null when the price is words, not a number
+      percent,
+      perPage: input.hasAttribute('data-est-per-page'), // price × the number of pages
       monthly: /\/\s*mo\b/i.test(priceText),
-      from: /starting|from|\+/i.test(priceText)
+      from: !percent && /starting|from|\+/i.test(priceText)
     };
   }
 
@@ -2022,8 +2027,13 @@ const CUBE_CONFIG = {
     // Hosting is locked on (disabled but checked) for a web application, so it still counts
     const picked = est.options.filter((o) => o.input.checked
       && (!o.input.disabled || o.input.hasAttribute('data-est-hosting')));
-    const sum = (list) => list.reduce((total, o) => total + (o.price || 0), 0);
-    const onceFull = (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly));
+    const cost = (o) => (o.price || 0) * (o.perPage ? pages : 1);
+    const sum = (list) => list.reduce((total, o) => total + cost(o), 0);
+    const onceBase = (type && !custom ? type.price : 0) + pagesCost + sum(picked.filter((o) => !o.monthly));
+    // Percentage add-ons (rush delivery) are a share of everything else one-time
+    const percents = picked.filter((o) => o.percent)
+      .map((o) => ({ o, amount: Math.round((onceBase * o.percent) / 100) }));
+    const onceFull = onceBase + percents.reduce((total, p) => total + p.amount, 0);
     const discount = offer && onceFull ? offer.off(onceFull) : 0; // the offer covers one-time work only
     return {
       type,
@@ -2033,6 +2043,8 @@ const CUBE_CONFIG = {
       extraPages,
       pagesCost,
       picked,
+      cost,
+      percents,
       onceFull, // one-time total before the offer
       discount,
       once: onceFull - discount, // one-time total to pay
@@ -2042,39 +2054,55 @@ const CUBE_CONFIG = {
     };
   }
 
-  // [label, price, class?] rows: the breakdown, the form's copy and the enquiry message
-  function estimateLines(e) {
+  // A package's saving against what its contents cost as add-ons (data-worth), or null
+  function packageSaving(type) {
+    const worth = type ? Number(type.input.dataset.worth) || 0 : 0;
+    return type && type.price && worth > type.price ? { worth, saved: worth - type.price } : null;
+  }
+
+  // [label, price, class?] rows: the breakdown, the form's copy and the enquiry message.
+  // The page leaves out the free extras to stay short; the PDF ({ full: true }) lists them
+  // all, with the package's saving.
+  function estimateLines(e, { full = false } = {}) {
     const rows = [];
     if (e.type) rows.push([e.type.name, e.type.priceText]);
     // What the type's price is made of (the hidden [data-est-includes] lists in index.html)
     if (e.type && e.type.includes.length) {
+      const items = full ? e.type.includes : e.type.includes.filter(([, price]) => !/^free$/i.test(price));
       rows.push(['Included', '', 'is-group']);
-      e.type.includes.forEach(([name, price]) => rows.push([name, price, 'is-note']));
+      items.forEach(([name, price]) => rows.push([name, price, 'is-note']));
+      const saving = packageSaving(e.type);
+      if (full && saving) {
+        rows.push(['Worth at our add-on prices', fmtLKR(saving.worth), 'is-note']);
+        rows.push(['You save', fmtLKR(saving.saved), 'is-note']);
+      }
     }
     if (e.custom) rows.push([`${e.pages} page${e.pages === 1 ? '' : 's'}`, 'Scoped on a call']);
     // Everything chosen on top. Free static hosting is already listed under Included.
-    const addOns = e.picked.filter((o) => o.price !== null || o.monthly);
-    if (e.extraPages || addOns.length) rows.push(['Add-ons', '', 'is-group']);
+    const addOns = e.picked.filter((o) => (o.price !== null || o.monthly) && !o.percent);
+    if (e.extraPages || addOns.length || e.percents.length) rows.push(['Add-ons', '', 'is-group']);
     if (e.extraPages) {
       rows.push([`${e.extraPages} extra page${e.extraPages === 1 ? '' : 's'} × ${fmtLKR(est.pagePrice)}`,
         fmtLKR(e.pagesCost)]);
     }
-    addOns.forEach((o) => rows.push([o.name, o.priceText]));
+    addOns.forEach((o) => rows.push(o.perPage
+      ? [`${o.name} (${e.pages} page${e.pages === 1 ? '' : 's'} × ${fmtLKR(o.price)})`, fmtLKR(e.cost(o))]
+      : [o.name, o.priceText]));
+    e.percents.forEach(({ o, amount }) => rows.push([`${o.name} (+${o.percent}%)`, fmtLKR(amount)]));
     if (e.discount) {
       rows.push([`${offer.name}: ${offer.percent}% off one-time work`, `− ${fmtLKR(e.discount)}`, 'is-offer']);
     }
     return rows;
   }
 
-  // One line for the total, e.g. "LKR 55,000+ one-time + LKR 5,000 / mo", or with an offer
-  // running "LKR 49,500+ one-time, with the Christmas offer (10% off, was LKR 55,000+) + …"
+  // One line for the total, e.g. "LKR 55,000 one-time + LKR 5,000 / mo", or with an offer
+  // running "LKR 49,500 one-time, with the Christmas offer (10% off, was LKR 55,000) + …"
   function estimateText(e) {
     const parts = [];
-    const plus = e.from ? '+' : '';
     if (e.custom) parts.push('Custom retainer (quoted after a discovery call)');
     if (e.once) {
-      parts.push(`${fmtLKR(e.once)}${plus} one-time${e.discount
-        ? `, with the ${offer.name} (${offer.percent}% off, was ${fmtLKR(e.onceFull)}${plus})` : ''}`);
+      parts.push(`${fmtLKR(e.once)} one-time${e.discount
+        ? `, with the ${offer.name} (${offer.percent}% off, was ${fmtLKR(e.onceFull)})` : ''}`);
     }
     if (e.monthly) parts.push(`${fmtLKR(e.monthly)} / mo`);
     return parts.join(' + ');
@@ -2100,7 +2128,7 @@ const CUBE_CONFIG = {
     const chosen = est.types.find((t) => t.input.checked);
     // Static sites get it too, priced "Free", so the estimate shows what hosting costs either way.
     const needsHosting = Boolean(chosen && chosen.input.value === 'Web Application');
-    const freeHosting = Boolean(chosen && chosen.input.value === 'Static Website');
+    const freeHosting = Boolean(chosen && ['Static Website', 'Business Website'].includes(chosen.input.value));
     est.options.filter((o) => o.input.hasAttribute('data-est-hosting')).forEach((o) => {
       o.paid ||= { priceText: o.priceText, price: o.price, monthly: o.monthly, from: o.from };
       Object.assign(o, freeHosting ? { priceText: 'Free', price: null, monthly: false, from: false } : o.paid);
@@ -2109,13 +2137,25 @@ const CUBE_CONFIG = {
       o.input.checked = needsHosting || freeHosting;
       o.input.disabled = true;
     });
+    // Add-ons a package already includes (data-included-in): shown as "Included" and locked,
+    // so they aren't charged twice
+    est.options.filter((o) => o.input.dataset.includedIn).forEach((o) => {
+      o.paid ||= { priceText: o.priceText, price: o.price, monthly: o.monthly, from: o.from };
+      const inPackage = Boolean(chosen && chosen.input.value === o.input.dataset.includedIn);
+      Object.assign(o, inPackage ? { priceText: 'Included', price: null, monthly: false, from: false } : o.paid);
+      const priceEl = $('.est-option__price', o.label);
+      if (priceEl && priceEl.textContent !== o.priceText) priceEl.textContent = o.priceText;
+      if (inPackage) o.input.checked = true;
+      else if (o.input.disabled) o.input.checked = false;
+      o.input.disabled = inPackage;
+    });
     const hostingHint = $('[data-est-hosting-hint]', est.root);
     if (hostingHint) {
       hostingHint.textContent = needsHosting
         ? 'Web applications run on a server, so hosting is added automatically.'
-        : freeHosting ? 'Static sites are hosted free on Cloudflare.'
+        : freeHosting ? 'Static and business websites are hosted free on Cloudflare.'
           : chosen ? 'Hosting is part of the Managed Infrastructure plan.'
-            : 'Hosting is added automatically: free for a static website, LKR 5,000 a month for a web application.';
+            : 'Hosting is added automatically: free for a static or business website, LKR 5,000 a month for a web application.';
     }
 
     const e = getEstimate();
@@ -2151,10 +2191,10 @@ const CUBE_CONFIG = {
     let total = '—';
     let sub = 'Choose a website type to start';
     if (e.custom) {
-      total = e.once ? `Custom + ${fmtLKR(e.once)}${e.from ? '+' : ''}` : 'Custom';
+      total = e.once ? `Custom + ${fmtLKR(e.once)}` : 'Custom';
       sub = e.once ? 'retainer quoted on a call, plus one-time work' : 'retainer, quoted after a call';
     } else if (e.once) {
-      total = `${fmtLKR(e.once)}${e.from ? '+' : ''}`;
+      total = fmtLKR(e.once);
       sub = e.from ? 'one-time, starting at' : 'one-time';
     } else if (e.monthly) {
       total = fmtLKR(e.monthly);
@@ -2186,8 +2226,21 @@ const CUBE_CONFIG = {
     if (wasEl) {
       wasEl.hidden = !e.discount;
       const full = $('[data-estimate-full]', wasEl);
-      if (full && e.discount) full.textContent = `${fmtLKR(e.onceFull)}${e.from ? '+' : ''}`;
+      if (full && e.discount) full.textContent = fmtLKR(e.onceFull);
     }
+    // The package's saving, highlighted under the total
+    const saveEl = $('[data-est-save]', est.root);
+    if (saveEl) {
+      const saving = packageSaving(e.type);
+      saveEl.hidden = !saving;
+      if (saving) {
+        $('[data-est-save-amount]', saveEl).textContent = `You save ${fmtLKR(saving.saved)}`;
+        const vs = $('[data-est-save-vs]', saveEl);
+        vs.replaceChildren('Everything included is worth ', Object.assign(document.createElement('s'),
+          { textContent: fmtLKR(saving.worth) }), ' at our add-on prices');
+      }
+    }
+    updateBusinessTip(e);
     const rows = estimateLines(e);
     const lines = $('[data-estimate-lines]', est.root);
     if (lines) {
@@ -2236,24 +2289,28 @@ const CUBE_CONFIG = {
     const { email, phone } = CUBE_CONFIG.contact;
     const field = (id) => ($(`#${id}`)?.value || '').trim();
     const to = [field('f-name'), field('f-business'), field('f-email')].filter(Boolean);
-    const plus = e.from ? '+' : '';
     const totals = [];
     if (e.custom) totals.push(['Managed Infrastructure', 'Custom', 'Quoted after a discovery call']);
     if (e.once) {
-      totals.push([`One-time total${e.from ? ', starting at' : ''}`, `${fmtLKR(e.once)}${plus}`,
-        e.discount ? `Includes the ${offer.name}: ${offer.percent}% off (was ${fmtLKR(e.onceFull)}${plus})` : '']);
+      totals.push([`One-time total${e.from ? ', starting at' : ''}`, fmtLKR(e.once),
+        e.discount ? `Includes the ${offer.name}: ${offer.percent}% off (was ${fmtLKR(e.onceFull)})` : '']);
     }
     if (e.monthly) totals.push(['Monthly', `${fmtLKR(e.monthly)} / mo`, '']);
+    const saving = packageSaving(e.type);
+    if (saving) {
+      totals.push(['You save', fmtLKR(saving.saved),
+        `Everything included is worth ${fmtLKR(saving.worth)} at our add-on prices`, 'save']);
+    }
     return {
       number,
       date: now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
       from: ['CobWebZ', 'Colombo, Sri Lanka', email, phone, 'www.cobwebz.lk'].filter(Boolean),
       to: to.length ? to : null,
-      rows: estimateLines(e),
+      rows: estimateLines(e, { full: true }),
       totals,
       notes: [
         'This is a starting estimate, not a quote. Every project starts with a short discovery call, and your fixed, written quote follows it.',
-        'Prices are in Sri Lankan rupees (LKR). A "+" marks a starting price. Third-party fees, such as payment gateways, are billed by their providers.',
+        'Prices are in Sri Lankan rupees (LKR). Items marked "starting at" can cost more once scoped. Third-party fees, such as payment gateways, are billed by their providers.',
         `To go ahead or ask a question, message or call us on ${phone}, or email ${email}, quoting estimate ${number}.`
       ],
       footer: ['CobWebZ', 'www.cobwebz.lk', email, phone].filter(Boolean).join('  ·  '),
@@ -2292,13 +2349,55 @@ const CUBE_CONFIG = {
 
   function setType(value) {
     est.types.forEach((t) => { t.input.checked = t.input.value === value; });
+    fitPagesToType();
     updateEstimate();
+  }
+
+  // The note above the breakdown that says why the Business website is worth it: its saving
+  // when it's chosen, or what it adds when a static site or a web app is chosen instead.
+  function updateBusinessTip(e) {
+    const tip = $('[data-est-tip]', est.root);
+    const biz = est.types.find((t) => t.input.value === 'Business Website');
+    if (!tip || !biz || !biz.price) return;
+    const text = $('[data-est-tip-text]', tip);
+    const switchBtn = $('[data-est-tip-switch]', tip);
+    const price = `<b>${fmtLKR(biz.price)}</b>`;
+    const chosen = e.type ? e.type.input.value : '';
+    let html = '';
+    // With the Business website chosen, its saving shows under the total instead ([data-est-save])
+    if (chosen === 'Business Website') {
+      html = '';
+    } else if (chosen === 'Static Website') {
+      html = e.onceFull >= biz.price - 15000
+        ? `Your static site is already <b>${fmtLKR(e.onceFull)}</b>. For ${price}, the <b>Business website</b> includes 8 pages, a blog you can update yourself, a product catalogue with WhatsApp ordering and advanced SEO.`
+        : `Need more pages, a blog or an online catalogue? For ${price}, the <b>Business website</b> includes 8 pages, a blog you update yourself and a product catalogue with WhatsApp ordering, with free hosting.`;
+    } else if (chosen === 'Web Application') {
+      html = `No logins or database needed? The <b>Business website</b> is ${price} with free hosting, so there is no LKR 5,000 monthly fee.`;
+    }
+    tip.hidden = !html;
+    if (text) text.innerHTML = html;
+    if (switchBtn) switchBtn.hidden = !html || chosen === 'Business Website';
+  }
+
+  // Set the page count to what the chosen package includes (e.g. 8 for a business website), so
+  // its included pages don't look like extras. A count the visitor typed is only ever raised.
+  function fitPagesToType() {
+    const type = est.types.find((t) => t.input.checked);
+    const included = type ? Number(type.input.dataset.pages) || 0 : 0;
+    if (!est.pages || !included) return;
+    const current = parseInt(est.pages.value, 10) || 0;
+    const untouched = current === est.autoPages; // still the count a package set
+    if (current < included || (untouched && current !== included)) {
+      est.pages.value = String(included);
+      est.autoPages = included;
+    }
   }
 
   function resetEstimate() {
     est.types.forEach((t) => { t.input.checked = false; });
     est.options.forEach((o) => { o.input.checked = false; });
     if (est.pages) est.pages.value = '5';
+    est.autoPages = 5;
     setSelect(packageSelect, '', { quiet: true });
     updateEstimate();
   }
@@ -2315,11 +2414,18 @@ const CUBE_CONFIG = {
     est.pagePrice = lkr(flatText($('[data-est-page-price]', est.root))) || 0;
 
     est.root.addEventListener('change', (e) => {
-      if (e.target.matches('[data-est-type]')) setSelect(packageSelect, e.target.value, { quiet: true });
+      if (e.target.matches('[data-est-type]')) {
+        setSelect(packageSelect, e.target.value, { quiet: true });
+        fitPagesToType();
+      }
       if (e.target === est.pages) est.pages.value = String(getEstimate().pages); // tidy into 1…40
       updateEstimate();
     });
     est.pages?.addEventListener('input', updateEstimate);
+    $('[data-est-tip-switch]', est.root)?.addEventListener('click', () => {
+      setSelect(packageSelect, 'Business Website', { quiet: true });
+      setType('Business Website');
+    });
     $$('[data-est-pages-step]', est.root).forEach((btn) => btn.addEventListener('click', () => {
       const next = (parseInt(est.pages.value, 10) || 1) + Number(btn.dataset.estPagesStep);
       est.pages.value = String(Math.max(1, Math.min(MAX_PAGES, next)));
@@ -2550,7 +2656,7 @@ const CUBE_CONFIG = {
       data.plan = e.type ? `${e.type.name}${e.custom ? ' (custom)' : ''}` : '';
       data.addons = [
         ...(e.extraPages ? [`${e.extraPages} extra page${e.extraPages === 1 ? '' : 's'}`] : []),
-        ...e.picked.filter((o) => o.price !== null || o.monthly)
+        ...e.picked.filter((o) => o.price !== null || o.monthly || o.percent)
           .map((o) => (o.input.hasAttribute('data-est-hosting') ? 'Hosting' : o.name))
       ].join('\n');
       // ...and the total, add-ons included, e.g. "LKR 123,000+ one-time + LKR 10,000 / mo"
