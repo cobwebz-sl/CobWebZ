@@ -2294,6 +2294,9 @@ const CUBE_CONFIG = {
     if (e.once) {
       totals.push([`One-time total${e.from ? ', starting at' : ''}`, fmtLKR(e.once),
         e.discount ? `Includes the ${offer.name}: ${offer.percent}% off (was ${fmtLKR(e.onceFull)})` : '']);
+      const down = Math.round(e.once * 0.3);
+      totals.push([`Down payment (30%)${e.from ? ', starting at' : ''}`, fmtLKR(down),
+        `Remaining ${fmtLKR(e.once - down)} due on completion`]);
     }
     if (e.monthly) totals.push(['Monthly', `${fmtLKR(e.monthly)} / mo`, '']);
     const saving = packageSaving(e.type);
@@ -2310,6 +2313,7 @@ const CUBE_CONFIG = {
       totals,
       notes: [
         'This is a starting estimate, not a quote. Every project starts with a short discovery call, and your fixed, written quote follows it.',
+        'A 30% down payment is included to get started, with the balance due on completion.',
         'Prices are in Sri Lankan rupees (LKR). Items marked "starting at" can cost more once scoped. Third-party fees, such as payment gateways, are billed by their providers.',
         `To go ahead or ask a question, message or call us on ${phone}, or email ${email}, quoting estimate ${number}.`
       ],
@@ -2318,13 +2322,13 @@ const CUBE_CONFIG = {
     };
   }
 
-  async function downloadEstimatePdf(btn) {
+  async function downloadEstimatePdf(btn = $('[data-estimate-pdf]', est.root)) {
     const e = getEstimate();
-    if (!e.any || btn.getAttribute('aria-busy') === 'true') return;
-    const label = $('[data-estimate-pdf-label]', btn) || btn;
+    if (!e.any || btn?.getAttribute('aria-busy') === 'true') return;
+    const label = btn ? ($('[data-estimate-pdf-label]', btn) || btn) : null;
     const status = $('[data-estimate-status]', est.root);
-    btn.setAttribute('aria-busy', 'true');
-    label.textContent = 'Preparing PDF…';
+    btn?.setAttribute('aria-busy', 'true');
+    if (label) label.textContent = 'Preparing PDF…';
     try {
       const writer = await loadPdfWriter();
       const data = estimatePdfData(e);
@@ -2337,13 +2341,13 @@ const CUBE_CONFIG = {
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 60000);
-      label.textContent = 'Download PDF';
+      if (label) label.textContent = 'Download PDF';
       if (status) status.textContent = 'Your estimate PDF has been downloaded.';
     } catch {
-      label.textContent = 'Couldn\'t make the PDF. Try again';
+      if (label) label.textContent = 'Couldn\'t make the PDF. Try again';
       if (status) status.textContent = 'The estimate PDF couldn\'t be created. Please try again.';
     } finally {
-      btn.removeAttribute('aria-busy');
+      btn?.removeAttribute('aria-busy');
     }
   }
 
@@ -2745,6 +2749,7 @@ const CUBE_CONFIG = {
         const text = `*${CUBE_CONFIG.form.subject}*\n\n${summary(data)}`;
         const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank', 'noopener');
+        downloadEstimatePdf();
         const link = document.createElement('a');
         link.href = url;
         link.target = '_blank';
@@ -2760,6 +2765,7 @@ const CUBE_CONFIG = {
         if (email) {
           const subject = encodeURIComponent(CUBE_CONFIG.form.subject);
           window.location.href = `mailto:${email}?subject=${subject}&body=${encodeURIComponent(summary(data))}`;
+          downloadEstimatePdf();
           showStatus('info', 'Your email app should now open with your enquiry filled in.',
             'It has not been sent yet — please press Send in your email app to deliver it.');
         } else {
@@ -2776,6 +2782,7 @@ const CUBE_CONFIG = {
       submitLabel.textContent = 'Sending…';
       try {
         await send(data);
+        await downloadEstimatePdf();
         showStatus('success', `Thanks, ${data.name.split(' ')[0]} — your enquiry has been sent.`,
           `We'll reply to ${data.email} as soon as possible.`);
         resetForm();
@@ -2817,7 +2824,6 @@ const CUBE_CONFIG = {
     const glow = $('.process__glow', pin);
     const guide = $('.process__guide', pin);
     const tip = $('.process__tip', pin);
-    const sleigh = $('.process__sleigh-turn', pin); // December: Santa's team, turned to the curve
     const grad = $('#process-grad', pin);
     if (!steps.length || nodes.some((n) => !n) || !ink || !tip) return;
     const svgs = $$('svg.process__line', pin);
@@ -2971,14 +2977,6 @@ const CUBE_CONFIG = {
       const [x, y] = pointAt(l);
       tip.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
       tip.classList.toggle('is-on', v > 0.002 && v < 0.998);
-      if (sleigh) {
-        // Faces the way the line runs (from a point just behind the tip), within a gentle tilt,
-        // and stays parked at the end once the line is drawn
-        const [bx, by] = pointAt(Math.max(0, l - 24));
-        const deg = x === bx && y === by ? 0 : Math.max(-32, Math.min(32, (Math.atan2(y - by, x - bx) * 180) / Math.PI));
-        sleigh.setAttribute('transform', `rotate(${deg.toFixed(1)}) scale(1.25)`);
-        tip.classList.toggle('has-sleigh', v > 0.002);
-      }
       steps.forEach((step, i) => step.classList.toggle('is-reached', l >= at[i] - 1));
     }
 
@@ -2995,7 +2993,7 @@ const CUBE_CONFIG = {
         const step = dt / 2.4;
         shown = Math.abs(target - shown) <= step ? target : shown + Math.sign(target - shown) * step;
       } else {
-        shown += (target - shown) * (1 - Math.exp(-dt * 7));
+        shown += (target - shown) * (1 - Math.exp(-dt * 4.5));
         if (mode === 'still' || Math.abs(target - shown) < 0.0005) shown = target;
       }
       render();

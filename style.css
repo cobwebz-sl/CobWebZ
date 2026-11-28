@@ -2769,7 +2769,8 @@
     line-height: 1;
     letter-spacing: -0.06em;
     color: transparent;
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-ink) 12%, transparent) 20%, transparent 88%);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--color-ink) 28%, transparent) 15%,
+      color-mix(in srgb, var(--color-ink) 6%, transparent) 92%);
     -webkit-background-clip: text;
     background-clip: text;
     pointer-events: none;
@@ -2863,11 +2864,11 @@
     }
   }
 
-  /* Tall enough as well: the section holds still for a while (its extra 90vh of height) while
+  /* Tall enough as well: the section holds still for a while (its extra 160vh of height) while
      scrolling draws the line, then scrolls on */
   @media (min-width: 1100px) and (min-height: 680px) and (prefers-reduced-motion: no-preference) {
     .js .process {
-      height: 190vh;
+      height: 260vh;
       padding-block: 0;
     }
     .js .process__pin {
@@ -4733,13 +4734,6 @@
   [data-season='christmas'] .process__glow { stroke: var(--xmas-red); }
   [data-season='christmas'] .process__tip-core { fill: #e0414b; stroke: #ff8a8f; }
   [data-season='christmas'] .process__tip-halo { fill: rgba(224, 65, 75, 0.35); }
-  /* Santa's team rides the tip on wide screens, where the line runs left to right, and
-     stays parked at the end once it's drawn */
-  [data-season='christmas'] .process__tip.has-sleigh { opacity: 1; }
-  .process__sleigh { filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25)); }
-  @media (max-width: 1099px) {
-    .process__sleigh { display: none; }
-  }
   /* Card glows and the FAQ rows' moving highlight */
   [data-season='christmas'] .ok-glow { --glow-head: var(--xmas-green); }
   [data-season='christmas'] .faq__item::after { --glow-head: var(--xmas-red); }
